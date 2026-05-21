@@ -7,19 +7,19 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
-        'home.title': 'Milkshakespeare',
-        'home.subtitle': 'Where Every Sip Tells a Story',
-        'home.heroTagline': 'Craft milkshakes inspired by the greatest literary works of all time.',
-        'home.aboutTitle': 'Our Story',
-        'home.aboutText': 'Born from a love of classic literature and artisanal milkshakes.',
-        'home.featuredTitle': 'Featured Creations',
-        'home.featuredRomeo': 'Romeo & Juliet Berry',
-        'home.featuredRomeoDesc': 'A passionate blend of strawberries, raspberries, and a hint of rose.',
-        'home.featuredHamlet': "Hamlet's Dark Chocolate",
-        'home.featuredHamletDesc': 'To drink or not to drink.',
-        'home.featuredMidsummer': "Midsummer Night's Dream",
-        'home.featuredMidsummerDesc': 'Lavender, vanilla bean, and honeycomb.',
-        'home.viewFullMenu': 'View Full Menu',
+        'home.title': 'Saudade',
+        'home.subtitle': 'A Digital Heirloom of Family Love',
+        'home.heroTagline': 'Preserve, share, and celebrate your most treasured family memories — safely and beautifully.',
+        'home.aboutTitle': "Your Family's Story Lives Here",
+        'home.aboutText': 'Saudade was born from the longing to keep loved ones close.',
+        'home.featuredTitle': 'Cherished Collections',
+        'home.featuredPortraits': 'Portraits & Milestones',
+        'home.featuredPortraitsDesc': 'Birthdays, graduations, weddings — the moments that mark a life well lived.',
+        'home.featuredTraditions': 'Family Traditions',
+        'home.featuredTraditionsDesc': 'Holiday gatherings, Sunday dinners, and the rituals that bind generations together.',
+        'home.featuredHeritage': 'Heritage & Roots',
+        'home.featuredHeritageDesc': 'Vintage scans and ancestral photographs kept vivid for those who come after.',
+        'home.viewAlbums': 'Explore Albums',
         'home.learnMore': 'Our Story',
       };
       return translations[key] || key;
@@ -38,21 +38,21 @@ describe('HomeScreen', () => {
 
   it('displays expected translated text', () => {
     const { getByText } = render(<HomeScreen />);
-    expect(getByText('Milkshakespeare')).toBeTruthy();
-    expect(getByText('Where Every Sip Tells a Story')).toBeTruthy();
+    expect(getByText('Saudade')).toBeTruthy();
+    expect(getByText('A Digital Heirloom of Family Love')).toBeTruthy();
   });
 
   it('has navigation buttons', () => {
     const { getAllByText } = render(<HomeScreen />);
-    const menuButtons = getAllByText('View Full Menu');
-    expect(menuButtons.length).toBeGreaterThan(0);
+    const albumButtons = getAllByText('Explore Albums');
+    expect(albumButtons.length).toBeGreaterThan(0);
   });
 
-  it('displays featured creations', () => {
+  it('displays featured collections', () => {
     const { getByText } = render(<HomeScreen />);
-    expect(getByText('Featured Creations')).toBeTruthy();
-    expect(getByText('Romeo & Juliet Berry')).toBeTruthy();
-    expect(getByText("Hamlet's Dark Chocolate")).toBeTruthy();
-    expect(getByText("Midsummer Night's Dream")).toBeTruthy();
+    expect(getByText('Cherished Collections')).toBeTruthy();
+    expect(getByText('Portraits & Milestones')).toBeTruthy();
+    expect(getByText('Family Traditions')).toBeTruthy();
+    expect(getByText('Heritage & Roots')).toBeTruthy();
   });
 });

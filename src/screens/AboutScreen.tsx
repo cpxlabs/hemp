@@ -64,7 +64,7 @@ const AboutScreen: React.FC = () => {
               </Card>
             </View>
 
-            {/* Visit Us */}
+            {/* Security */}
             <Card className="bg-secondary">
               <CardHeader>
                 <CardTitle className="text-secondary-foreground">
