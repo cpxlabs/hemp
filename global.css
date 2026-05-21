@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Saudade Brand — Light Mode */
+    /* Saudade Brand — Light Mode (Parchment) */
     --background: 40 60% 96%;           /* Parchment #f7f0e6 */
     --foreground: 25 40% 18%;           /* Deep Walnut #3d2b1a */
     --card: 40 50% 98%;
@@ -28,25 +30,25 @@
   }
 
   .dark {
-    /* Saudade Brand — Dark Mode */
-    --background: 25 40% 10%;           /* Dark Walnut */
-    --foreground: 40 60% 96%;           /* Parchment */
-    --card: 25 40% 14%;
-    --card-foreground: 40 60% 96%;
-    --popover: 25 40% 14%;
-    --popover-foreground: 40 60% 96%;
-    --primary: 38 55% 48%;              /* Antique Brass */
-    --primary-foreground: 25 40% 18%;   /* Deep Walnut */
-    --secondary: 25 30% 25%;            /* Warm Umber (dark) */
-    --secondary-foreground: 40 60% 96%;
-    --muted: 25 30% 20%;
-    --muted-foreground: 38 20% 60%;
-    --accent: 38 55% 48%;               /* Antique Brass */
-    --accent-foreground: 25 40% 18%;
+    /* Saudade Brand — Dark Mode (Rich Wood / Heirloom) */
+    --background: 22 41% 8%;            /* Dark Walnut #1c120c */
+    --foreground: 40 56% 93%;           /* Warm Cream #f4eade */
+    --card: 22 47% 12%;                 /* Deep Wood #2c1b10 */
+    --card-foreground: 40 56% 93%;
+    --popover: 22 47% 12%;
+    --popover-foreground: 40 56% 93%;
+    --primary: 40 67% 70%;              /* Aged Gold #e6c280 */
+    --primary-foreground: 22 41% 12%;   /* Dark Walnut */
+    --secondary: 25 35% 20%;            /* Mid Wood #3a2312 */
+    --secondary-foreground: 40 56% 93%;
+    --muted: 25 35% 15%;
+    --muted-foreground: 35 22% 62%;     /* Soft Sand #b5a28c */
+    --accent: 38 68% 52%;               /* Antique Brass #d4af37 */
+    --accent-foreground: 22 41% 12%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 25 30% 25%;
-    --input: 25 30% 25%;
-    --ring: 38 55% 48%;                 /* Antique Brass */
+    --border: 22 44% 19%;               /* Wood Border #422e1d */
+    --input: 22 44% 19%;
+    --ring: 40 67% 70%;                 /* Aged Gold */
   }
 }

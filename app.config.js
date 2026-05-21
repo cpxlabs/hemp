@@ -14,8 +14,8 @@ module.exports = () => {
 
   return {
     expo: {
-      name: 'Milkshakespeare',
-      slug: 'milkshakespeare',
+      name: 'Saudade',
+      slug: 'saudade',
       version: '1.0.0',
       orientation: 'portrait',
       icon: './assets/icon.png',
