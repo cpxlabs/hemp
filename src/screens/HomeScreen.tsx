@@ -8,13 +8,14 @@ import { HomeScreenNavigationProp } from '../types/navigation';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { MenuButton } from '@/components/ui/menu-button';
-
-const GOLD = '#c59b27';
-const GOLD_LIGHT = '#e6c280';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const brandColors = require('@/lib/brand-colors') as {
+  gold: { DEFAULT: string; antique: string };
+};
 
 /** Stylised family-tree / share-nodes icon (Heroicons outline) */
 const FamilyTreeIcon: React.FC = () => (
-  <Svg width={40} height={40} viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth={1.5}>
+  <Svg width={40} height={40} viewBox="0 0 24 24" fill="none" stroke={brandColors.gold.antique} strokeWidth={1.5}>
     <Path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -32,7 +33,7 @@ interface CollectionCardProps {
 const CollectionCard: React.FC<CollectionCardProps> = ({ title, description, icon }) => (
   <View className="relative overflow-hidden rounded-lg border border-wood-border bg-wood-card p-6 shadow-lg">
     {/* Left gold accent bar */}
-    <View className="absolute left-0 top-0 bottom-0 w-1 bg-gold/20 rounded-l-lg" />
+    <View className="absolute left-0 top-0 bottom-0 w-1 bg-gold/20" />
     <View className="pl-4 flex-row items-center justify-between">
       <View className="flex-1 mr-4">
         <Text className="font-serif text-lg font-semibold text-gold mb-2">{title}</Text>
@@ -112,17 +113,17 @@ const HomeScreen: React.FC = () => {
             <CollectionCard
               title={t('home.featuredPortraits')}
               description={t('home.featuredPortraitsDesc')}
-              icon={<Camera size={48} color={GOLD_LIGHT} />}
+              icon={<Camera size={48} color={brandColors.gold.DEFAULT} />}
             />
             <CollectionCard
               title={t('home.featuredTraditions')}
               description={t('home.featuredTraditionsDesc')}
-              icon={<BookOpen size={48} color={GOLD_LIGHT} />}
+              icon={<BookOpen size={48} color={brandColors.gold.DEFAULT} />}
             />
             <CollectionCard
               title={t('home.featuredHeritage')}
               description={t('home.featuredHeritageDesc')}
-              icon={<TreeDeciduous size={48} color={GOLD_LIGHT} />}
+              icon={<TreeDeciduous size={48} color={brandColors.gold.DEFAULT} />}
             />
           </View>
         </View>

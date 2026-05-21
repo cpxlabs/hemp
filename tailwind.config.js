@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const brandColors = require('./src/lib/brand-colors');
+
 module.exports = {
   darkMode: 'class',
   content: ['./src/**/*.{ts,tsx}', './App.tsx'],
@@ -11,20 +13,8 @@ module.exports = {
         sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },
       colors: {
-        wood: {
-          darkest: '#1c120c',
-          dark: '#26170b',
-          mid: '#3a2312',
-          card: '#2c1b10',
-          border: '#422e1d',
-        },
-        gold: {
-          DEFAULT: '#e6c280',
-          muted: '#d1bfa7',
-          soft: '#c7b9a5',
-          sand: '#b5a28c',
-          antique: '#d4af37',
-        },
+        wood: brandColors.wood,
+        gold: brandColors.gold,
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
