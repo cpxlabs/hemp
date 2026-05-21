@@ -1,6 +1,7 @@
 {
   "name": "template-react-native-web-expo-ts",
   "version": "1.0.0",
+  "homepage": "https://saudade-rn.vercel.app/",
   "main": "./index.js",
   "scripts": {
     "start": "expo start",
