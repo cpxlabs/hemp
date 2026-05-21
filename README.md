@@ -6,8 +6,12 @@ A fully scaffolded, cross-platform (iOS / Android / Web) React Native template a
 
 - **Expo managed workflow** — no ejected native projects
 - **TypeScript** in strict mode with `@/*` path alias
-- **React Navigation** (native stack) with type-safe routes
-- **Context API** state management (Language, Auth, Ads, Toast)
+- **React Navigation** — Drawer + native stack with type-safe routes
+- **Side menu (DrawerNavigator)** — gesture-based on mobile, animated panel on web
+- **NativeWind v4** — Tailwind CSS utilities for React Native with full dark mode support
+- **React Native Reusables** — shadcn/ui-style copy-paste component library (Button, Card, Text, Toggle, and more)
+- **Dark / Light mode** — system preference detection, manual toggle, persisted via AsyncStorage
+- **Context API** state management (Theme, Language, Auth, Ads, Toast)
 - **i18n** — English & Portuguese (device language auto-detection)
 - **Auth stub** — Google Sign-In on native, guest mode on web
 - **Ad stub** — AdMob placeholders (banner, rewarded, interstitial)
@@ -30,23 +34,27 @@ Keep dependencies current with safe, non-breaking updates:
 
 ```bash
 # Refresh lockfile to latest versions allowed by package.json ranges
-npm update
+pnpm update
 
 # Check remaining newer major versions
-npm outdated
+pnpm outdated
 ```
 
 Use Expo SDK upgrades separately (for example, Expo 50 to 51+) because they require coordinated React Native and tooling changes.
 
-## Adding UI Components
+## UI Component Library
 
-This project uses [React Native Reusables](https://reactnativereusables.com) for its UI library. To add new components (e.g., avatar, checkbox, dialog), run:
+This project uses [React Native Reusables](https://reactnativereusables.com) — a shadcn/ui-style, copy-paste component library built on NativeWind. Components land in `src/components/ui/` and are fully owned/customizable.
+
+**Installed components:** `button`, `card`, `text`, `toggle`, `menu-button`
+
+To add more components (e.g., avatar, checkbox, dialog):
 
 ```bash
 pnpm dlx @react-native-reusables/cli@latest add [component]
 ```
 
-Use `pnpm dlx @react-native-reusables/cli@latest add --help` to see all available options.
+Use `pnpm dlx @react-native-reusables/cli@latest add --help` to see all available components.
 
 ## Quick Start
 
@@ -93,16 +101,28 @@ pnpm run ios
 ├── metro.config.js            # Metro bundler (web overrides)
 ├── jest.config.js             # Jest configuration
 ├── jest.setup.js              # Native module mocks
+├── tailwind.config.js         # Tailwind / NativeWind config (darkMode: 'class')
+├── global.css                 # CSS custom properties (light & dark theme tokens)
+├── components.json            # React Native Reusables / shadcn config
 ├── assets/                    # App icons & splash screen
 └── src/
     ├── components/            # Shared UI components
-    │   └── ErrorBoundary.tsx
+    │   ├── DrawerContent.tsx  # Side menu (theme toggle, language, nav links)
+    │   ├── ErrorBoundary.tsx
+    │   └── ui/                # React Native Reusables components
+    │       ├── button.tsx
+    │       ├── card.tsx
+    │       ├── menu-button.tsx
+    │       ├── text.tsx
+    │       └── toggle.tsx
     ├── screens/               # Screen components
     │   ├── HomeScreen.tsx
-    │   └── DetailsScreen.tsx
+    │   ├── DetailsScreen.tsx  # Menu / milkshake list screen
+    │   └── AboutScreen.tsx
     ├── navigation/            # Navigator definitions
-    │   └── AppNavigator.tsx
+    │   └── AppNavigator.tsx   # DrawerNavigator wrapping NativeStackNavigator
     ├── providers/             # Context providers
+    │   ├── ThemeProvider.tsx  # Dark/light mode + persistence
     │   ├── LanguageProvider.tsx
     │   ├── AuthProvider.tsx
     │   ├── AdProvider.tsx
@@ -110,6 +130,9 @@ pnpm run ios
     ├── hooks/                 # Custom hooks
     │   ├── useSocket.ts
     │   └── useHaptics.ts
+    ├── lib/                   # Shared utilities
+    │   ├── utils.ts           # cn() helper (clsx + tailwind-merge)
+    │   └── constants.ts
     ├── services/              # External service clients
     │   ├── storage.ts
     │   └── socket.ts
@@ -119,9 +142,30 @@ pnpm run ios
     │   ├── en.json
     │   └── pt-BR.json
     ├── types/                 # Shared TypeScript types
-    │   └── navigation.ts
+    │   └── navigation.ts      # RootStackParamList + DrawerParamList
     └── utils/                 # Utility functions
         └── platform.ts
+```
+
+## Provider Composition
+
+Providers are nested in `App.tsx` in dependency order:
+
+```
+ErrorBoundary
+ └─ GestureHandlerRootView
+     └─ ThemeProvider          (dark/light mode)
+         └─ LanguageProvider   (i18n)
+             └─ AuthProvider
+                 └─ AdProvider
+                     └─ ToastProvider
+                         └─ AppNavigator
+                              └─ DrawerNavigator
+                                  ├─ DrawerContent  (side menu)
+                                  └─ NativeStackNavigator
+                                       ├─ HomeScreen
+                                       ├─ DetailsScreen
+                                       └─ AboutScreen
 ```
 
 ## Detailed Reference
