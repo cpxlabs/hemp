@@ -1,0 +1,21 @@
+# Native build artifacts
+android/
+ios/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Expo internals
+.expo/
+dist-final/
+
+# Development
+node_modules/
+coverage/
+
+# Secrets
+.env
+google-services.json
+GoogleService-Info.plist
