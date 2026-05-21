@@ -31,24 +31,24 @@
 
   .dark {
     /* Saudade Brand — Dark Mode (Rich Wood / Heirloom) */
-    --background: 22 41% 8%;            /* Dark Walnut #1c120c */
+    --background: 24 42% 14%;           /* Warm Dark Walnut */
     --foreground: 40 56% 93%;           /* Warm Cream #f4eade */
-    --card: 22 47% 12%;                 /* Deep Wood #2c1b10 */
+    --card: 24 43% 18%;                 /* Deep Wood (lighter) */
     --card-foreground: 40 56% 93%;
-    --popover: 22 47% 12%;
+    --popover: 24 43% 18%;
     --popover-foreground: 40 56% 93%;
     --primary: 40 67% 70%;              /* Aged Gold #e6c280 */
-    --primary-foreground: 22 41% 12%;   /* Dark Walnut */
-    --secondary: 25 35% 20%;            /* Mid Wood #3a2312 */
+    --primary-foreground: 24 42% 18%;   /* Dark Walnut */
+    --secondary: 25 35% 24%;            /* Mid Wood (lighter) */
     --secondary-foreground: 40 56% 93%;
-    --muted: 25 35% 15%;
+    --muted: 25 35% 20%;
     --muted-foreground: 35 22% 62%;     /* Soft Sand #b5a28c */
     --accent: 38 68% 52%;               /* Antique Brass #d4af37 */
-    --accent-foreground: 22 41% 12%;
+    --accent-foreground: 24 42% 18%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 22 44% 19%;               /* Wood Border #422e1d */
-    --input: 22 44% 19%;
+    --border: 24 39% 28%;
+    --input: 24 39% 28%;
     --ring: 40 67% 70%;                 /* Aged Gold */
   }
 }

@@ -4,11 +4,11 @@
  */
 const brandColors = {
   wood: {
-    darkest: '#1c120c',
-    dark: '#26170b',
-    mid: '#3a2312',
-    card: '#2c1b10',
-    border: '#422e1d',
+    darkest: '#2a1a10',
+    dark: '#332013',
+    mid: '#4a2d17',
+    card: '#3a2415',
+    border: '#5a3c26',
   },
   gold: {
     DEFAULT: '#e6c280',
