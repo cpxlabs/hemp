@@ -12,21 +12,24 @@ Reference for bootstrapping new React Native apps using the framework, Expo conf
 4. [TypeScript](#typescript)
 5. [Babel](#babel)
 6. [Metro Bundler](#metro-bundler)
-7. [React Navigation](#react-navigation)
-8. [State Management (Context API)](#state-management-context-api)
-9. [Gestures](#gestures)
-10. [Internationalization (i18n)](#internationalization-i18n)
-11. [Local Storage (AsyncStorage)](#local-storage-asyncstorage)
-12. [Authentication (Google Sign-In)](#authentication-google-sign-in)
-13. [Ads (Google AdMob)](#ads-google-admob)
-14. [Realtime (Socket.io)](#realtime-socketio)
-15. [Haptics](#haptics)
-16. [Web Support](#web-support)
-17. [Testing](#testing)
-18. [ESLint](#eslint)
-19. [Prettier](#prettier)
-20. [Scripts](#scripts)
-21. [Platform Notes](#platform-notes)
+7. [Styling (NativeWind + Tailwind)](#styling-nativewind--tailwind)
+8. [UI Components (React Native Reusables)](#ui-components-react-native-reusables)
+9. [Dark / Light Mode](#dark--light-mode)
+10. [React Navigation](#react-navigation)
+11. [State Management (Context API)](#state-management-context-api)
+12. [Gestures](#gestures)
+13. [Internationalization (i18n)](#internationalization-i18n)
+14. [Local Storage (AsyncStorage)](#local-storage-asyncstorage)
+15. [Authentication (Google Sign-In)](#authentication-google-sign-in)
+16. [Ads (Google AdMob)](#ads-google-admob)
+17. [Realtime (Socket.io)](#realtime-socketio)
+18. [Haptics](#haptics)
+19. [Web Support](#web-support)
+20. [Testing](#testing)
+21. [ESLint](#eslint)
+22. [Prettier](#prettier)
+23. [Scripts](#scripts)
+24. [Platform Notes](#platform-notes)
 
 ---
 
@@ -41,11 +44,7 @@ Reference for bootstrapping new React Native apps using the framework, Expo conf
 
 Expo managed workflow is used — no ejected native projects. Native modules that require custom builds use `expo-dev-client`.
 
----
-
 ## Packages
-
-### Production Dependencies
 
 | Package | Version | Category |
 |---|---|---|
@@ -57,9 +56,19 @@ Expo managed workflow is used — no ejected native projects. Native modules tha
 | `@expo/metro-runtime` | ~3.1.3 | Web |
 | `@react-navigation/native` | ^6.1.9 | Navigation |
 | `@react-navigation/native-stack` | ^6.9.17 | Navigation |
+| `@react-navigation/drawer` | ^6.7.2 | Navigation (side menu) |
 | `react-native-screens` | ~3.29.0 | Navigation |
 | `react-native-safe-area-context` | 4.8.2 | Navigation / Layout |
 | `react-native-gesture-handler` | ~2.14.0 | Gestures |
+| `react-native-reanimated` | ~3.6.0 | Animations (required by drawer) |
+| `nativewind` | ^4.2.1 | Tailwind CSS for React Native |
+| `tailwindcss` | ^3.4.19 | Styling |
+| `tailwindcss-animate` | ^1.0.7 | Tailwind animation plugin |
+| `tailwind-merge` | ^3.4.0 | Utility — merge Tailwind classes |
+| `clsx` | ^2.1.1 | Utility — conditional class names |
+| `class-variance-authority` | ^0.7.1 | Component variant styling (CVA) |
+| `@rn-primitives/slot` | ^1.2.0 | Slot pattern for React Native Reusables |
+| `react-native-css-interop` | 0.2.1 | NativeWind CSS interop layer |
 | `@react-native-async-storage/async-storage` | 1.21.0 | Local storage |
 | `@react-native-google-signin/google-signin` | ^13.1.0 | Authentication |
 | `react-native-google-mobile-ads` | ^16.0.1 | Monetization |
@@ -71,6 +80,8 @@ Expo managed workflow is used — no ejected native projects. Native modules tha
 | `react-native-get-random-values` | ^1.11.0 | Crypto polyfill (required by uuid) |
 | `uuid` | ^9.0.0 | Unique ID generation |
 | `@expo/vector-icons` | ^14.1.0 | Icon sets |
+| `lucide-react-native` | ^0.545.0 | Icon set used in UI components |
+| `react-native-svg` | ^15.15.3 | SVG support (required by lucide) |
 | `@react-native/assets-registry` | ^0.83.1 | Asset resolution |
 | `@babel/runtime` | ^7.28.4 | Babel polyfills |
 
@@ -80,6 +91,7 @@ Expo managed workflow is used — no ejected native projects. Native modules tha
 |---|---|---|
 | `typescript` | ^5.1.3 | Language |
 | `@babel/core` | ^7.20.0 | Build |
+| `@babel/preset-flow` | ^7.27.1 | Build (Flow-typed third-party code) |
 | `babel-jest` | ^30.2.0 | Test transform |
 | `jest` | ^30.2.0 | Test runner |
 | `jest-expo` | 50.0.0 | Test preset |
@@ -97,6 +109,7 @@ Expo managed workflow is used — no ejected native projects. Native modules tha
 | `eslint-plugin-react` | ^7.37.5 | Linting |
 | `eslint-plugin-react-hooks` | ^7.0.1 | Linting |
 | `prettier` | ^3.8.0 | Formatting |
+| `prettier-plugin-tailwindcss` | ^0.6.14 | Auto-sort Tailwind classes |
 
 ---
 
@@ -188,14 +201,15 @@ module.exports = function (api) {
       'babel-preset-expo',
       'nativewind/babel',
     ],
-    plugins: [],
+    plugins: ['react-native-reanimated/plugin'],
   };
 };
 ```
 
 - `babel-preset-expo` handles React Native + JSX transform.
-- `@babel/preset-flow` for Flow-typed third-party code.
-- **`react-native-reanimated/plugin` must always be the last plugin** in the list.
+- `nativewind/babel` enables Tailwind class compilation.
+- `@babel/preset-flow` is installed as a dev dependency to handle Flow-typed third-party packages at transpile time.
+- **`react-native-reanimated/plugin` must always be the last plugin** in the list (required by `@react-navigation/drawer`).
 
 ---
 
@@ -236,45 +250,246 @@ Use the `resolveRequest` hook to:
 
 ---
 
+## Styling (NativeWind + Tailwind)
+
+Packages: `nativewind` ^4.2.1, `tailwindcss` ^3.4.19, `react-native-css-interop` 0.2.1
+
+NativeWind v4 brings Tailwind utility classes to React Native via `className` props, with full CSS variable support for theming.
+
+### Tailwind Configuration
+
+```js
+// tailwind.config.js
+module.exports = {
+  darkMode: 'class',
+  content: ['./src/**/*.{ts,tsx}', './App.tsx'],
+  presets: [require('nativewind/preset')],
+  theme: {
+    extend: {
+      colors: {
+        border: 'hsl(var(--border))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        // ... other semantic color tokens
+      },
+    },
+  },
+  plugins: [require('tailwindcss-animate')],
+};
+```
+
+- `darkMode: 'class'` — dark mode is toggled by adding/removing the `dark` class on the root element.
+- All colors are CSS custom properties defined in `global.css`, enabling runtime theme switching.
+
+### CSS Variables (`global.css`)
+
+Define semantic color tokens under `:root` (light) and `.dark` (dark):
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 50 100% 95%;
+    --foreground: 217 74% 17%;
+    --primary: 217 74% 17%;
+    /* ... */
+  }
+
+  .dark {
+    --background: 217 74% 10%;
+    --foreground: 50 100% 95%;
+    --primary: 46 63% 53%;
+    /* ... */
+  }
+}
+```
+
+### `cn()` Utility
+
+`src/lib/utils.ts` exports a `cn()` helper that merges class names:
+
+```ts
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+Use `cn()` when composing conditional or overridable Tailwind classes.
+
+---
+
+## UI Components (React Native Reusables)
+
+[React Native Reusables](https://reactnativereusables.com) is a shadcn/ui-style, copy-paste component library built on NativeWind. Components are generated into `src/components/ui/` and are fully owned — no black-box library to version-bump.
+
+### Installed Components
+
+| Component | File | Description |
+|---|---|---|
+| `Button` | `ui/button.tsx` | Pressable button with CVA variants (default, destructive, outline, secondary, ghost, link) |
+| `Card` | `ui/card.tsx` | Card container with Header, Title, Description, Content, Footer sub-components |
+| `Text` | `ui/text.tsx` | Text with `TextClassContext` for inheriting styles from parent (e.g., Button) |
+| `Toggle` | `ui/toggle.tsx` | Animated switch built on `Animated.Value` (used for theme toggle in the drawer) |
+| `MenuButton` | `ui/menu-button.tsx` | Floating hamburger button that calls `navigation.openDrawer()` |
+
+### Adding Components
+
+```bash
+pnpm dlx @react-native-reusables/cli@latest add [component]
+```
+
+Components are configured via `components.json` (shadcn schema) with the `@/components` alias pointing to `src/components`.
+
+### Component Variants with CVA
+
+Components use `class-variance-authority` for variant management:
+
+```ts
+import { cva } from 'class-variance-authority';
+
+const buttonVariants = cva('base-classes', {
+  variants: {
+    variant: {
+      default: 'bg-primary',
+      outline: 'border border-border bg-background',
+    },
+    size: {
+      default: 'h-10 px-4',
+      sm: 'h-9 px-3',
+    },
+  },
+  defaultVariants: { variant: 'default', size: 'default' },
+});
+```
+
+---
+
+## Dark / Light Mode
+
+Package: `nativewind` (useColorScheme), `@react-native-async-storage/async-storage` (persistence)
+
+### ThemeProvider
+
+`src/providers/ThemeProvider.tsx` manages the active theme and exposes it via context:
+
+- **Persistence**: reads/writes `@app:theme` in AsyncStorage.
+- **System preference**: falls back to `Appearance.getColorScheme()` if no stored value.
+- **NativeWind integration**: calls `setColorScheme()` from `nativewind` to switch utility classes.
+- **Web**: toggles the `dark` class on `document.documentElement` for CSS variable switching.
+
+```tsx
+import { useTheme } from '@/providers/ThemeProvider';
+
+const MyComponent = () => {
+  const { isDark, toggleTheme, setTheme } = useTheme();
+  return <Button onPress={toggleTheme}>{isDark ? 'Light Mode' : 'Dark Mode'}</Button>;
+};
+```
+
+### Dark Mode Utilities
+
+Prefix any Tailwind class with `dark:` to apply it only in dark mode:
+
+```tsx
+// Use dark: prefix for classes that differ between themes
+<View className="bg-white dark:bg-gray-900">
+  <Text className="text-black dark:text-white">Hello</Text>
+</View>
+```
+
+Because semantic color tokens (`bg-background`, `text-foreground`, etc.) are CSS variables, they automatically resolve to the correct value in each theme — no `dark:` prefix needed for those classes. Use `dark:` only when applying a *different* class value in dark mode.
+
+---
+
 ## React Navigation
 
-Packages: `@react-navigation/native`, `@react-navigation/native-stack`, `react-native-screens`, `react-native-safe-area-context`.
+Packages: `@react-navigation/native`, `@react-navigation/native-stack`, `@react-navigation/drawer`, `react-native-screens`, `react-native-safe-area-context`, `react-native-reanimated`.
+
+### Structure
+
+The navigator uses a **Drawer wrapping a Stack** pattern:
+
+```
+NavigationContainer
+ └─ DrawerNavigator
+     ├─ drawerContent: <DrawerContent />   (custom side menu)
+     └─ Screen "Main"
+          └─ NativeStackNavigator
+               ├─ Screen "Home"
+               ├─ Screen "Menu"
+               └─ Screen "About"
+```
 
 ### Setup
 
-Wrap the app in `NavigationContainer` and define stacks with `createNativeStackNavigator`:
-
 ```tsx
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
+const Drawer = createDrawerNavigator<DrawerParamList>();
 
-const AppNavigator = () => (
+const MainStack: React.FC = () => (
+  <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Home" component={HomeScreen} />
+    <Stack.Screen name="Menu" component={MenuScreen} />
+    <Stack.Screen name="About" component={AboutScreen} />
+  </Stack.Navigator>
+);
+
+const AppNavigator: React.FC = () => (
   <NavigationContainer>
-    <Stack.Navigator
-      initialRouteName="Home"
-      screenOptions={{ headerShown: false, animation: 'slide_from_right' }}
+    <Drawer.Navigator
+      screenOptions={{ headerShown: false, drawerType: 'front' }}
+      drawerContent={(props) => <DrawerContent {...props} />}
     >
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Details" component={DetailsScreen} />
-    </Stack.Navigator>
+      <Drawer.Screen name="Main" component={MainStack} />
+    </Drawer.Navigator>
   </NavigationContainer>
 );
 ```
 
 ### Type-Safe Routes
 
-Define param list types for compile-time route safety:
-
 ```ts
-type RootStackParamList = {
+// src/types/navigation.ts
+export type RootStackParamList = {
   Home: undefined;
-  Details: { id: string };
+  Menu: undefined;
+  About: undefined;
 };
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+export type DrawerParamList = {
+  Main: NavigatorScreenParams<RootStackParamList>;
+};
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends DrawerParamList {}
+  }
+}
 ```
+
+### Opening the Drawer
+
+Use the `MenuButton` component (top-left of each screen) which calls `navigation.openDrawer()`. On mobile the drawer is also accessible via a swipe gesture from the left edge.
+
+### Custom Drawer Content (`DrawerContent`)
+
+`src/components/DrawerContent.tsx` renders the side menu with:
+- Navigation links (Home, Menu, About)
+- Theme toggle (dark/light) using `useTheme()`
+- Language switcher using `useLanguage()`
 
 ---
 
@@ -312,20 +527,22 @@ Providers are nested in `App.tsx` in dependency order:
 ```tsx
 <ErrorBoundary>
   <GestureHandlerRootView style={{ flex: 1 }}>
-    <LanguageProvider>
-      <AuthProvider>
-        <AdProvider>
-          <ToastProvider>
-            <AppNavigator />
-          </ToastProvider>
-        </AdProvider>
-      </AuthProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <AdProvider>
+            <ToastProvider>
+              <AppNavigator />
+            </ToastProvider>
+          </AdProvider>
+        </AuthProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   </GestureHandlerRootView>
 </ErrorBoundary>
 ```
 
-Order matters — outer providers are available to inner ones.
+Order matters — outer providers are available to inner ones. `ThemeProvider` wraps all others so that UI components and the drawer can access the current theme.
 
 ---
 
@@ -653,9 +870,12 @@ Key differences from the legacy `.eslintrc.js` format:
   "tabWidth": 2,
   "useTabs": false,
   "arrowParens": "always",
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
 ```
+
+`prettier-plugin-tailwindcss` automatically sorts Tailwind class names in the canonical order on format.
 
 ---
 
@@ -682,9 +902,9 @@ Key differences from the legacy `.eslintrc.js` format:
 
 Use this lightweight maintenance cycle for routine updates:
 
-1. Run `npm update` to pull the latest non-breaking versions allowed by `package.json`.
-2. Run `npm outdated` to review remaining major-version upgrades that may require migration work.
-3. Run lint and tests (`npm run lint`, `npm test`) before merging.
+1. Run `pnpm update` to pull the latest non-breaking versions allowed by `package.json`.
+2. Run `pnpm outdated` to review remaining major-version upgrades that may require migration work.
+3. Run lint and tests (`pnpm run lint`, `pnpm test`) before merging.
 
 For Expo major SDK migrations, follow Expo's upgrade guide and update React Native ecosystem packages together.
 
@@ -708,3 +928,4 @@ For Expo major SDK migrations, follow Expo's upgrade guide and update React Nati
 - `metro.config.js` must resolve `react-native-web` Platform and empty-resolve native-only packages.
 - Google Sign-In and AdMob are not available — implement fallbacks.
 - `expo-haptics` is a safe no-op on web.
+- Dark mode applies the `dark` class to `document.documentElement` via `ThemeProvider`.
