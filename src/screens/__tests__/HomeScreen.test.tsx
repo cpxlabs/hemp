@@ -39,7 +39,7 @@ describe('HomeScreen', () => {
   it('displays expected translated text', () => {
     const { getByText } = render(<HomeScreen />);
     expect(getByText('Saudade')).toBeTruthy();
-    expect(getByText('A Digital Heirloom of Family Love')).toBeTruthy();
+    expect(getByText('Preserve, share, and celebrate your most treasured family memories — safely and beautifully.')).toBeTruthy();
   });
 
   it('has navigation buttons', () => {

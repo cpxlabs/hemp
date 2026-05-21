@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { render, waitFor } from '@testing-library/react-native';
 import { Text } from 'react-native';
 import { LanguageProvider, useLanguage } from '../LanguageProvider';
 
@@ -33,22 +33,22 @@ const TestConsumer: React.FC = () => {
 };
 
 describe('LanguageProvider', () => {
-  it('renders children', () => {
+  it('renders children', async () => {
     const { getByText } = render(
       <LanguageProvider>
         <Text>Child Content</Text>
       </LanguageProvider>
     );
-    expect(getByText('Child Content')).toBeTruthy();
+    await waitFor(() => expect(getByText('Child Content')).toBeTruthy());
   });
 
-  it('useLanguage hook returns expected defaults', () => {
+  it('useLanguage hook returns expected defaults', async () => {
     const { getByTestId } = render(
       <LanguageProvider>
         <TestConsumer />
       </LanguageProvider>
     );
-    expect(getByTestId('language-value')).toBeTruthy();
+    await waitFor(() => expect(getByTestId('language-value')).toBeTruthy());
   });
 
   it('throws when useLanguage is used outside provider', () => {
