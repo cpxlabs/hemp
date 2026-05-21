@@ -51,7 +51,7 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
       <DrawerContentScrollView
         {...props}
         style={{ backgroundColor: 'transparent' }}
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: Math.max(insets.bottom, 16) }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: Math.max(insets.bottom, 20) }}
         showsVerticalScrollIndicator={false}
       >
         <View className="flex-1 bg-transparent px-4">
