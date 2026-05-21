@@ -46,88 +46,88 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
     LANGUAGES.find((l) => l.code === language)?.label ?? language;
 
   const iconColor = isDark ? '#fffbe8' : '#0b234a';
-  const drawerBackgroundColor = isDark ? '#332013' : '#f7f0e6';
-
   return (
-    <DrawerContentScrollView
-      {...props}
-      style={{ backgroundColor: drawerBackgroundColor }}
-      contentContainerStyle={{ flexGrow: 1, paddingBottom: Math.max(insets.bottom, 16) }}
-      showsVerticalScrollIndicator={false}
-    >
-      <View className="flex-1 bg-transparent px-4">
-        {/* Header */}
-        <View className="border-b border-border pb-4 mb-2 mt-2">
-          <Text className="text-2xl font-bold text-foreground">
-            {t('sidemenu.appName')}
-          </Text>
-        </View>
-
-        {/* Navigation */}
-        <View className="gap-1 mt-2">
-          <Pressable
-            onPress={navigateToHome}
-            className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
-          >
-            <Home size={28} color={iconColor} />
-            <Text className="text-lg text-foreground">{t('sidemenu.home')}</Text>
-          </Pressable>
-
-          <Pressable
-            onPress={navigateToMenu}
-            className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
-          >
-            <Images size={28} color={iconColor} />
-            <Text className="text-lg text-foreground">{t('sidemenu.menu')}</Text>
-          </Pressable>
-
-          <Pressable
-            onPress={navigateToAbout}
-            className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
-          >
-            <BookOpen size={28} color={iconColor} />
-            <Text className="text-lg text-foreground">{t('sidemenu.about')}</Text>
-          </Pressable>
-        </View>
-
-        {/* Spacer */}
-        <View className="flex-1" />
-
-        {/* Settings section */}
-        <View className="border-t border-border pt-4 gap-3 pb-4">
-          {/* Theme toggle */}
-          <View className="flex-row items-center justify-between px-3 py-3">
-            <View className="flex-row items-center gap-3">
-              {isDark ? (
-                <Moon size={28} color={iconColor} />
-              ) : (
-                <Sun size={28} color={iconColor} />
-              )}
-              <Text className="text-lg text-foreground">
-                {isDark ? t('sidemenu.darkMode') : t('sidemenu.lightMode')}
-              </Text>
-            </View>
-            <Toggle
-              value={isDark}
-              onValueChange={toggleTheme}
-              activeColor="#d3b03b"
-              inactiveColor="#3664a0"
-            />
+    <View className="flex-1 bg-background">
+      <DrawerContentScrollView
+        {...props}
+        style={{ backgroundColor: 'transparent' }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: Math.max(insets.bottom, 16) }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="flex-1 bg-transparent px-4">
+          {/* Header */}
+          <View className="border-b border-border pb-4 mb-2 mt-2">
+            <Text className="text-2xl font-bold text-foreground">
+              {t('sidemenu.appName')}
+            </Text>
           </View>
 
-          {/* Language toggle */}
-          <Pressable
-            onPress={cycleLanguage}
-            className="flex-row items-center justify-between px-3 py-3 rounded-md active:bg-accent"
-          >
-            <View className="flex-row items-center gap-3">
-              <Languages size={28} color={iconColor} />
-              <Text className="text-lg text-foreground">{t('sidemenu.language')}</Text>
+          {/* Navigation */}
+          <View className="gap-1 mt-2">
+            <Pressable
+              onPress={navigateToHome}
+              className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
+            >
+              <Home size={28} color={iconColor} />
+              <Text className="text-lg text-foreground">{t('sidemenu.home')}</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={navigateToMenu}
+              className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
+            >
+              <Images size={28} color={iconColor} />
+              <Text className="text-lg text-foreground">{t('sidemenu.menu')}</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={navigateToAbout}
+              className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
+            >
+              <BookOpen size={28} color={iconColor} />
+              <Text className="text-lg text-foreground">{t('sidemenu.about')}</Text>
+            </Pressable>
+          </View>
+
+          {/* Spacer */}
+          <View className="flex-1" />
+
+          {/* Settings section */}
+          <View className="border-t border-border pt-4 gap-3 pb-4">
+            {/* Theme toggle */}
+            <View className="flex-row items-center justify-between px-3 py-3">
+              <View className="flex-row items-center gap-3">
+                {isDark ? (
+                  <Moon size={28} color={iconColor} />
+                ) : (
+                  <Sun size={28} color={iconColor} />
+                )}
+                <Text className="text-lg text-foreground">
+                  {isDark ? t('sidemenu.darkMode') : t('sidemenu.lightMode')}
+                </Text>
+              </View>
+              <Toggle
+                value={isDark}
+                onValueChange={toggleTheme}
+                activeColor="#d3b03b"
+                inactiveColor="#3664a0"
+              />
             </View>
-            <Text className="text-base text-muted-foreground">{currentLanguageLabel}</Text>
-          </Pressable>
+
+            {/* Language toggle */}
+            <Pressable
+              onPress={cycleLanguage}
+              className="flex-row items-center justify-between px-3 py-3 rounded-md active:bg-accent"
+            >
+              <View className="flex-row items-center gap-3">
+                <Languages size={28} color={iconColor} />
+                <Text className="text-lg text-foreground">{t('sidemenu.language')}</Text>
+              </View>
+              <Text className="text-base text-muted-foreground">{currentLanguageLabel}</Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
-    </DrawerContentScrollView>
+      </DrawerContentScrollView>
+    </View>
   );
 };
