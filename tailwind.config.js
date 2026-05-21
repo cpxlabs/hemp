@@ -1,11 +1,39 @@
 /** @type {import('tailwindcss').Config} */
+const brandColors = require('./src/lib/brand-colors');
+
+/**
+ * Wrap a hex color so Tailwind can apply opacity modifiers (e.g. bg-gold/30).
+ * Without this, plain hex strings don't support the slash-opacity syntax.
+ */
+function withOpacity(hex) {
+  if (typeof hex !== 'string' || !/^#[0-9a-fA-F]{6}$/.test(hex)) {
+    throw new Error(`withOpacity: expected a 6-digit hex color, got "${hex}"`);
+  }
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return ({ opacityValue }) =>
+    opacityValue !== undefined ? `rgba(${r},${g},${b},${opacityValue})` : hex;
+}
+
+function opacityScale(scale) {
+  return Object.fromEntries(Object.entries(scale).map(([k, v]) => [k, withOpacity(v)]));
+}
+
 module.exports = {
   darkMode: 'class',
   content: ['./src/**/*.{ts,tsx}', './App.tsx'],
   presets: [require('nativewind/preset')],
   theme: {
     extend: {
+      fontFamily: {
+        display: ['Cinzel', 'Georgia', 'serif'],
+        serif: ['Lora', 'Georgia', 'serif'],
+        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+      },
       colors: {
+        wood: opacityScale(brandColors.wood),
+        gold: opacityScale(brandColors.gold),
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
