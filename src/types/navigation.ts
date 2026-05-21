@@ -14,6 +14,8 @@ export type DrawerParamList = {
 
 export type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 export type MenuScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Menu'>;
+/** Alias for the Albums screen, which maps to the 'Menu' route internally. */
+export type AlbumsScreenNavigationProp = MenuScreenNavigationProp;
 export type AboutScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'About'>;
 export type MenuScreenRouteProp = RouteProp<RootStackParamList, 'Menu'>;
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { MenuScreenNavigationProp } from '../types/navigation';
+import { AlbumsScreenNavigationProp } from '../types/navigation';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -47,7 +47,7 @@ const ALBUM_SECTIONS: { titleKey: string; items: AlbumItem[] }[] = [
 ];
 
 const AlbumsScreen: React.FC = () => {
-  const navigation = useNavigation<MenuScreenNavigationProp>();
+  const navigation = useNavigation<AlbumsScreenNavigationProp>();
   const { t } = useTranslation();
 
   return (
