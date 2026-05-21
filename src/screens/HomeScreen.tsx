@@ -269,8 +269,8 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ title, description, ill
     style={{ minHeight: 96 }}
   >
     <View className="p-5 pr-28">
-      <Text className="font-serif text-base font-semibold text-gold mb-1.5">{title}</Text>
-      <Text className="text-gold-soft text-sm leading-5">{description}</Text>
+      <Text className="font-serif text-lg font-semibold text-gold mb-1.5">{title}</Text>
+      <Text className="text-gold-soft text-base leading-6">{description}</Text>
     </View>
     {/* Illustration: anchored to bottom-right, fades out via opacity on the SVG itself */}
     <View className="absolute right-0 bottom-0">{illustration}</View>
@@ -318,7 +318,7 @@ const HomeScreen: React.FC = () => {
           </Text>
 
           {/* Tagline */}
-          <Text className="text-sm text-gold-muted text-center mt-4 max-w-xs leading-6 font-light">
+          <Text className="text-base text-gold-muted text-center mt-4 max-w-xs leading-7 font-light">
             {t('home.heroTagline')}
           </Text>
 
