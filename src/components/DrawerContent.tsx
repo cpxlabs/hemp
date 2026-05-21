@@ -55,7 +55,7 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
       <View className="flex-1 bg-background px-4">
         {/* Header */}
         <View className="border-b border-border pb-4 mb-2 mt-2">
-          <Text className="text-xl font-bold text-foreground">
+          <Text className="text-2xl font-bold text-foreground">
             {t('sidemenu.appName')}
           </Text>
         </View>
@@ -64,26 +64,26 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
         <View className="gap-1 mt-2">
           <Pressable
             onPress={navigateToHome}
-            className="flex-row items-center gap-3 rounded-md px-3 py-3 active:bg-accent"
+            className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
           >
-            <Home size={20} color={iconColor} />
-            <Text className="text-base text-foreground">{t('sidemenu.home')}</Text>
+            <Home size={28} color={iconColor} />
+            <Text className="text-lg text-foreground">{t('sidemenu.home')}</Text>
           </Pressable>
 
           <Pressable
             onPress={navigateToMenu}
-            className="flex-row items-center gap-3 rounded-md px-3 py-3 active:bg-accent"
+            className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
           >
-            <Images size={20} color={iconColor} />
-            <Text className="text-base text-foreground">{t('sidemenu.menu')}</Text>
+            <Images size={28} color={iconColor} />
+            <Text className="text-lg text-foreground">{t('sidemenu.menu')}</Text>
           </Pressable>
 
           <Pressable
             onPress={navigateToAbout}
-            className="flex-row items-center gap-3 rounded-md px-3 py-3 active:bg-accent"
+            className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
           >
-            <BookOpen size={20} color={iconColor} />
-            <Text className="text-base text-foreground">{t('sidemenu.about')}</Text>
+            <BookOpen size={28} color={iconColor} />
+            <Text className="text-lg text-foreground">{t('sidemenu.about')}</Text>
           </Pressable>
         </View>
 
@@ -93,14 +93,14 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
         {/* Settings section */}
         <View className="border-t border-border pt-4 gap-3 mb-4">
           {/* Theme toggle */}
-          <View className="flex-row items-center justify-between px-3 py-2">
+          <View className="flex-row items-center justify-between px-3 py-3">
             <View className="flex-row items-center gap-3">
               {isDark ? (
-                <Moon size={20} color={iconColor} />
+                <Moon size={28} color={iconColor} />
               ) : (
-                <Sun size={20} color={iconColor} />
+                <Sun size={28} color={iconColor} />
               )}
-              <Text className="text-base text-foreground">
+              <Text className="text-lg text-foreground">
                 {isDark ? t('sidemenu.darkMode') : t('sidemenu.lightMode')}
               </Text>
             </View>
@@ -115,13 +115,13 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
           {/* Language toggle */}
           <Pressable
             onPress={cycleLanguage}
-            className="flex-row items-center justify-between px-3 py-2 rounded-md active:bg-accent"
+            className="flex-row items-center justify-between px-3 py-3 rounded-md active:bg-accent"
           >
             <View className="flex-row items-center gap-3">
-              <Languages size={20} color={iconColor} />
-              <Text className="text-base text-foreground">{t('sidemenu.language')}</Text>
+              <Languages size={28} color={iconColor} />
+              <Text className="text-lg text-foreground">{t('sidemenu.language')}</Text>
             </View>
-            <Text className="text-sm text-muted-foreground">{currentLanguageLabel}</Text>
+            <Text className="text-base text-muted-foreground">{currentLanguageLabel}</Text>
           </Pressable>
         </View>
       </View>

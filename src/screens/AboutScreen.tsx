@@ -18,7 +18,7 @@ const AboutScreen: React.FC = () => {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {/* Header */}
         <View className="bg-primary px-8 pt-20 pb-10 items-center">
-          <Text className="text-4xl font-extrabold text-primary-foreground text-center">
+          <Text className="text-5xl font-extrabold text-primary-foreground text-center">
             {t('about.title')}
           </Text>
         </View>
@@ -30,7 +30,7 @@ const AboutScreen: React.FC = () => {
               <Text className="text-2xl font-bold text-foreground">
                 {t('about.storyTitle')}
               </Text>
-              <Text className="text-base text-muted-foreground leading-6">
+              <Text className="text-lg text-muted-foreground leading-7">
                 {t('about.storyText')}
               </Text>
             </View>
@@ -39,7 +39,7 @@ const AboutScreen: React.FC = () => {
               <Text className="text-2xl font-bold text-foreground">
                 {t('about.missionTitle')}
               </Text>
-              <Text className="text-base text-muted-foreground leading-6">
+              <Text className="text-lg text-muted-foreground leading-7">
                 {t('about.missionText')}
               </Text>
             </View>
@@ -51,13 +51,13 @@ const AboutScreen: React.FC = () => {
               </Text>
               <Card className="border-accent/30">
                 <CardContent className="gap-3 pt-4">
-                  <Text className="text-base text-foreground leading-6">
+                  <Text className="text-lg text-foreground leading-7">
                     {t('about.valueCraft')}
                   </Text>
-                  <Text className="text-base text-foreground leading-6">
+                  <Text className="text-lg text-foreground leading-7">
                     {t('about.valueCreativity')}
                   </Text>
-                  <Text className="text-base text-foreground leading-6">
+                  <Text className="text-lg text-foreground leading-7">
                     {t('about.valueCommunity')}
                   </Text>
                 </CardContent>
@@ -72,10 +72,10 @@ const AboutScreen: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="gap-2">
-                <Text className="text-base text-secondary-foreground/90">
+                <Text className="text-lg text-secondary-foreground/90">
                   {t('about.visitAddress')}
                 </Text>
-                <Text className="text-base text-secondary-foreground/90">
+                <Text className="text-lg text-secondary-foreground/90">
                   {t('about.visitHours')}
                 </Text>
               </CardContent>

@@ -56,10 +56,10 @@ const AlbumsScreen: React.FC = () => {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {/* Header */}
         <View className="bg-secondary px-8 pt-20 pb-10 items-center">
-          <Text className="text-4xl font-extrabold text-secondary-foreground text-center">
+          <Text className="text-5xl font-extrabold text-secondary-foreground text-center">
             {t('albums.title')}
           </Text>
-          <Text className="text-lg text-secondary-foreground/80 text-center mt-2 italic">
+          <Text className="text-xl text-secondary-foreground/80 text-center mt-2 italic">
             {t('albums.subtitle')}
           </Text>
         </View>
@@ -69,7 +69,7 @@ const AlbumsScreen: React.FC = () => {
           <View className="w-full max-w-lg gap-8">
             {ALBUM_SECTIONS.map((section) => (
               <View key={section.titleKey} className="gap-4">
-                <Text className="text-xl font-bold text-accent border-b border-accent/30 pb-2">
+                <Text className="text-2xl font-bold text-accent border-b border-accent/30 pb-2">
                   {t(section.titleKey)}
                 </Text>
                 {section.items.map((item) => (

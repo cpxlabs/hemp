@@ -6,7 +6,7 @@ import { Platform, Text as RNText, type Role } from 'react-native';
 
 const textVariants = cva(
   cn(
-    'text-foreground text-base',
+    'text-foreground text-lg',
     Platform.select({
       web: 'select-text',
     })
@@ -32,8 +32,8 @@ const textVariants = cva(
         ),
         lead: 'text-muted-foreground text-xl',
         large: 'text-lg font-semibold',
-        small: 'text-sm font-medium leading-none',
-        muted: 'text-muted-foreground text-sm',
+        small: 'text-base font-medium leading-none',
+        muted: 'text-muted-foreground text-base',
       },
     },
     defaultVariants: {
