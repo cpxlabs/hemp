@@ -14,6 +14,7 @@ const LANGUAGES = [
   { code: 'en', label: 'English' },
   { code: 'pt-BR', label: 'Português' },
 ];
+const MIN_DRAWER_PADDING_BOTTOM = 20;
 
 export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
   const { isDark, toggleTheme } = useTheme();
@@ -51,7 +52,10 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
       <DrawerContentScrollView
         {...props}
         style={{ backgroundColor: 'transparent' }}
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: Math.max(insets.bottom, 20) }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingBottom: Math.max(insets.bottom, MIN_DRAWER_PADDING_BOTTOM),
+        }}
         showsVerticalScrollIndicator={false}
       >
         <View className="flex-1 bg-transparent px-4">
