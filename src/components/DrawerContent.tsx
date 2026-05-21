@@ -46,13 +46,16 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
     LANGUAGES.find((l) => l.code === language)?.label ?? language;
 
   const iconColor = isDark ? '#fffbe8' : '#0b234a';
+  const drawerBackgroundColor = isDark ? '#332013' : '#f7f0e6';
 
   return (
     <DrawerContentScrollView
       {...props}
-      contentContainerStyle={{ flex: 1, paddingBottom: insets.bottom }}
+      style={{ backgroundColor: drawerBackgroundColor }}
+      contentContainerStyle={{ flexGrow: 1, paddingBottom: Math.max(insets.bottom, 16) }}
+      showsVerticalScrollIndicator={false}
     >
-      <View className="flex-1 bg-background px-4">
+      <View className="flex-1 bg-transparent px-4">
         {/* Header */}
         <View className="border-b border-border pb-4 mb-2 mt-2">
           <Text className="text-2xl font-bold text-foreground">
@@ -91,7 +94,7 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
         <View className="flex-1" />
 
         {/* Settings section */}
-        <View className="border-t border-border pt-4 gap-3 mb-4">
+        <View className="border-t border-border pt-4 gap-3 pb-4">
           {/* Theme toggle */}
           <View className="flex-row items-center justify-between px-3 py-3">
             <View className="flex-row items-center gap-3">
