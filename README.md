@@ -1,5 +1,7 @@
 # Template React Native Web Expo TypeScript
 
+**Live demo:** [saudade-rn.vercel.app](https://saudade-rn.vercel.app/)
+
 A fully scaffolded, cross-platform (iOS / Android / Web) React Native template app built with Expo, TypeScript, and modern tooling.
 
 ## Features
