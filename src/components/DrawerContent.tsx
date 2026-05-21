@@ -93,7 +93,7 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
           <View className="flex-1" />
 
           {/* Settings section */}
-          <View className="border-t border-border pt-4 gap-3 pb-4">
+          <View className="border-t border-border pt-4 gap-3">
             {/* Theme toggle */}
             <View className="flex-row items-center justify-between px-3 py-3">
               <View className="flex-row items-center gap-3">
