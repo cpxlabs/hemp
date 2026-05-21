@@ -4,49 +4,49 @@
 
 @layer base {
   :root {
-    /* Milkshakespeare Brand — Light Mode */
-    --background: 50 100% 95%;        /* Ivory Mist #fffbe8 */
-    --foreground: 217 74% 17%;        /* Prussian Blue #0b234a */
-    --card: 0 0% 100%;
-    --card-foreground: 217 74% 17%;   /* Prussian Blue */
-    --popover: 0 0% 100%;
-    --popover-foreground: 217 74% 17%;
-    --primary: 217 74% 17%;           /* Prussian Blue #0b234a */
-    --primary-foreground: 50 100% 95%;/* Ivory Mist */
-    --secondary: 203 81% 27%;         /* Yale Blue #0d527c */
-    --secondary-foreground: 50 100% 95%;
-    --muted: 50 40% 90%;
-    --muted-foreground: 214 50% 42%;  /* Baltic Blue #3664a0 */
-    --accent: 46 63% 53%;             /* Metallic Gold #d3b03b */
-    --accent-foreground: 217 74% 17%; /* Prussian Blue */
+    /* Saudade Brand — Light Mode */
+    --background: 40 60% 96%;           /* Parchment #f7f0e6 */
+    --foreground: 25 40% 18%;           /* Deep Walnut #3d2b1a */
+    --card: 40 50% 98%;
+    --card-foreground: 25 40% 18%;      /* Deep Walnut */
+    --popover: 40 50% 98%;
+    --popover-foreground: 25 40% 18%;
+    --primary: 25 40% 18%;              /* Deep Walnut #3d2b1a */
+    --primary-foreground: 40 60% 96%;   /* Parchment */
+    --secondary: 25 30% 30%;            /* Warm Umber #6b4c36 */
+    --secondary-foreground: 40 60% 96%;
+    --muted: 40 30% 90%;
+    --muted-foreground: 25 20% 45%;     /* Aged Sienna */
+    --accent: 38 55% 48%;               /* Antique Brass #c49a3a */
+    --accent-foreground: 25 40% 18%;    /* Deep Walnut */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 46 30% 80%;
-    --input: 46 30% 80%;
-    --ring: 46 63% 53%;               /* Metallic Gold */
+    --border: 38 30% 78%;
+    --input: 38 30% 78%;
+    --ring: 38 55% 48%;                 /* Antique Brass */
     --radius: 0.5rem;
   }
 
   .dark {
-    /* Milkshakespeare Brand — Dark Mode */
-    --background: 217 74% 10%;        /* Darker Prussian Blue */
-    --foreground: 50 100% 95%;        /* Ivory Mist */
-    --card: 217 74% 14%;
-    --card-foreground: 50 100% 95%;
-    --popover: 217 74% 14%;
-    --popover-foreground: 50 100% 95%;
-    --primary: 46 63% 53%;            /* Metallic Gold */
-    --primary-foreground: 217 74% 17%;/* Prussian Blue */
-    --secondary: 203 81% 27%;         /* Yale Blue */
-    --secondary-foreground: 50 100% 95%;
-    --muted: 217 50% 20%;
-    --muted-foreground: 214 30% 60%;
-    --accent: 46 63% 53%;             /* Metallic Gold */
-    --accent-foreground: 217 74% 17%;
+    /* Saudade Brand — Dark Mode */
+    --background: 25 40% 10%;           /* Dark Walnut */
+    --foreground: 40 60% 96%;           /* Parchment */
+    --card: 25 40% 14%;
+    --card-foreground: 40 60% 96%;
+    --popover: 25 40% 14%;
+    --popover-foreground: 40 60% 96%;
+    --primary: 38 55% 48%;              /* Antique Brass */
+    --primary-foreground: 25 40% 18%;   /* Deep Walnut */
+    --secondary: 25 30% 25%;            /* Warm Umber (dark) */
+    --secondary-foreground: 40 60% 96%;
+    --muted: 25 30% 20%;
+    --muted-foreground: 38 20% 60%;
+    --accent: 38 55% 48%;               /* Antique Brass */
+    --accent-foreground: 25 40% 18%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 217 40% 25%;
-    --input: 217 40% 25%;
-    --ring: 46 63% 53%;               /* Metallic Gold */
+    --border: 25 30% 25%;
+    --input: 25 30% 25%;
+    --ring: 38 55% 48%;                 /* Antique Brass */
   }
 }

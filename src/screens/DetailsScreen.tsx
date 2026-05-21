@@ -2,52 +2,52 @@ import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { MenuScreenNavigationProp } from '../types/navigation';
+import { AlbumsScreenNavigationProp } from '../types/navigation';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { MenuButton } from '@/components/ui/menu-button';
 
-type MenuItem = {
+type AlbumItem = {
   nameKey: string;
   descKey: string;
 };
 
-const MENU_SECTIONS: { titleKey: string; items: MenuItem[] }[] = [
+const ALBUM_SECTIONS: { titleKey: string; items: AlbumItem[] }[] = [
   {
-    titleKey: 'menu.tragedies',
+    titleKey: 'albums.portraits',
     items: [
-      { nameKey: 'menu.romeoName', descKey: 'menu.romeoDesc' },
-      { nameKey: 'menu.hamletName', descKey: 'menu.hamletDesc' },
-      { nameKey: 'menu.macbethName', descKey: 'menu.macbethDesc' },
+      { nameKey: 'albums.portraitName', descKey: 'albums.portraitDesc' },
+      { nameKey: 'albums.couplePortraitName', descKey: 'albums.couplePortraitDesc' },
+      { nameKey: 'albums.childrenPortraitName', descKey: 'albums.childrenPortraitDesc' },
     ],
   },
   {
-    titleKey: 'menu.comedies',
+    titleKey: 'albums.milestones',
     items: [
-      { nameKey: 'menu.midsummerName', descKey: 'menu.midsummerDesc' },
-      { nameKey: 'menu.tempestName', descKey: 'menu.tempestDesc' },
-      { nameKey: 'menu.twelfthNightName', descKey: 'menu.twelfthNightDesc' },
+      { nameKey: 'albums.birthdayName', descKey: 'albums.birthdayDesc' },
+      { nameKey: 'albums.graduationName', descKey: 'albums.graduationDesc' },
+      { nameKey: 'albums.weddingName', descKey: 'albums.weddingDesc' },
     ],
   },
   {
-    titleKey: 'menu.histories',
+    titleKey: 'albums.traditions',
     items: [
-      { nameKey: 'menu.henryName', descKey: 'menu.henryDesc' },
-      { nameKey: 'menu.richardName', descKey: 'menu.richardDesc' },
+      { nameKey: 'albums.holidayName', descKey: 'albums.holidayDesc' },
+      { nameKey: 'albums.recipesName', descKey: 'albums.recipesDesc' },
     ],
   },
   {
-    titleKey: 'menu.sonnets',
+    titleKey: 'albums.heritage',
     items: [
-      { nameKey: 'menu.sonnet18Name', descKey: 'menu.sonnet18Desc' },
-      { nameKey: 'menu.sonnet130Name', descKey: 'menu.sonnet130Desc' },
+      { nameKey: 'albums.vintageName', descKey: 'albums.vintageDesc' },
+      { nameKey: 'albums.ancestryName', descKey: 'albums.ancestryDesc' },
     ],
   },
 ];
 
-const MenuScreen: React.FC = () => {
-  const navigation = useNavigation<MenuScreenNavigationProp>();
+const AlbumsScreen: React.FC = () => {
+  const navigation = useNavigation<AlbumsScreenNavigationProp>();
   const { t } = useTranslation();
 
   return (
@@ -57,17 +57,17 @@ const MenuScreen: React.FC = () => {
         {/* Header */}
         <View className="bg-secondary px-8 pt-20 pb-10 items-center">
           <Text className="text-4xl font-extrabold text-secondary-foreground text-center">
-            {t('menu.title')}
+            {t('albums.title')}
           </Text>
           <Text className="text-lg text-secondary-foreground/80 text-center mt-2 italic">
-            {t('menu.subtitle')}
+            {t('albums.subtitle')}
           </Text>
         </View>
 
-        {/* Menu Sections */}
+        {/* Album Sections */}
         <View className="px-6 py-8 items-center">
           <View className="w-full max-w-lg gap-8">
-            {MENU_SECTIONS.map((section) => (
+            {ALBUM_SECTIONS.map((section) => (
               <View key={section.titleKey} className="gap-4">
                 <Text className="text-xl font-bold text-accent border-b border-accent/30 pb-2">
                   {t(section.titleKey)}
@@ -100,4 +100,4 @@ const MenuScreen: React.FC = () => {
   );
 };
 
-export default MenuScreen;
+export default AlbumsScreen;

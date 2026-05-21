@@ -32,7 +32,7 @@ const HomeScreen: React.FC = () => {
               onPress={() => navigation.navigate('Menu')}
               className="bg-accent"
             >
-              <Text className="text-accent-foreground font-semibold">{t('home.viewFullMenu')}</Text>
+              <Text className="text-accent-foreground font-semibold">{t('home.viewAlbums')}</Text>
             </Button>
             <Button
               variant="outline"
@@ -54,7 +54,7 @@ const HomeScreen: React.FC = () => {
           </Text>
         </View>
 
-        {/* Featured Creations */}
+        {/* Featured Collections */}
         <View className="px-8 pb-10 items-center">
           <Text className="text-2xl font-bold text-foreground text-center mb-6">
             {t('home.featuredTitle')}
@@ -62,22 +62,22 @@ const HomeScreen: React.FC = () => {
           <View className="w-full max-w-lg gap-4">
             <Card className="w-full border-accent/30">
               <CardHeader>
-                <CardTitle className="text-secondary">{t('home.featuredRomeo')}</CardTitle>
-                <CardDescription>{t('home.featuredRomeoDesc')}</CardDescription>
+                <CardTitle className="text-secondary">{t('home.featuredPortraits')}</CardTitle>
+                <CardDescription>{t('home.featuredPortraitsDesc')}</CardDescription>
               </CardHeader>
             </Card>
 
             <Card className="w-full border-accent/30">
               <CardHeader>
-                <CardTitle className="text-secondary">{t('home.featuredHamlet')}</CardTitle>
-                <CardDescription>{t('home.featuredHamletDesc')}</CardDescription>
+                <CardTitle className="text-secondary">{t('home.featuredTraditions')}</CardTitle>
+                <CardDescription>{t('home.featuredTraditionsDesc')}</CardDescription>
               </CardHeader>
             </Card>
 
             <Card className="w-full border-accent/30">
               <CardHeader>
-                <CardTitle className="text-secondary">{t('home.featuredMidsummer')}</CardTitle>
-                <CardDescription>{t('home.featuredMidsummerDesc')}</CardDescription>
+                <CardTitle className="text-secondary">{t('home.featuredHeritage')}</CardTitle>
+                <CardDescription>{t('home.featuredHeritageDesc')}</CardDescription>
               </CardHeader>
             </Card>
           </View>
@@ -86,7 +86,7 @@ const HomeScreen: React.FC = () => {
             onPress={() => navigation.navigate('Menu')}
             className="mt-6"
           >
-            <Text>{t('home.viewFullMenu')}</Text>
+            <Text>{t('home.viewAlbums')}</Text>
           </Button>
         </View>
       </ScrollView>
