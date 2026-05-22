@@ -49,16 +49,14 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
   const iconColor = isDark ? '#fffbe8' : '#0b234a';
   return (
     <View className="flex-1 bg-background">
+      {/* Scrollable area: header + navigation only */}
       <DrawerContentScrollView
         {...props}
         style={{ backgroundColor: 'transparent' }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingBottom: Math.max(insets.bottom, MIN_DRAWER_PADDING_BOTTOM),
-        }}
+        contentContainerStyle={{ paddingBottom: 8 }}
         showsVerticalScrollIndicator={false}
       >
-        <View className="flex-1 bg-transparent px-4">
+        <View className="bg-transparent px-4">
           {/* Header */}
           <View className="border-b border-border pb-4 mb-2 mt-2">
             <Text className="text-2xl font-bold text-foreground">
@@ -92,46 +90,47 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
               <Text className="text-lg text-foreground">{t('sidemenu.about')}</Text>
             </Pressable>
           </View>
-
-          {/* Spacer */}
-          <View className="flex-1" />
-
-          {/* Settings section */}
-          <View className="border-t border-border pt-4 gap-3">
-            {/* Theme toggle */}
-            <View className="flex-row items-center justify-between px-3 py-3">
-              <View className="flex-row items-center gap-3">
-                {isDark ? (
-                  <Moon size={28} color={iconColor} />
-                ) : (
-                  <Sun size={28} color={iconColor} />
-                )}
-                <Text className="text-lg text-foreground">
-                  {isDark ? t('sidemenu.darkMode') : t('sidemenu.lightMode')}
-                </Text>
-              </View>
-              <Toggle
-                value={isDark}
-                onValueChange={toggleTheme}
-                activeColor="#d3b03b"
-                inactiveColor="#3664a0"
-              />
-            </View>
-
-            {/* Language toggle */}
-            <Pressable
-              onPress={cycleLanguage}
-              className="flex-row items-center justify-between px-3 py-3 rounded-md active:bg-accent"
-            >
-              <View className="flex-row items-center gap-3">
-                <Languages size={28} color={iconColor} />
-                <Text className="text-lg text-foreground">{t('sidemenu.language')}</Text>
-              </View>
-              <Text className="text-base text-muted-foreground">{currentLanguageLabel}</Text>
-            </Pressable>
-          </View>
         </View>
       </DrawerContentScrollView>
+
+      {/* Fixed bottom settings — outside ScrollView so it always stays visible
+          and the bg-background covers the system navigation bar area */}
+      <View
+        className="border-t border-border px-4 pt-3 gap-2 bg-background"
+        style={{ paddingBottom: Math.max(insets.bottom, MIN_DRAWER_PADDING_BOTTOM) }}
+      >
+        {/* Theme toggle */}
+        <View className="flex-row items-center justify-between px-3 py-3">
+          <View className="flex-row items-center gap-3">
+            {isDark ? (
+              <Moon size={28} color={iconColor} />
+            ) : (
+              <Sun size={28} color={iconColor} />
+            )}
+            <Text className="text-lg text-foreground">
+              {isDark ? t('sidemenu.darkMode') : t('sidemenu.lightMode')}
+            </Text>
+          </View>
+          <Toggle
+            value={isDark}
+            onValueChange={toggleTheme}
+            activeColor="#d3b03b"
+            inactiveColor="#3664a0"
+          />
+        </View>
+
+        {/* Language toggle */}
+        <Pressable
+          onPress={cycleLanguage}
+          className="flex-row items-center justify-between px-3 py-3 rounded-md active:bg-accent"
+        >
+          <View className="flex-row items-center gap-3">
+            <Languages size={28} color={iconColor} />
+            <Text className="text-lg text-foreground">{t('sidemenu.language')}</Text>
+          </View>
+          <Text className="text-base text-muted-foreground">{currentLanguageLabel}</Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
