@@ -52,7 +52,7 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
       {/* Scrollable area: header + navigation only */}
       <DrawerContentScrollView
         {...props}
-        style={{ backgroundColor: 'transparent' }}
+        style={{ flex: 1, backgroundColor: 'transparent' }}
         contentContainerStyle={{ paddingBottom: 8 }}
         showsVerticalScrollIndicator={false}
       >
