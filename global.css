@@ -4,6 +4,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .glass {
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .bg-carbon {
+    background-color: #050505;
+    background-image: radial-gradient(#111 10%, transparent 10%);
+    background-size: 4px 4px;
+  }
+}
+
 @layer base {
   :root {
     /* Saudade Brand — Light Mode (Parchment) */
@@ -30,15 +44,15 @@
   }
 
   .dark {
-    /* Saudade Brand — Dark Mode (Lighter Warm Wood) */
-    --background: 24 32% 22%;           /* Lighter Warm Walnut */
+    /* Hemp Ramps Brand — Dark Mode */
+    --background: 0 0% 4%;              /* #0A0A0A */
     --foreground: 40 56% 93%;           /* Warm Cream #f4eade */
     --card: 24 30% 27%;                 /* Lighter Wood */
     --card-foreground: 40 56% 93%;
     --popover: 24 30% 27%;
     --popover-foreground: 40 56% 93%;
-    --primary: 40 67% 70%;              /* Aged Gold #e6c280 */
-    --primary-foreground: 24 32% 22%;
+    --primary: 111 100% 54%;            /* Neon Green #39FF14 */
+    --primary-foreground: 0 0% 4%;
     --secondary: 25 30% 32%;            /* Mid Wood */
     --secondary-foreground: 40 56% 93%;
     --muted: 25 28% 28%;

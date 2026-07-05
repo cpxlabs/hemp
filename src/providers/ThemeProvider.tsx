@@ -17,11 +17,11 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 const THEME_STORAGE_KEY = '@app:theme';
 
 function getSystemTheme(): Theme {
-  return Appearance.getColorScheme() === 'dark' ? 'dark' : 'light';
+  return 'dark'; // Default to dark for Hemp Ramps
 }
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(getSystemTheme);
+  const [theme, setThemeState] = useState<Theme>('dark');
   const { setColorScheme } = useNativeWindColorScheme();
 
   const applyTheme = useCallback(

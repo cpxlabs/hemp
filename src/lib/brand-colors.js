@@ -17,6 +17,11 @@ const brandColors = {
     sand: '#b5a28c',
     antique: '#d4af37',
   },
+  cpx: {
+    neon: '#39FF14',
+    dark: '#0A0A0A',
+    carbon: '#121212',
+  }
 };
 
 module.exports = brandColors;

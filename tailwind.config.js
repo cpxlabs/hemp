@@ -34,6 +34,7 @@ module.exports = {
       colors: {
         wood: opacityScale(brandColors.wood),
         gold: opacityScale(brandColors.gold),
+        cpx: opacityScale(brandColors.cpx),
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

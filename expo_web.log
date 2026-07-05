@@ -1,0 +1,18 @@
+ WARN  Unsupported engine: wanted: {"node":">=24 <25"} (current: {"node":"v22.22.1","pnpm":"10.33.0"})
+
+> template-react-native-web-expo-ts@1.0.0 web /app
+> EXPO_PUBLIC_BUILD_PLATFORM=web expo start --web
+
+(node:254202) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Starting project at /app
+Starting Metro Bundler
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Web Bundled 17230ms (index.js)
+Web Bundled 341ms (index.js)
+Web Bundled 314ms (index.js)
+Web Bundled 255ms (index.js)
+Web Bundled 254ms (index.js)
+Web Bundled 254ms (index.js)
+ ELIFECYCLE  Command failed.
