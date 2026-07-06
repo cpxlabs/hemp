@@ -37,6 +37,11 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
     props.navigation.closeDrawer();
   };
 
+  const navigateToCategory = (route: string) => {
+    props.navigation.navigate('Main', { screen: route });
+    props.navigation.closeDrawer();
+  };
+
   const cycleLanguage = () => {
     const currentIndex = LANGUAGES.findIndex((l) => l.code === language);
     const nextIndex = (currentIndex + 1) % LANGUAGES.length;
@@ -88,6 +93,39 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
             >
               <BookOpen size={28} color={iconColor} />
               <Text className="text-lg text-foreground">{t('sidemenu.about')}</Text>
+            </Pressable>
+
+            <View className="h-px bg-border my-2 mx-3" />
+
+            <Pressable
+              onPress={() => navigateToCategory('Ramps')}
+              className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
+            >
+              <Text className="text-lg text-foreground">Rampas</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => navigateToCategory('Decks')}
+              className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
+            >
+              <Text className="text-lg text-foreground">Decks</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => navigateToCategory('DiceTower')}
+              className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
+            >
+              <Text className="text-lg text-foreground">Dice Tower</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => navigateToCategory('Acessorios')}
+              className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
+            >
+              <Text className="text-lg text-foreground">Acessórios</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => navigateToCategory('Xadrez')}
+              className="flex-row items-center gap-3 rounded-md px-3 py-4 active:bg-accent"
+            >
+              <Text className="text-lg text-foreground">Xadrez</Text>
             </Pressable>
           </View>
         </View>

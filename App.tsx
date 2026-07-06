@@ -8,6 +8,7 @@ import { LanguageProvider } from './src/providers/LanguageProvider';
 import { AuthProvider } from './src/providers/AuthProvider';
 import { AdProvider } from './src/providers/AdProvider';
 import { ToastProvider } from './src/providers/ToastProvider';
+import { ConfiguratorProvider } from './src/providers/ConfiguratorProvider';
 import AppNavigator from './src/navigation/AppNavigator';
 import './src/i18n';
 
@@ -20,7 +21,9 @@ export default function App() {
             <AuthProvider>
               <AdProvider>
                 <ToastProvider>
-                  <AppNavigator />
+                  <ConfiguratorProvider>
+                    <AppNavigator />
+                  </ConfiguratorProvider>
                 </ToastProvider>
               </AdProvider>
             </AuthProvider>

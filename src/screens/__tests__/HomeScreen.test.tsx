@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import HomeScreen from '../HomeScreen';
+import { ConfiguratorProvider } from '../../providers/ConfiguratorProvider';
 
 // Mock Scene3D
 jest.mock('../../components/Scene3D', () => {
@@ -21,24 +22,40 @@ jest.mock('framer-motion', () => ({
 
 describe('HomeScreen', () => {
   it('renders without crashing', () => {
-    const { toJSON } = render(<HomeScreen />);
+    const { toJSON } = render(
+      <ConfiguratorProvider>
+        <HomeScreen />
+      </ConfiguratorProvider>
+    );
     expect(toJSON()).toBeTruthy();
   });
 
   it('displays Hemp Ramps branding', () => {
-    const { getByText } = render(<HomeScreen />);
+    const { getByText } = render(
+      <ConfiguratorProvider>
+        <HomeScreen />
+      </ConfiguratorProvider>
+    );
     expect(getByText(/HEMP RAMPS/)).toBeTruthy();
   });
 
   it('has navigation links', () => {
-    const { getByText } = render(<HomeScreen />);
+    const { getByText } = render(
+      <ConfiguratorProvider>
+        <HomeScreen />
+      </ConfiguratorProvider>
+    );
     expect(getByText('RAMPAS')).toBeTruthy();
     expect(getByText('DECKS')).toBeTruthy();
     expect(getByText('ACESSÓRIOS')).toBeTruthy();
   });
 
   it('displays configurator panel', () => {
-    const { getByText } = render(<HomeScreen />);
-    expect(getByText(/Configurar seu produto/i)).toBeTruthy();
+    const { getAllByText } = render(
+      <ConfiguratorProvider>
+        <HomeScreen />
+      </ConfiguratorProvider>
+    );
+    expect(getAllByText(/Configurar seu produto/i).length).toBeGreaterThan(0);
   });
 });

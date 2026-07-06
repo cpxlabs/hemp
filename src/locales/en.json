@@ -70,6 +70,34 @@
     "theme": "Theme",
     "darkMode": "Dark Mode",
     "lightMode": "Light Mode",
-    "language": "Language"
+    "language": "Language",
+    "ramps": "Ramps",
+    "decks": "Decks",
+    "diceTower": "Dice Towers",
+    "accessories": "Accessories",
+    "chess": "Chess"
+  },
+  "categories": {
+    "ramps": {
+      "title": "Ramps",
+      "filterMaterial": "Filter by Material"
+    },
+    "decks": {
+      "title": "Decks",
+      "filterFormat": "Filter by Format"
+    },
+    "diceTower": {
+      "title": "Dice Towers",
+      "featured": "Featured Tower"
+    },
+    "accessories": {
+      "title": "Accessories"
+    },
+    "chess": {
+      "title": "Chess",
+      "completeSets": "Complete Sets",
+      "boardsOnly": "Boards Only",
+      "piecesOnly": "Pieces Only"
+    }
   }
 }
