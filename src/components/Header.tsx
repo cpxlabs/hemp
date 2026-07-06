@@ -1,13 +1,24 @@
 import React from 'react';
 import { View, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Text } from './ui/text';
 import { motion } from 'framer-motion';
+import { RootStackParamList } from '../types/navigation';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const NAV_LINKS = ['RAMPAS', 'DECKS', 'ACESSÓRIOS', 'DICE TOWER', 'XADREZ'];
+const NAV_LINKS = [
+  { label: 'RAMPAS', route: 'Ramps' },
+  { label: 'DECKS', route: 'Decks' },
+  { label: 'ACESSÓRIOS', route: 'Acessorios' },
+  { label: 'DICE TOWER', route: 'DiceTower' },
+  { label: 'XADREZ', route: 'Xadrez' },
+] as const;
 
 const MotionView = motion.div;
 
 export const Header = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
     <MotionView
       initial={{ y: -100, opacity: 0 }}
@@ -38,9 +49,9 @@ export const Header = () => {
 
       <View className="hidden flex-row gap-8 md:flex" style={{ flexGrow: 1, justifyContent: 'center' }}>
         {NAV_LINKS.map((link) => (
-          <Pressable key={link}>
+          <Pressable key={link.route} onPress={() => navigation.navigate(link.route as any)}>
             <Text className="text-xs font-bold tracking-widest text-white/70 hover:text-primary transition-colors">
-              {link}
+              {link.label}
             </Text>
           </Pressable>
         ))}

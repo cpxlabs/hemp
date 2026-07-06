@@ -70,6 +70,34 @@
     "theme": "Tema",
     "darkMode": "Modo Escuro",
     "lightMode": "Modo Claro",
-    "language": "Idioma"
+    "language": "Idioma",
+    "ramps": "Rampas",
+    "decks": "Decks",
+    "diceTower": "Dice Towers",
+    "accessories": "Acessórios",
+    "chess": "Xadrez"
+  },
+  "categories": {
+    "ramps": {
+      "title": "Rampas",
+      "filterMaterial": "Filtrar por Material"
+    },
+    "decks": {
+      "title": "Decks",
+      "filterFormat": "Filtrar por Formato"
+    },
+    "diceTower": {
+      "title": "Dice Towers",
+      "featured": "Destaque"
+    },
+    "accessories": {
+      "title": "Acessórios"
+    },
+    "chess": {
+      "title": "Xadrez",
+      "completeSets": "Sets Completos",
+      "boardsOnly": "Apenas Tabuleiros",
+      "piecesOnly": "Apenas Peças"
+    }
   }
 }

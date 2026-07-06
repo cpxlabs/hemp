@@ -6,6 +6,11 @@ export type RootStackParamList = {
   Home: undefined;
   Menu: undefined;
   About: undefined;
+  Ramps: undefined;
+  Decks: undefined;
+  DiceTower: undefined;
+  Acessorios: undefined;
+  Xadrez: undefined;
 };
 
 export type DrawerParamList = {
@@ -17,6 +22,12 @@ export type MenuScreenNavigationProp = NativeStackNavigationProp<RootStackParamL
 /** Alias for the Albums screen, which maps to the 'Menu' route internally. */
 export type AlbumsScreenNavigationProp = MenuScreenNavigationProp;
 export type AboutScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'About'>;
+export type RampsScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Ramps'>;
+export type DecksScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Decks'>;
+export type DiceTowerScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DiceTower'>;
+export type AcessoriosScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Acessorios'>;
+export type XadrezScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Xadrez'>;
+
 export type MenuScreenRouteProp = RouteProp<RootStackParamList, 'Menu'>;
 
 declare global {
