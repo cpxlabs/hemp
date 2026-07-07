@@ -768,7 +768,7 @@ const Scene3D: React.FC<Scene3DProps> = ({
   const { isRampCollapsed } = useConfigurator();
 
   const backgroundColor = isDark ? '#050505' : '#f7f0e6';
-  const ambientIntensity = isDark ? 0.3 : 0.6;
+  const ambientIntensity = isDark ? 0.45 : 0.75;
   const spotIntensity = isDark ? 2.5 : 1.5;
   const shadowColor = isDark ? '#39FF14' : '#4d372c';
 
@@ -789,6 +789,8 @@ const Scene3D: React.FC<Scene3DProps> = ({
           />
 
           <ambientLight intensity={ambientIntensity} />
+          <directionalLight position={[0, 10, 0]} intensity={isDark ? 1.8 : 1.2} castShadow shadow-mapSize={[1024, 1024]} />
+          
           <spotLight
             position={[6, 9, 6]}
             angle={0.3}
@@ -796,6 +798,12 @@ const Scene3D: React.FC<Scene3DProps> = ({
             intensity={spotIntensity}
             castShadow
             shadow-mapSize={[2048, 2048]}
+          />
+          <spotLight
+            position={[-6, 9, -6]}
+            angle={0.4}
+            penumbra={1}
+            intensity={isDark ? 1.5 : 1.0}
           />
           {isDark && (
             <pointLight position={[-5, 5, -5]} intensity={1.5} color="#39FF14" />

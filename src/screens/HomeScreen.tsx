@@ -22,26 +22,23 @@ const HomeScreen = () => {
   const [isCategoriesMinimized, setIsCategoriesMinimized] = useState(false);
 
   return (
-    <View className="flex-1 bg-carbon overflow-hidden">
+    <View className="flex-1 bg-carbon overflow-hidden relative">
       <Header />
 
-      <View className="flex-1 flex-col lg:flex-row">
-        {/* 3D Model View - Takes full screen on mobile, right side on desktop */}
-        <View className="flex-[1.5] lg:order-2">
-          <Scene3D category="Home" />
-        </View>
+      {/* 3D Viewport - Fullscreen */}
+      <View className="absolute inset-0 z-0 pt-16">
+        <Scene3D category="Home" />
+      </View>
 
-        {/* Configurator Panel - Overlays on mobile (handled by absolute pos in component) or stays left on desktop */}
-        <View className="hidden lg:flex lg:flex-1 lg:order-1 relative items-center justify-center pointer-events-none">
-          {/* On desktop, the ConfiguratorPanel is placed inside this flex container */}
-          <View className="pointer-events-auto">
-             <ConfiguratorPanel isMobile={false} />
-          </View>
+      {/* Desktop Configurator Panel Overlay */}
+      <View className="hidden lg:flex absolute top-24 left-10 z-40 pointer-events-none" style={{ width: 420 }}>
+        <View className="pointer-events-auto">
+          <ConfiguratorPanel isMobile={false} />
         </View>
       </View>
 
       {/* Mobile Configurator Panel (Absolute Overlay) */}
-      <View className="lg:hidden">
+      <View className="lg:hidden z-40">
         <ConfiguratorPanel isMobile={true} />
       </View>
 
