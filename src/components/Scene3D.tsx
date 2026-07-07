@@ -762,9 +762,7 @@ interface Scene3DProps {
 
 const Scene3D: React.FC<Scene3DProps> = ({
   category,
-  activeProductId,
-  material,
-  finish
+  material
 }) => {
   const { isDark } = useTheme();
   const { isRampCollapsed } = useConfigurator();

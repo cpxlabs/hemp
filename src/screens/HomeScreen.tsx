@@ -72,7 +72,7 @@ const HomeScreen = () => {
               {CATEGORIES.map((cat) => (
                 <Pressable
                   key={cat.route}
-                  onPress={() => navigation.navigate(cat.route as any)}
+                  onPress={() => navigation.navigate(cat.route as keyof RootStackParamList)}
                   className="flex-row items-center justify-between py-2 group"
                 >
                   <Text className="text-white text-sm font-medium group-hover:text-primary transition-colors">
