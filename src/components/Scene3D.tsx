@@ -14,6 +14,8 @@ import {
 import { useTheme } from '../providers/ThemeProvider';
 import { useConfigurator } from '../providers/ConfiguratorProvider';
 
+const isMobileDevice = typeof window !== 'undefined' && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
 // --- Material Selector Helper ---
 const getMaterialProps = (materialName?: string, isDark?: boolean) => {
   const name = materialName?.toLowerCase() || '';
@@ -89,8 +91,8 @@ const StadiumLight = ({ position, isDark, color }: any) => {
         angle={Math.PI / 3}
         penumbra={0.6}
         color={lightColor}
-        castShadow
-        shadow-mapSize={[512, 512]}
+        castShadow={!isMobileDevice}
+        shadow-mapSize={isMobileDevice ? [256, 256] : [512, 512]}
       />
       {/* Halo point light for color bleed */}
       <pointLight
@@ -1750,7 +1752,7 @@ const Scene3D: React.FC<Scene3DProps> = ({
             intensity={isDark ? 3.5 : 2.5}
             color={isDark ? '#ffffff' : '#fff8f0'}
             castShadow
-            shadow-mapSize={[2048, 2048]}
+            shadow-mapSize={isMobileDevice ? [1024, 1024] : [2048, 2048]}
             shadow-bias={-0.0005}
           />
           {/* Cool rim light for separation */}
@@ -1765,8 +1767,8 @@ const Scene3D: React.FC<Scene3DProps> = ({
             angle={0.5}
             penumbra={0.9}
             intensity={spotIntensity}
-            castShadow
-            shadow-mapSize={[2048, 2048]}
+            castShadow={!isMobileDevice}
+            shadow-mapSize={isMobileDevice ? [512, 512] : [2048, 2048]}
             shadow-bias={-0.0005}
             color="#ffffff"
           />
