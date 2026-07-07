@@ -51,12 +51,12 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
     <group position={[0, -0.2, 0]}>
       {/* Ground Concrete Slab */}
       <mesh receiveShadow position={[0, -0.5, 0]}>
-        <boxGeometry args={[7.2, 0.15, 5.0]} />
+        <boxGeometry args={[9.2, 0.15, 5.0]} />
         <meshStandardMaterial color={parkColor} roughness={0.8} metalness={0.1} />
       </mesh>
       
       {/* Quarterpipe transition on Left */}
-      <group position={[-2.6, -0.425, 0]}>
+      <group position={[-3.5, -0.425, 0]}>
         {/* Base block */}
         <mesh castShadow receiveShadow position={[-0.4, 0.4, 0]}>
           <boxGeometry args={[0.8, 0.8, 4.2]} />
@@ -113,7 +113,7 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       </group>
 
       {/* Kicker Ramp on Right */}
-      <group position={[2.4, -0.425, 0]}>
+      <group position={[3.3, -0.425, 0]}>
         {/* Base wedge slope */}
         <mesh castShadow position={[-0.2, 0.125, 0]} rotation={[0, 0, -Math.PI / 12]}>
           <boxGeometry args={[1.3, 0.08, 2.6]} />
