@@ -256,7 +256,7 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       <StadiumLight position={[4.2, -0.525, 2.2]} isDark={isDark} />
 
       {/* --- Central Skate Ramp (Quarterpipe) --- */}
-      <group position={[-0.2, -0.425, -0.1]}>
+      <group position={[-0.4, -0.425, -0.5]}>
         {/* Base block */}
         <mesh castShadow receiveShadow position={[0, 0.4, -0.8]}>
           <boxGeometry args={[3.2, 0.8, 1.2]} />
@@ -352,7 +352,7 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       </group>
 
       {/* --- Stack of Wooden Fingerboard Decks to the Left --- */}
-      <group position={[-3.1, -0.425, 0.0]} rotation={[0.05, 0.5, 0]}>
+      <group position={[-3.3, -0.425, 0.4]} rotation={[0.05, 0.5, 0]}>
         {[0, 1, 2, 3, 4].map((index) => {
           const woodHue = index === 4 ? woodColor : index % 2 === 0 ? '#8b5a2b' : '#6f4a27';
           return (
@@ -399,7 +399,7 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       </group>
 
       {/* --- Detailed Stone Dice Tower to the Right --- */}
-      <group position={[2.8, -0.425, -0.9]} rotation={[0, -0.3, 0]}>
+      <group position={[3.0, -0.425, -1.3]} rotation={[0, -0.3, 0]}>
         {/* Tower Base castle wall */}
         <mesh castShadow position={[0, 0.7, 0]}>
           <boxGeometry args={[0.9, 1.4, 0.9]} />
@@ -446,7 +446,7 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       </group>
 
       {/* --- Chess Board and pieces in Front Right --- */}
-      <group position={[1.9, -0.425, 1.4]} rotation={[0, -0.2, 0]}>
+      <group position={[2.4, -0.425, 1.1]} rotation={[0, -0.2, 0]}>
         {/* Chess board base frame */}
         <mesh castShadow receiveShadow position={[0, 0.05, 0]}>
           <boxGeometry args={[2.5, 0.1, 2.5]} />
