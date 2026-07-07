@@ -724,24 +724,40 @@ const SkateRamp = ({ active, material, isDark, isCollapsed = false, ...props }: 
 
 const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any, ref: any) => {
   const matProps = {
-    color: '#1a1a1a', // Black grip tape look matching base photo
+    color: '#1a1a1a', // Black grip tape look
     roughness: 0.98,
     metalness: 0.05,
   };
   const woodCoreProps = {
-    color: '#e3be94', // Light birch ply color matching the photo edge
-    roughness: 0.45,
-    metalness: 0.1,
-    clearcoat: 0.25,
+    color: '#d1a075', // Richer maple ply
+    roughness: 0.35,
+    metalness: 0.05,
+    clearcoat: 0.8,
+    clearcoatRoughness: 0.1,
   };
   
+  const graphicProps = {
+    color: '#0a0a0a',
+    roughness: 0.2,
+    metalness: 0.2,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.05,
+  };
+
+  const bushingProps = {
+    color: '#39FF14', // Neon lime green Pro bushings
+    roughness: 0.4,
+    transmission: 0.2,
+    thickness: 0.1,
+  };
+
   const metalProps = {
-    color: '#d4af37', // Polished gold/brass trucks matching photo
-    roughness: 0.18,
+    color: '#e0e0e0', // Polished silver trucks
+    roughness: 0.1,
     metalness: 0.95,
   };
 
-  const hardwareColor = '#d4af37'; // Gold hardware bolts
+  const hardwareColor = '#111111'; // Black allen bolts
 
   return (
     <group ref={ref} {...props} rotation={[0, 0, 0]}>
@@ -749,11 +765,17 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
       <group position={[0, 0.1, 0]}>
         {/* --- Middle Section with Concave (Split into center + side rails) --- */}
         <group position={[0, 0, 0]}>
-          {/* Flat Center */}
+          {/* Flat Center Grip */}
           <mesh castShadow receiveShadow position={[0, 0, 0]}>
             <boxGeometry args={[0.42, 0.025, 1.2]} />
             <meshPhysicalMaterial {...matProps} />
           </mesh>
+          {/* Grip Tape Cut-out line exposing wood underneath */}
+          <mesh position={[0, 0.013, -0.2]}>
+            <boxGeometry args={[0.425, 0.002, 0.03]} />
+            <meshPhysicalMaterial {...woodCoreProps} />
+          </mesh>
+
           {/* Left Concave Rail */}
           <mesh castShadow receiveShadow position={[-0.28, 0.035, 0]} rotation={[0, 0, Math.PI / 12]}>
             <boxGeometry args={[0.16, 0.025, 1.2]} />
@@ -771,42 +793,50 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
             <meshPhysicalMaterial {...woodCoreProps} />
           </mesh>
 
-          {/* 8 Gold Hardware Bolts on Top */}
+          {/* Bottom Deck Graphic (CPX Custom Foil Decal) */}
+          <group position={[0, -0.017, 0]}>
+            <mesh position={[0, 0, 0]}>
+              <boxGeometry args={[0.7, 0.002, 1.1]} />
+              <meshPhysicalMaterial {...graphicProps} />
+            </mesh>
+            <mesh position={[0, -0.001, 0.1]}>
+              <boxGeometry args={[0.3, 0.002, 0.6]} />
+              <meshBasicMaterial color="#39FF14" />
+            </mesh>
+            <mesh position={[0, -0.001, -0.3]}>
+              <boxGeometry args={[0.4, 0.002, 0.1]} />
+              <meshBasicMaterial color="#39FF14" />
+            </mesh>
+          </group>
+
+          {/* 8 Black Hardware Bolts sunken into grip tape */}
           {/* Front Truck Bolts */}
-          <mesh position={[-0.12, 0.015, 0.45]}>
-            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
-            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
-          </mesh>
-          <mesh position={[0.12, 0.015, 0.45]}>
-            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
-            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
-          </mesh>
-          <mesh position={[-0.12, 0.015, 0.55]}>
-            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
-            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
-          </mesh>
-          <mesh position={[0.12, 0.015, 0.55]}>
-            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
-            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
-          </mesh>
+          {[[-0.12, 0.45], [0.12, 0.45], [-0.12, 0.55], [0.12, 0.55]].map(([hx, hz], i) => (
+            <group key={`f-bolt-${i}`} position={[hx, 0.012, hz]}>
+              <mesh position={[0, 0.001, 0]}>
+                <cylinderGeometry args={[0.022, 0.022, 0.002, 12]} />
+                <meshBasicMaterial color="#050505" />
+              </mesh>
+              <mesh position={[0, 0, 0]}>
+                <cylinderGeometry args={[0.012, 0.012, 0.01, 8]} />
+                <meshStandardMaterial color={hardwareColor} metalness={0.8} roughness={0.2} />
+              </mesh>
+            </group>
+          ))}
 
           {/* Rear Truck Bolts */}
-          <mesh position={[-0.12, 0.015, -0.45]}>
-            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
-            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
-          </mesh>
-          <mesh position={[0.12, 0.015, -0.45]}>
-            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
-            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
-          </mesh>
-          <mesh position={[-0.12, 0.015, -0.55]}>
-            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
-            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
-          </mesh>
-          <mesh position={[0.12, 0.015, -0.55]}>
-            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
-            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
-          </mesh>
+          {[[-0.12, -0.45], [0.12, -0.45], [-0.12, -0.55], [0.12, -0.55]].map(([hx, hz], i) => (
+            <group key={`r-bolt-${i}`} position={[hx, 0.012, hz]}>
+              <mesh position={[0, 0.001, 0]}>
+                <cylinderGeometry args={[0.022, 0.022, 0.002, 12]} />
+                <meshBasicMaterial color="#050505" />
+              </mesh>
+              <mesh position={[0, 0, 0]}>
+                <cylinderGeometry args={[0.012, 0.012, 0.01, 8]} />
+                <meshStandardMaterial color={hardwareColor} metalness={0.8} roughness={0.2} />
+              </mesh>
+            </group>
+          ))}
         </group>
 
         {/* --- Nose Kicktail (Front) Hinge Group --- */}
@@ -852,58 +882,62 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
         </group>
       </group>
 
-      {/* --- Pro Metal Trucks (Front & Back) --- */}
+      {/* --- Pro Metal Trucks & Wheels (Front & Back) --- */}
       {[-0.5, 0.5].map((z) => (
         <group key={z} position={[0, 0.04, z]}>
           {/* Baseplate */}
           <mesh castShadow position={[0, 0.04, 0]}>
-            <boxGeometry args={[0.2, 0.03, 0.25]} />
+            <boxGeometry args={[0.2, 0.02, 0.25]} />
             <meshStandardMaterial {...metalProps} />
           </mesh>
-          {/* Kingpin & Bushings */}
-          <mesh position={[0, 0.01, 0]}>
-            <cylinderGeometry args={[0.04, 0.04, 0.08, 8]} />
-            <meshStandardMaterial color="#2c6b85" roughness={0.3} />
-          </mesh>
-          {/* Hanger / Axle */}
-          <mesh castShadow position={[0, -0.03, 0]} rotation={[0, 0, Math.PI / 2]}>
-            <cylinderGeometry args={[0.035, 0.035, 0.72, 16]} />
-            <meshStandardMaterial {...metalProps} />
-          </mesh>
+          {/* Pivot Cup & Kingpin Bushings */}
+          <group position={[0, 0.015, z > 0 ? -0.05 : 0.05]}>
+            <mesh position={[0, 0, 0]}>
+              <cylinderGeometry args={[0.045, 0.045, 0.08, 12]} />
+              <meshPhysicalMaterial {...bushingProps} />
+            </mesh>
+            {/* Bushing Washers */}
+            <mesh position={[0, 0.045, 0]}>
+              <cylinderGeometry args={[0.05, 0.05, 0.01, 12]} />
+              <meshStandardMaterial {...metalProps} />
+            </mesh>
+          </group>
           
-          {/* Urethane Wheels */}
+          {/* Hanger / Axle (Tapered profile) */}
           <group position={[0, -0.03, 0]}>
-            {/* Left Wheel (Teal tyre) */}
-            <mesh position={[-0.38, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
-              <cylinderGeometry args={[0.13, 0.13, 0.09, 16]} />
-              <meshPhysicalMaterial color="#35778a" roughness={0.35} />
+            {/* Main Tapered Hanger */}
+            <mesh castShadow rotation={[0, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[0.025, 0.045, 0.5, 16]} />
+              <meshStandardMaterial {...metalProps} />
             </mesh>
-            {/* Left White Hub */}
-            <mesh position={[-0.41, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.09, 0.09, 0.04, 12]} />
-              <meshStandardMaterial color="#ffffff" roughness={0.4} />
+            {/* Axle Rods */}
+            <mesh castShadow rotation={[0, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[0.015, 0.015, 0.76, 8]} />
+              <meshStandardMaterial {...metalProps} />
             </mesh>
-            {/* Left Center Nut (Gold) */}
-            <mesh position={[-0.435, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.035, 0.035, 0.02, 8]} />
-              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} />
-            </mesh>
-
-            {/* Right Wheel (Teal tyre) */}
-            <mesh position={[0.38, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
-              <cylinderGeometry args={[0.13, 0.13, 0.09, 16]} />
-              <meshPhysicalMaterial color="#35778a" roughness={0.35} />
-            </mesh>
-            {/* Right White Hub */}
-            <mesh position={[0.41, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.09, 0.09, 0.04, 12]} />
-              <meshStandardMaterial color="#ffffff" roughness={0.4} />
-            </mesh>
-            {/* Right Center Nut (Gold) */}
-            <mesh position={[0.435, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.035, 0.035, 0.02, 8]} />
-              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} />
-            </mesh>
+          </group>
+          
+          {/* Conical Urethane Wheels */}
+          <group position={[0, -0.03, 0]}>
+            {[-0.39, 0.39].map((wx, i) => (
+              <group key={wx} position={[wx, 0, 0]}>
+                {/* Wheel Outer Edge (Conical shape) */}
+                <mesh rotation={[0, 0, Math.PI / 2]} castShadow>
+                  <cylinderGeometry args={[0.13, 0.11, 0.08, 24]} />
+                  <meshPhysicalMaterial color="#ffffff" roughness={0.5} clearcoat={0.1} />
+                </mesh>
+                {/* Inner Core Recess */}
+                <mesh position={[i === 0 ? 0.02 : -0.02, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+                  <cylinderGeometry args={[0.09, 0.09, 0.04, 16]} />
+                  <meshStandardMaterial color="#f0f0f0" roughness={0.3} />
+                </mesh>
+                {/* Axle Nut */}
+                <mesh position={[i === 0 ? -0.045 : 0.045, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+                  <cylinderGeometry args={[0.035, 0.035, 0.02, 8]} />
+                  <meshStandardMaterial color="#111111" metalness={0.9} roughness={0.1} />
+                </mesh>
+              </group>
+            ))}
           </group>
         </group>
       ))}
