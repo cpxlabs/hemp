@@ -9,6 +9,8 @@ interface ConfiguratorContextType {
   resetSelections: () => void;
   isRampCollapsed: boolean;
   setIsRampCollapsed: (val: boolean) => void;
+  lightsColor: string;
+  setLightsColor: (col: string) => void;
 }
 
 const ConfiguratorContext = createContext<ConfiguratorContextType | undefined>(undefined);
@@ -17,6 +19,7 @@ export const ConfiguratorProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [selections, setSelections] = useState<any[]>([]);
   const [activeProductIndex, setActiveProductIndex] = useState(0);
   const [isRampCollapsed, setIsRampCollapsed] = useState(false);
+  const [lightsColor, setLightsColor] = useState('#39FF14');
 
   useEffect(() => {
     const load = async () => {
@@ -26,6 +29,8 @@ export const ConfiguratorProvider: React.FC<{ children: React.ReactNode }> = ({ 
       if (typeof savedIndex === 'number') setActiveProductIndex(savedIndex);
       const savedCollapsed = await storage.getItem<boolean>('ramp-collapsed');
       if (typeof savedCollapsed === 'boolean') setIsRampCollapsed(savedCollapsed);
+      const savedColor = await storage.getItem<string>('configurator-lights-color');
+      if (savedColor) setLightsColor(savedColor);
     };
     load();
   }, []);
@@ -45,6 +50,11 @@ export const ConfiguratorProvider: React.FC<{ children: React.ReactNode }> = ({ 
     storage.setItem('ramp-collapsed', val);
   };
 
+  const handleSetLightsColor = (col: string) => {
+    setLightsColor(col);
+    storage.setItem('configurator-lights-color', col);
+  };
+
   const resetSelections = () => {
     // defaults
   };
@@ -57,7 +67,9 @@ export const ConfiguratorProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setActiveProductIndex: handleSetActiveIndex,
       resetSelections,
       isRampCollapsed,
-      setIsRampCollapsed: handleSetRampCollapsed
+      setIsRampCollapsed: handleSetRampCollapsed,
+      lightsColor,
+      setLightsColor: handleSetLightsColor
     }}>
       {children}
     </ConfiguratorContext.Provider>

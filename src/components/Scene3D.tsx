@@ -45,9 +45,9 @@ const getMaterialProps = (materialName?: string, isDark?: boolean) => {
   };
 };
 
-const StadiumLight = ({ position, isDark }: any) => {
+const StadiumLight = ({ position, isDark, color }: any) => {
   const poleColor = isDark ? '#222222' : '#888888';
-  const lightColor = isDark ? '#39FF14' : '#fff9e6';
+  const lightColor = color || (isDark ? '#39FF14' : '#fff9e6');
   return (
     <group position={position}>
       {/* Pole */}
@@ -236,6 +236,7 @@ const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
 };
 
 const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
+  const { lightsColor } = useConfigurator();
   const parkColor = '#b5b0a6'; // Concrete grey color for realistic skatepark ground
   const structuralColor = isDark ? '#1f1f1f' : '#d5cbbd';
   const woodColor = '#a87544'; // Beautiful rich warm wood color for the ramp face
@@ -278,77 +279,103 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       <gridHelper args={[9.5, 12, '#8e8a82', '#9c978f']} position={[0, -0.42, 0]} />
 
       {/* --- Stadium Corner Lights for Sparks and Warm Glow --- */}
-      <StadiumLight position={[-4.2, -0.525, -2.2]} isDark={isDark} />
-      <StadiumLight position={[4.2, -0.525, -2.2]} isDark={isDark} />
-      <StadiumLight position={[-4.2, -0.525, 2.2]} isDark={isDark} />
-      <StadiumLight position={[4.2, -0.525, 2.2]} isDark={isDark} />
+      <StadiumLight position={[-4.2, -0.525, -2.2]} isDark={isDark} color={lightsColor} />
+      <StadiumLight position={[4.2, -0.525, -2.2]} isDark={isDark} color={lightsColor} />
+      <StadiumLight position={[-4.2, -0.525, 2.2]} isDark={isDark} color={lightsColor} />
+      <StadiumLight position={[4.2, -0.525, 2.2]} isDark={isDark} color={lightsColor} />
+
+      {/* Secondary glowing RGB light bulbs at the sides of the concrete park */}
+      <group position={[-3.8, -0.38, -0.5]}>
+        <mesh castShadow>
+          <sphereGeometry args={[0.08, 16, 16]} />
+          <meshBasicMaterial color={lightsColor} />
+        </mesh>
+        <pointLight color={lightsColor} intensity={2.5} distance={5} />
+      </group>
+      <group position={[3.8, -0.38, -0.5]}>
+        <mesh castShadow>
+          <sphereGeometry args={[0.08, 16, 16]} />
+          <meshBasicMaterial color={lightsColor} />
+        </mesh>
+        <pointLight color={lightsColor} intensity={2.5} distance={5} />
+      </group>
 
       {/* --- Central Skate Ramp (Quarterpipe) --- */}
       <group position={[-0.4, -0.425, -0.5]}>
         {/* Base block */}
         <mesh castShadow receiveShadow position={[0, 0.4, -0.8]}>
           <boxGeometry args={[3.2, 0.8, 1.2]} />
-          <meshStandardMaterial color="#a6a195" roughness={0.9} />
+          <meshStandardMaterial color="#121212" roughness={0.55} metalness={0.6} />
         </mesh>
         
         {/* Curved ramp surface (Quadrant segment of a cylinder) */}
         <mesh castShadow receiveShadow position={[0, 0.8, -0.4]} rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.8, 0.8, 3.2, 32, 1, true, Math.PI, Math.PI / 2]} />
-          <meshPhysicalMaterial color="#b0aba0" roughness={0.8} clearcoat={0.0} side={2} />
+          <meshPhysicalMaterial color="#e3be94" roughness={0.35} clearcoat={0.3} clearcoatRoughness={0.15} side={2} />
         </mesh>
 
-        {/* Left concrete side wall enclosing transition curve */}
+        {/* Left carbon side wall enclosing transition curve */}
         <mesh castShadow receiveShadow position={[-1.58, 0.4, -0.4]}>
           <boxGeometry args={[0.04, 0.8, 0.8]} />
-          <meshStandardMaterial color="#a6a195" roughness={0.9} />
+          <meshStandardMaterial color="#1a1a1a" roughness={0.5} metalness={0.75} />
         </mesh>
-        {/* Right concrete side wall enclosing transition curve */}
+        {/* Right carbon side wall enclosing transition curve */}
         <mesh castShadow receiveShadow position={[1.58, 0.4, -0.4]}>
           <boxGeometry args={[0.04, 0.8, 0.8]} />
-          <meshStandardMaterial color="#a6a195" roughness={0.9} />
+          <meshStandardMaterial color="#1a1a1a" roughness={0.5} metalness={0.75} />
         </mesh>
 
-        {/* Colorful spray-painted graffiti tag mural on concrete transition */}
-        <group position={[0.7, 0.28, 0.05]} rotation={[Math.PI / 6, 0.2, -0.1]}>
-          {/* Graffiti bubble backdrop */}
-          <mesh position={[0, 0, 0]}>
-            <planeGeometry args={[0.9, 0.45]} />
-            <meshBasicMaterial color="#ff00ff" transparent opacity={0.85} depthWrite={false} />
-          </mesh>
-          {/* Inner bubble glow */}
-          <mesh position={[-0.05, 0.02, 0.001]}>
-            <planeGeometry args={[0.7, 0.35]} />
-            <meshBasicMaterial color="#ffff00" transparent opacity={0.9} depthWrite={false} />
-          </mesh>
-          {/* Main tags lettering represent CPX street art */}
-          <mesh position={[0, 0, 0.002]}>
-            <boxGeometry args={[0.5, 0.04, 0.002]} />
-            <meshBasicMaterial color="#00ffff" />
-          </mesh>
-          <mesh position={[-0.15, -0.05, 0.002]} rotation={[0, 0, 0.4]}>
-            <boxGeometry args={[0.4, 0.04, 0.002]} />
-            <meshBasicMaterial color="#00ffff" />
-          </mesh>
-          <mesh position={[0.15, 0.05, 0.002]} rotation={[0, 0, -0.4]}>
-            <boxGeometry args={[0.4, 0.04, 0.002]} />
-            <meshBasicMaterial color="#00ffff" />
-          </mesh>
-          {/* Black outline detailing */}
-          <mesh position={[0, 0.08, 0.003]}>
-            <boxGeometry args={[0.6, 0.015, 0.002]} />
-            <meshBasicMaterial color="#111111" />
-          </mesh>
-          <mesh position={[0, -0.08, 0.003]}>
-            <boxGeometry args={[0.6, 0.015, 0.002]} />
-            <meshBasicMaterial color="#111111" />
-          </mesh>
-          {/* Spray paint drips */}
-          {[-0.2, 0, 0.2].map((xOffset, idx) => (
-            <mesh key={idx} position={[xOffset, -0.15, 0.002]}>
-              <boxGeometry args={[0.015, 0.15, 0.002]} />
-              <meshBasicMaterial color="#ff00ff" />
+        {/* Beautiful 3D CPX Labs leaf logo matching the reference image */}
+        <group position={[0, 0.38, -0.15]} rotation={[Math.PI / 6, 0, 0]}>
+          {/* Stylized dark gray X background plate */}
+          <group>
+            <mesh castShadow rotation={[0, 0, 0.5]}>
+              <boxGeometry args={[0.9, 0.16, 0.05]} />
+              <meshStandardMaterial color="#1f2122" roughness={0.5} />
             </mesh>
-          ))}
+            <mesh castShadow rotation={[0, 0, -0.5]}>
+              <boxGeometry args={[0.9, 0.16, 0.05]} />
+              <meshStandardMaterial color="#1f2122" roughness={0.5} />
+            </mesh>
+            {/* Green accents on the background plate */}
+            <mesh position={[-0.2, 0.15, 0.03]} rotation={[0, 0, 0.5]}>
+              <boxGeometry args={[0.2, 0.04, 0.01]} />
+              <meshBasicMaterial color="#39FF14" />
+            </mesh>
+            <mesh position={[-0.32, 0.05, 0.03]} rotation={[0, 0, -0.5]}>
+               <boxGeometry args={[0.2, 0.04, 0.01]} />
+               <meshBasicMaterial color="#39FF14" />
+            </mesh>
+          </group>
+
+          {/* Stylized White swoosh shield */}
+          <mesh position={[-0.05, -0.05, 0.04]} rotation={[0, 0, 0.3]}>
+            <boxGeometry args={[0.15, 0.3, 0.02]} />
+            <meshStandardMaterial color="#ffffff" roughness={0.3} />
+          </mesh>
+          <mesh position={[-0.1, -0.1, 0.05]} rotation={[0, 0, -0.1]}>
+            <boxGeometry args={[0.12, 0.25, 0.02]} />
+            <meshStandardMaterial color="#ffffff" roughness={0.3} />
+          </mesh>
+
+          {/* Green Skateboard Leaf Symbol */}
+          <group position={[0.15, 0, 0.06]} rotation={[0, 0, -0.2]}>
+            {/* Center stem */}
+            <mesh position={[0, -0.1, 0]}>
+              <boxGeometry args={[0.015, 0.18, 0.01]} />
+              <meshBasicMaterial color="#2d4a23" />
+            </mesh>
+            {/* Overlapping green leaf lobes */}
+            {[0.12, 0.16, 0.2, 0.16, 0.12].map((len, idx) => {
+              const rot = -0.8 + idx * 0.4;
+              return (
+                <mesh key={idx} position={[Math.sin(rot) * len * 0.4, Math.cos(rot) * len * 0.4 - 0.05, 0.005]} rotation={[0, 0, -rot]}>
+                  <boxGeometry args={[0.04, len, 0.01]} />
+                  <meshBasicMaterial color="#365e2b" />
+                </mesh>
+              );
+            })}
+          </group>
         </group>
         
         {/* Metal transition plate at bottom */}

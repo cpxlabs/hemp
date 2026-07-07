@@ -60,7 +60,7 @@ const CustomSelect = ({ label, options, value, onChange, isDark }: any) => {
 };
 
 export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) => {
-  const { selections, setSelections, activeProductIndex, setActiveProductIndex, isRampCollapsed, setIsRampCollapsed } = useConfigurator();
+  const { selections, setSelections, activeProductIndex, setActiveProductIndex, isRampCollapsed, setIsRampCollapsed, lightsColor, setLightsColor } = useConfigurator();
   const [isMinimized, setIsMinimized] = React.useState(false);
   const { isDark } = useTheme();
   const { addToCart, setIsCartOpen } = useCart();
@@ -203,6 +203,35 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
             </View>
           </Pressable>
         ))}
+      </View>
+      
+      {/* RGB Lighting Color Selector */}
+      <View className="mt-4 px-4 py-3 bg-foreground/5 rounded-xl border border-border/20">
+        <Text className="text-[10px] font-bold text-foreground mb-2">COR DAS LUZES RGB (SECUNDÁRIAS)</Text>
+        <View className="flex-row gap-3">
+          {[
+            { name: 'Green', hex: '#39FF14' },
+            { name: 'Pink', hex: '#FF1493' },
+            { name: 'Blue', hex: '#00E5FF' },
+            { name: 'Purple', hex: '#BD00FF' },
+            { name: 'Orange', hex: '#FF4500' },
+            { name: 'White', hex: '#FFFFFF' }
+          ].map((col) => (
+            <Pressable
+              key={col.hex}
+              onPress={() => setLightsColor(col.hex)}
+              className="w-8 h-8 rounded-full items-center justify-center active:scale-90 border border-white/20"
+              style={{
+                backgroundColor: col.hex,
+                borderColor: lightsColor === col.hex ? '#ffffff' : 'rgba(255,255,255,0.2)'
+              }}
+            >
+              {lightsColor === col.hex && (
+                <View className="w-2.5 h-2.5 rounded-full bg-black/60" />
+              )}
+            </Pressable>
+          ))}
+        </View>
       </View>
 
       <View className={`flex-row gap-4 ${isMobile ? 'mt-6' : 'mt-10'}`}>
