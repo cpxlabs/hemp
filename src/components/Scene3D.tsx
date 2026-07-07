@@ -271,42 +271,46 @@ const SkateDecks = ({ active, material, isDark, ...props }: any) => {
           </mesh>
         </group>
 
-        {/* --- Nose Kicktail (Front) --- */}
-        <group position={[0, 0.065, 0.73]} rotation={[Math.PI / 9, 0, 0]}>
-          {/* Center */}
-          <mesh castShadow position={[0, 0, 0]}>
-            <boxGeometry args={[0.42, 0.04, 0.45]} />
-            <meshStandardMaterial {...matProps} />
-          </mesh>
-          {/* Left Concave */}
-          <mesh castShadow position={[-0.28, 0.02, 0]} rotation={[0, 0, Math.PI / 18]}>
-            <boxGeometry args={[0.16, 0.04, 0.45]} />
-            <meshStandardMaterial {...matProps} />
-          </mesh>
-          {/* Right Concave */}
-          <mesh castShadow position={[0.26, 0.02, 0]} rotation={[0, 0, -Math.PI / 18]}>
-            <boxGeometry args={[0.16, 0.04, 0.45]} />
-            <meshStandardMaterial {...matProps} />
-          </mesh>
+        {/* --- Nose Kicktail (Front) Hinge Group --- */}
+        <group position={[0, 0, 0.6]} rotation={[Math.PI / 10, 0, 0]}>
+          <group position={[0, 0.015, 0.225]}>
+            {/* Center */}
+            <mesh castShadow>
+              <boxGeometry args={[0.42, 0.04, 0.45]} />
+              <meshStandardMaterial {...matProps} />
+            </mesh>
+            {/* Left Concave */}
+            <mesh castShadow position={[-0.28, 0.02, 0]} rotation={[0, 0, Math.PI / 18]}>
+              <boxGeometry args={[0.16, 0.04, 0.45]} />
+              <meshStandardMaterial {...matProps} />
+            </mesh>
+            {/* Right Concave */}
+            <mesh castShadow position={[0.26, 0.02, 0]} rotation={[0, 0, -Math.PI / 18]}>
+              <boxGeometry args={[0.16, 0.04, 0.45]} />
+              <meshStandardMaterial {...matProps} />
+            </mesh>
+          </group>
         </group>
 
-        {/* --- Tail Kicktail (Back) --- */}
-        <group position={[0, 0.065, -0.73]} rotation={[-Math.PI / 9, 0, 0]}>
-          {/* Center */}
-          <mesh castShadow position={[0, 0, 0]}>
-            <boxGeometry args={[0.42, 0.04, 0.45]} />
-            <meshStandardMaterial {...matProps} />
-          </mesh>
-          {/* Left Concave */}
-          <mesh castShadow position={[-0.28, 0.02, 0]} rotation={[0, 0, Math.PI / 18]}>
-            <boxGeometry args={[0.16, 0.04, 0.45]} />
-            <meshStandardMaterial {...matProps} />
-          </mesh>
-          {/* Right Concave */}
-          <mesh castShadow position={[0.26, 0.02, 0]} rotation={[0, 0, -Math.PI / 18]}>
-            <boxGeometry args={[0.16, 0.04, 0.45]} />
-            <meshStandardMaterial {...matProps} />
-          </mesh>
+        {/* --- Tail Kicktail (Back) Hinge Group --- */}
+        <group position={[0, 0, -0.6]} rotation={[-Math.PI / 10, 0, 0]}>
+          <group position={[0, 0.015, -0.225]}>
+            {/* Center */}
+            <mesh castShadow>
+              <boxGeometry args={[0.42, 0.04, 0.45]} />
+              <meshStandardMaterial {...matProps} />
+            </mesh>
+            {/* Left Concave */}
+            <mesh castShadow position={[-0.28, 0.02, 0]} rotation={[0, 0, Math.PI / 18]}>
+              <boxGeometry args={[0.16, 0.04, 0.45]} />
+              <meshStandardMaterial {...matProps} />
+            </mesh>
+            {/* Right Concave */}
+            <mesh castShadow position={[0.26, 0.02, 0]} rotation={[0, 0, -Math.PI / 18]}>
+              <boxGeometry args={[0.16, 0.04, 0.45]} />
+              <meshStandardMaterial {...matProps} />
+            </mesh>
+          </group>
         </group>
       </group>
 
