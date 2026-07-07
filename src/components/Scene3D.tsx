@@ -238,6 +238,31 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
   const woodColor = '#a87544'; // Beautiful rich warm wood color for the ramp face
   const logoGreen = '#39FF14';
 
+  const miniSkateRef = React.useRef<any>();
+
+  useFrame((state) => {
+    if (miniSkateRef.current) {
+      const time = state.clock.getElapsedTime();
+      // Slow speed movement back and forth along the quadrant curve
+      // theta goes from bottom (around 0) to mid ramp (around 0.5)
+      const theta = Math.sin(time * 0.7) * 0.35 - 0.25; 
+      const R = 0.76; // Radius slightly smaller than the 0.8 ramp radius so the wheels rest exactly on the surface
+      
+      // Center of cylinder quadrant is at [0, 0.8, -0.4] in ramp space
+      const localY = 0.8 + Math.sin(theta) * R;
+      const localZ = -0.4 + Math.cos(theta) * R;
+      
+      miniSkateRef.current.position.set(-0.4, localY, localZ);
+      
+      // Tangent angle to curve
+      miniSkateRef.current.rotation.x = -theta - Math.PI / 2;
+      
+      // Gentle realistic wiggle steer
+      miniSkateRef.current.rotation.y = Math.sin(time * 1.4) * 0.12 + 0.3;
+      miniSkateRef.current.rotation.z = Math.cos(time * 0.7) * 0.04;
+    }
+  });
+
   return (
     <group position={[0, -0.2, 0]}>
       {/* Ground Concrete Slab */}
@@ -263,14 +288,10 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           <meshStandardMaterial color={structuralColor} roughness={0.7} />
         </mesh>
         
-        {/* Curved ramp surface (using angled segment structure to make it transition smoothly) */}
-        <mesh castShadow receiveShadow position={[0, 0.25, 0]} rotation={[Math.PI / 12, 0, 0]}>
-          <boxGeometry args={[3.2, 0.06, 1.6]} />
-          <meshPhysicalMaterial color={woodColor} roughness={0.25} clearcoat={1.0} clearcoatRoughness={0.1} />
-        </mesh>
-        <mesh castShadow receiveShadow position={[0, 0.6, -0.6]} rotation={[Math.PI / 4, 0, 0]}>
-          <boxGeometry args={[3.2, 0.06, 1.2]} />
-          <meshPhysicalMaterial color={woodColor} roughness={0.25} clearcoat={1.0} clearcoatRoughness={0.1} />
+        {/* Curved ramp surface (Quadrant segment of a cylinder) */}
+        <mesh castShadow receiveShadow position={[0, 0.8, -0.4]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.8, 0.8, 3.2, 32, 1, true, Math.PI, Math.PI / 2]} />
+          <meshPhysicalMaterial color={woodColor} roughness={0.25} clearcoat={1.0} clearcoatRoughness={0.1} side={2} />
         </mesh>
         
         {/* Metal transition plate at bottom */}
@@ -326,8 +347,8 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           </mesh>
         </group>
 
-        {/* Complete Miniature Skateboard (Tech Deck) sitting on transition */}
-        <SkateDecks active={false} material="wood" isDark={isDark} scale={0.4} position={[-0.4, 0.22, 0.2]} rotation={[Math.PI / 12, 0.5, 0.05]} />
+        {/* Complete Miniature Skateboard (Tech Deck) sliding slowly back and forth */}
+        <SkateDecks ref={miniSkateRef} active={false} material="wood" isDark={isDark} scale={0.35} />
 
         {/* Miniature metal trucks and loose screws lying on the flat surface */}
         <group position={[0.2, 0.1, 0.3]} rotation={[0, -0.4, 0]}>
@@ -561,7 +582,7 @@ const SkateRamp = ({ active, material, isDark, isCollapsed = false, ...props }: 
   );
 };
 
-const SkateDecks = ({ active, material, isDark, ...props }: any) => {
+const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any, ref: any) => {
   const matProps = getMaterialProps(material || 'wood', isDark);
   const woodCoreProps = getMaterialProps('wood', isDark);
   
@@ -572,7 +593,7 @@ const SkateDecks = ({ active, material, isDark, ...props }: any) => {
   };
 
   return (
-    <group {...props} rotation={[0.1, 0.2, 0.05]}>
+    <group ref={ref} {...props} rotation={[0.1, 0.2, 0.05]}>
       {/* --- The Deck with Concave & Double Kicktail --- */}
       <group position={[0, 0.1, 0]}>
         {/* --- Middle Section with Concave (Split into center + side rails) --- */}
@@ -677,7 +698,8 @@ const SkateDecks = ({ active, material, isDark, ...props }: any) => {
       ))}
     </group>
   );
-};
+});
+SkateDecks.displayName = 'SkateDecks';
 
 const DiceTower = ({ active, material, isDark, ...props }: any) => {
   const matProps = getMaterialProps(material, isDark);
