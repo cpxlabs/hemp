@@ -233,12 +233,9 @@ const SkateRamp = ({ active, material, isDark, isCollapsed = false, ...props }: 
 };
 
 const SkateDecks = ({ active, material, isDark, ...props }: any) => {
-  const matProps = getMaterialProps(material, isDark);
-  const gripProps = {
-    color: '#1a1a1a', // Black griptape
-    roughness: 1.0,
-    metalness: 0.1,
-  };
+  const matProps = getMaterialProps(material || 'wood', isDark);
+  const woodCoreProps = getMaterialProps('wood', isDark);
+  
   const metalProps = {
     color: '#dddddd',
     roughness: 0.1,
@@ -247,40 +244,68 @@ const SkateDecks = ({ active, material, isDark, ...props }: any) => {
 
   return (
     <group {...props} rotation={[0.1, 0.2, 0.05]}>
-      {/* --- The Deck (Standard double-kick shape) --- */}
+      {/* --- The Deck with Concave & Double Kicktail --- */}
       <group position={[0, 0.1, 0]}>
-        {/* Middle Flat Section */}
-        <mesh castShadow receiveShadow position={[0, 0, 0]}>
-          <boxGeometry args={[0.78, 0.04, 1.2]} />
-          <meshStandardMaterial {...matProps} />
-        </mesh>
-        {/* Middle Griptape */}
-        <mesh position={[0, 0.025, 0]}>
-          <boxGeometry args={[0.76, 0.01, 1.18]} />
-          <meshStandardMaterial {...gripProps} />
-        </mesh>
-
-        {/* Nose Kicktail (Front) */}
-        <group position={[0, 0.075, 0.75]} rotation={[Math.PI / 10, 0, 0]}>
-          <mesh castShadow position={[0, 0, 0]}>
-            <boxGeometry args={[0.78, 0.04, 0.45]} />
+        {/* --- Middle Section with Concave (Split into center + side rails) --- */}
+        <group position={[0, 0, 0]}>
+          {/* Flat Center */}
+          <mesh castShadow receiveShadow position={[0, 0, 0]}>
+            <boxGeometry args={[0.42, 0.04, 1.2]} />
             <meshStandardMaterial {...matProps} />
           </mesh>
-          <mesh position={[0, 0.025, 0]}>
-            <boxGeometry args={[0.76, 0.01, 0.43]} />
-            <meshStandardMaterial {...gripProps} />
+          {/* Left Concave Rail */}
+          <mesh castShadow receiveShadow position={[-0.28, 0.02, 0]} rotation={[0, 0, Math.PI / 18]}>
+            <boxGeometry args={[0.16, 0.04, 1.2]} />
+            <meshStandardMaterial {...matProps} />
+          </mesh>
+          {/* Right Concave Rail */}
+          <mesh castShadow receiveShadow position={[0.26, 0.02, 0]} rotation={[0, 0, -Math.PI / 18]}>
+            <boxGeometry args={[0.16, 0.04, 1.2]} />
+            <meshStandardMaterial {...matProps} />
+          </mesh>
+
+          {/* Laminated Wood Core Layer (visible edge line) */}
+          <mesh position={[0, -0.015, 0]}>
+            <boxGeometry args={[0.74, 0.01, 1.18]} />
+            <meshStandardMaterial {...woodCoreProps} />
           </mesh>
         </group>
 
-        {/* Tail Kicktail (Back) */}
-        <group position={[0, 0.075, -0.75]} rotation={[-Math.PI / 10, 0, 0]}>
+        {/* --- Nose Kicktail (Front) --- */}
+        <group position={[0, 0.065, 0.73]} rotation={[Math.PI / 9, 0, 0]}>
+          {/* Center */}
           <mesh castShadow position={[0, 0, 0]}>
-            <boxGeometry args={[0.78, 0.04, 0.45]} />
+            <boxGeometry args={[0.42, 0.04, 0.45]} />
             <meshStandardMaterial {...matProps} />
           </mesh>
-          <mesh position={[0, 0.025, 0]}>
-            <boxGeometry args={[0.76, 0.01, 0.43]} />
-            <meshStandardMaterial {...gripProps} />
+          {/* Left Concave */}
+          <mesh castShadow position={[-0.28, 0.02, 0]} rotation={[0, 0, Math.PI / 18]}>
+            <boxGeometry args={[0.16, 0.04, 0.45]} />
+            <meshStandardMaterial {...matProps} />
+          </mesh>
+          {/* Right Concave */}
+          <mesh castShadow position={[0.26, 0.02, 0]} rotation={[0, 0, -Math.PI / 18]}>
+            <boxGeometry args={[0.16, 0.04, 0.45]} />
+            <meshStandardMaterial {...matProps} />
+          </mesh>
+        </group>
+
+        {/* --- Tail Kicktail (Back) --- */}
+        <group position={[0, 0.065, -0.73]} rotation={[-Math.PI / 9, 0, 0]}>
+          {/* Center */}
+          <mesh castShadow position={[0, 0, 0]}>
+            <boxGeometry args={[0.42, 0.04, 0.45]} />
+            <meshStandardMaterial {...matProps} />
+          </mesh>
+          {/* Left Concave */}
+          <mesh castShadow position={[-0.28, 0.02, 0]} rotation={[0, 0, Math.PI / 18]}>
+            <boxGeometry args={[0.16, 0.04, 0.45]} />
+            <meshStandardMaterial {...matProps} />
+          </mesh>
+          {/* Right Concave */}
+          <mesh castShadow position={[0.26, 0.02, 0]} rotation={[0, 0, -Math.PI / 18]}>
+            <boxGeometry args={[0.16, 0.04, 0.45]} />
+            <meshStandardMaterial {...matProps} />
           </mesh>
         </group>
       </group>
