@@ -381,13 +381,13 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
         {/* Metal transition plate at bottom */}
         <mesh receiveShadow position={[0, 0.05, 0.75]} rotation={[-Math.PI / 24, 0, 0]}>
           <boxGeometry args={[3.2, 0.02, 0.5]} />
-          <meshStandardMaterial color="#cccccc" metalness={0.9} roughness={0.1} />
+          <meshPhysicalMaterial color="#e5e5e5" metalness={0.98} roughness={0.05} clearcoat={1.0} clearcoatRoughness={0.02} />
         </mesh>
 
         {/* Coping metal rail at top */}
         <mesh castShadow position={[0, 0.8, -1.2]} rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.05, 0.05, 3.2, 16]} />
-          <meshStandardMaterial color="#dddddd" metalness={0.95} roughness={0.05} />
+          <meshPhysicalMaterial color="#f0f0f0" metalness={0.98} roughness={0.02} clearcoat={1.0} clearcoatRoughness={0.02} />
         </mesh>
 
         {/* Wooden guard rail fence behind top platform */}
@@ -408,28 +408,6 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           ))}
         </group>
 
-        {/* Large green/white logo plate resting in the middle of transition */}
-        <group position={[0, 0.42, -0.2]} rotation={[Math.PI / 6, 0, 0]}>
-          {/* Logo plate base */}
-          <mesh castShadow position={[0, 0, 0]}>
-            <boxGeometry args={[0.9, 0.05, 0.7]} />
-            <meshStandardMaterial color="#1a1a1a" roughness={0.5} />
-          </mesh>
-          {/* Logo face overlay (white/green graphic design) */}
-          <mesh position={[0, 0.03, 0]}>
-            <boxGeometry args={[0.82, 0.01, 0.62]} />
-            <meshStandardMaterial color={isDark ? logoGreen : '#00aa00'} roughness={0.2} />
-          </mesh>
-          {/* Accent graphics */}
-          <mesh position={[-0.1, 0.04, 0]}>
-            <boxGeometry args={[0.15, 0.01, 0.4]} />
-            <meshStandardMaterial color="#ffffff" />
-          </mesh>
-          <mesh position={[0.15, 0.04, 0.05]} rotation={[0, 0.3, 0]}>
-            <boxGeometry args={[0.2, 0.01, 0.2]} />
-            <meshStandardMaterial color="#222222" />
-          </mesh>
-        </group>
 
         {/* Complete Miniature Skateboard (Tech Deck) sliding slowly back and forth */}
         <SkateDecks ref={miniSkateRef} active={false} material="wood" isDark={isDark} scale={0.35} />
@@ -685,10 +663,12 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
   };
   
   const metalProps = {
-    color: '#262626', // Matte black metal trucks
-    roughness: 0.5,
-    metalness: 0.8,
+    color: '#d4af37', // Polished gold/brass trucks matching photo
+    roughness: 0.18,
+    metalness: 0.95,
   };
+
+  const hardwareColor = '#d4af37'; // Gold hardware bolts
 
   return (
     <group ref={ref} {...props} rotation={[0, 0, 0]}>
@@ -716,6 +696,43 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
           <mesh position={[0, -0.012, 0]}>
             <boxGeometry args={[0.74, 0.008, 1.18]} />
             <meshPhysicalMaterial {...woodCoreProps} />
+          </mesh>
+
+          {/* 8 Gold Hardware Bolts on Top */}
+          {/* Front Truck Bolts */}
+          <mesh position={[-0.12, 0.015, 0.45]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
+            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
+          </mesh>
+          <mesh position={[0.12, 0.015, 0.45]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
+            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
+          </mesh>
+          <mesh position={[-0.12, 0.015, 0.55]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
+            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
+          </mesh>
+          <mesh position={[0.12, 0.015, 0.55]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
+            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
+          </mesh>
+
+          {/* Rear Truck Bolts */}
+          <mesh position={[-0.12, 0.015, -0.45]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
+            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
+          </mesh>
+          <mesh position={[0.12, 0.015, -0.45]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
+            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
+          </mesh>
+          <mesh position={[-0.12, 0.015, -0.55]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
+            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
+          </mesh>
+          <mesh position={[0.12, 0.015, -0.55]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.02, 8]} />
+            <meshStandardMaterial color={hardwareColor} metalness={0.9} roughness={0.1} />
           </mesh>
         </group>
 
@@ -773,7 +790,7 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
           {/* Kingpin & Bushings */}
           <mesh position={[0, 0.01, 0]}>
             <cylinderGeometry args={[0.04, 0.04, 0.08, 8]} />
-            <meshStandardMaterial color="#d4e310" roughness={0.3} />
+            <meshStandardMaterial color="#2c6b85" roughness={0.3} />
           </mesh>
           {/* Hanger / Axle */}
           <mesh castShadow position={[0, -0.03, 0]} rotation={[0, 0, Math.PI / 2]}>
@@ -783,26 +800,36 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
           
           {/* Urethane Wheels */}
           <group position={[0, -0.03, 0]}>
-            {/* Left Wheel */}
+            {/* Left Wheel (Teal tyre) */}
             <mesh position={[-0.38, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
               <cylinderGeometry args={[0.13, 0.13, 0.09, 16]} />
-              <meshPhysicalMaterial color="#d4e310" roughness={0.35} clearcoat={0.15} />
+              <meshPhysicalMaterial color="#35778a" roughness={0.35} />
             </mesh>
-            {/* Left Bearings */}
-            <mesh position={[-0.43, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.06, 0.06, 0.01, 8]} />
-              <meshStandardMaterial color="#1a1a1a" metalness={0.9} roughness={0.2} />
+            {/* Left White Hub */}
+            <mesh position={[-0.41, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[0.09, 0.09, 0.04, 12]} />
+              <meshStandardMaterial color="#ffffff" roughness={0.4} />
+            </mesh>
+            {/* Left Center Nut (Gold) */}
+            <mesh position={[-0.435, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[0.035, 0.035, 0.02, 8]} />
+              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} />
             </mesh>
 
-            {/* Right Wheel */}
+            {/* Right Wheel (Teal tyre) */}
             <mesh position={[0.38, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
               <cylinderGeometry args={[0.13, 0.13, 0.09, 16]} />
-              <meshPhysicalMaterial color="#d4e310" roughness={0.35} clearcoat={0.15} />
+              <meshPhysicalMaterial color="#35778a" roughness={0.35} />
             </mesh>
-            {/* Right Bearings */}
-            <mesh position={[0.43, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.06, 0.06, 0.01, 8]} />
-              <meshStandardMaterial color="#1a1a1a" metalness={0.9} roughness={0.2} />
+            {/* Right White Hub */}
+            <mesh position={[0.41, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[0.09, 0.09, 0.04, 12]} />
+              <meshStandardMaterial color="#ffffff" roughness={0.4} />
+            </mesh>
+            {/* Right Center Nut (Gold) */}
+            <mesh position={[0.435, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[0.035, 0.035, 0.02, 8]} />
+              <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} />
             </mesh>
           </group>
         </group>
