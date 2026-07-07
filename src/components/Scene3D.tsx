@@ -76,115 +76,273 @@ const StadiumLight = ({ position, isDark }: any) => {
 };
 
 const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
-  const parkColor = isDark ? '#161616' : '#e6dfd5';
-  const railColor = isDark ? '#39FF14' : '#c49a3a';
-  const structuralColor = isDark ? '#222222' : '#d5cbbd';
-  const woodColor = '#8b5a2b';
+  const parkColor = '#0c0c0c'; // Carbon fiber grid color (deep dark gray/black)
+  const structuralColor = isDark ? '#1f1f1f' : '#d5cbbd';
+  const woodColor = '#a87544'; // Beautiful rich warm wood color for the ramp face
+  const logoGreen = '#39FF14';
 
   return (
     <group position={[0, -0.2, 0]}>
-      {/* Ground Concrete Slab */}
+      {/* Ground Carbon Fiber Slab */}
       <mesh receiveShadow position={[0, -0.5, 0]}>
-        <boxGeometry args={[9.2, 0.15, 5.0]} />
-        <meshStandardMaterial color={parkColor} roughness={0.8} metalness={0.1} />
+        <boxGeometry args={[9.5, 0.15, 5.0]} />
+        <meshStandardMaterial color={parkColor} roughness={0.9} metalness={0.4} />
       </mesh>
+      
+      {/* Visual carbon grid pattern (thin cylinders or boxes to create a high-tech weave texture) */}
+      <gridHelper args={[9.5, 30, '#333333', '#222222']} position={[0, -0.42, 0]} />
 
-      {/* Corner Stadium Floodlights */}
+      {/* --- Stadium Corner Lights for Sparks and Warm Glow --- */}
       <StadiumLight position={[-4.2, -0.525, -2.2]} isDark={isDark} />
       <StadiumLight position={[4.2, -0.525, -2.2]} isDark={isDark} />
       <StadiumLight position={[-4.2, -0.525, 2.2]} isDark={isDark} />
       <StadiumLight position={[4.2, -0.525, 2.2]} isDark={isDark} />
-      
-      {/* Quarterpipe transition on Left */}
-      <group position={[-3.5, -0.425, 0]}>
+
+      {/* --- Central Skate Ramp (Quarterpipe) --- */}
+      <group position={[-0.3, -0.425, 0]}>
         {/* Base block */}
-        <mesh castShadow receiveShadow position={[-0.4, 0.4, 0]}>
-          <boxGeometry args={[0.8, 0.8, 4.2]} />
+        <mesh castShadow receiveShadow position={[0, 0.4, -0.8]}>
+          <boxGeometry args={[3.2, 0.8, 1.2]} />
           <meshStandardMaterial color={structuralColor} roughness={0.7} />
         </mesh>
-        {/* Transition ramp surface */}
-        <mesh castShadow receiveShadow position={[0.2, 0.2, 0]} rotation={[0, 0, Math.PI / 4]}>
-          <boxGeometry args={[0.9, 0.08, 4.2]} />
-          <meshStandardMaterial color={isDark ? '#39FF14' : woodColor} roughness={0.4} />
+        
+        {/* Curved ramp surface (using angled segment structure to make it transition smoothly) */}
+        <mesh castShadow receiveShadow position={[0, 0.25, 0]} rotation={[Math.PI / 12, 0, 0]}>
+          <boxGeometry args={[3.2, 0.06, 1.6]} />
+          <meshPhysicalMaterial color={woodColor} roughness={0.4} clearcoat={0.3} />
         </mesh>
+        <mesh castShadow receiveShadow position={[0, 0.6, -0.6]} rotation={[Math.PI / 4, 0, 0]}>
+          <boxGeometry args={[3.2, 0.06, 1.2]} />
+          <meshPhysicalMaterial color={woodColor} roughness={0.4} clearcoat={0.3} />
+        </mesh>
+        
+        {/* Metal transition plate at bottom */}
+        <mesh receiveShadow position={[0, 0.05, 0.75]} rotation={[-Math.PI / 24, 0, 0]}>
+          <boxGeometry args={[3.2, 0.02, 0.5]} />
+          <meshStandardMaterial color="#cccccc" metalness={0.9} roughness={0.1} />
+        </mesh>
+
         {/* Coping metal rail at top */}
-        <mesh castShadow position={[0, 0.8, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.06, 0.06, 4.2, 16]} />
-          <meshStandardMaterial color="#cccccc" metalness={0.95} roughness={0.05} />
+        <mesh castShadow position={[0, 0.8, -1.2]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.05, 0.05, 3.2, 16]} />
+          <meshStandardMaterial color="#dddddd" metalness={0.95} roughness={0.05} />
         </mesh>
-      </group>
 
-      {/* Funbox Platform in Center Back */}
-      <mesh castShadow receiveShadow position={[0, -0.225, -1.3]}>
-        <boxGeometry args={[2.2, 0.4, 1.8]} />
-        <meshStandardMaterial color={structuralColor} roughness={0.7} />
-      </mesh>
-      {/* Ledge top board */}
-      <mesh castShadow position={[0, 0.05, -1.3]}>
-        <boxGeometry args={[1.8, 0.15, 0.6]} />
-        <meshStandardMaterial color={isDark ? '#39FF14' : woodColor} roughness={0.5} />
-      </mesh>
-
-      {/* Grind Rail in Center Front */}
-      <group position={[0, -0.425, 0.8]}>
-        {/* Horizontal Rail */}
-        <mesh castShadow position={[0, 0.4, 0]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.04, 0.04, 2.8, 16]} />
-          <meshStandardMaterial color={railColor} metalness={0.95} roughness={0.05} />
-        </mesh>
-        {/* Supports */}
-        <mesh castShadow position={[-1.1, 0.2, 0]}>
-          <cylinderGeometry args={[0.03, 0.03, 0.4, 16]} />
-          <meshStandardMaterial color={railColor} metalness={0.9} />
-        </mesh>
-        <mesh castShadow position={[1.1, 0.2, 0]}>
-          <cylinderGeometry args={[0.03, 0.03, 0.4, 16]} />
-          <meshStandardMaterial color={railColor} metalness={0.9} />
-        </mesh>
-        {/* Base feet */}
-        <mesh castShadow position={[-1.1, 0.01, 0]}>
-          <boxGeometry args={[0.3, 0.02, 0.15]} />
-          <meshStandardMaterial color={railColor} />
-        </mesh>
-        <mesh castShadow position={[1.1, 0.01, 0]}>
-          <boxGeometry args={[0.3, 0.02, 0.15]} />
-          <meshStandardMaterial color={railColor} />
-        </mesh>
-      </group>
-
-      {/* Kicker Ramp on Right */}
-      <group position={[3.3, -0.425, 0]}>
-        {/* Base wedge slope */}
-        <mesh castShadow position={[-0.2, 0.125, 0]} rotation={[0, 0, -Math.PI / 12]}>
-          <boxGeometry args={[1.3, 0.08, 2.6]} />
-          <meshStandardMaterial color={isDark ? '#39FF14' : woodColor} roughness={0.4} />
-        </mesh>
-        {/* Back support box */}
-        <mesh castShadow position={[0.35, 0.125, 0]}>
-          <boxGeometry args={[0.3, 0.25, 2.6]} />
-          <meshStandardMaterial color={structuralColor} roughness={0.7} />
-        </mesh>
-      </group>
-
-      {/* Stylized small skateboard resting on the funbox */}
-      <group position={[0, 0.2, -1.3]} rotation={[0.2, 0.6, 0]}>
-        <mesh castShadow>
-          <boxGeometry args={[0.3, 0.02, 0.9]} />
-          <meshStandardMaterial color={isDark ? '#ffffff' : '#333333'} roughness={0.2} />
-        </mesh>
-        {/* Tiny wheels */}
-        {[-0.28, 0.28].map((z) => (
-          <group key={z} position={[0, -0.03, z]}>
-            <mesh position={[-0.1, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.05, 0.05, 0.06, 8]} />
-              <meshStandardMaterial color={isDark ? '#39FF14' : '#111'} roughness={0.5} />
+        {/* Wooden guard rail fence behind top platform */}
+        <group position={[0, 0.8, -1.35]}>
+          {/* Vertical posts */}
+          {[-1.5, 0, 1.5].map((x) => (
+            <mesh key={x} position={[x, 0.45, 0]} castShadow>
+              <boxGeometry args={[0.06, 0.9, 0.06]} />
+              <meshStandardMaterial color={isDark ? '#333333' : '#a87544'} roughness={0.8} />
             </mesh>
-            <mesh position={[0.1, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.05, 0.05, 0.06, 8]} />
-              <meshStandardMaterial color={isDark ? '#39FF14' : '#111'} roughness={0.5} />
+          ))}
+          {/* Horizontal rails */}
+          {[0.3, 0.6, 0.85].map((y) => (
+            <mesh key={y} position={[0, y, 0]} castShadow>
+              <boxGeometry args={[3.1, 0.08, 0.04]} />
+              <meshStandardMaterial color={isDark ? '#333333' : '#a87544'} roughness={0.8} />
             </mesh>
-          </group>
-        ))}
+          ))}
+        </group>
+
+        {/* Large green/white logo plate resting in the middle of transition */}
+        <group position={[0, 0.42, -0.2]} rotation={[Math.PI / 6, 0, 0]}>
+          {/* Logo plate base */}
+          <mesh castShadow position={[0, 0, 0]}>
+            <boxGeometry args={[0.9, 0.05, 0.7]} />
+            <meshStandardMaterial color="#1a1a1a" roughness={0.5} />
+          </mesh>
+          {/* Logo face overlay (white/green graphic design) */}
+          <mesh position={[0, 0.03, 0]}>
+            <boxGeometry args={[0.82, 0.01, 0.62]} />
+            <meshStandardMaterial color={isDark ? logoGreen : '#00aa00'} roughness={0.2} />
+          </mesh>
+          {/* Accent graphics */}
+          <mesh position={[-0.1, 0.04, 0]}>
+            <boxGeometry args={[0.15, 0.01, 0.4]} />
+            <meshStandardMaterial color="#ffffff" />
+          </mesh>
+          <mesh position={[0.15, 0.04, 0.05]} rotation={[0, 0.3, 0]}>
+            <boxGeometry args={[0.2, 0.01, 0.2]} />
+            <meshStandardMaterial color="#222222" />
+          </mesh>
+        </group>
+
+        {/* Miniature metal trucks and loose screws lying on the flat surface */}
+        <group position={[0.2, 0.1, 0.3]} rotation={[0, -0.4, 0]}>
+          {/* Tiny truck hanger */}
+          <mesh position={[0, 0.02, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+            <cylinderGeometry args={[0.015, 0.015, 0.25, 8]} />
+            <meshStandardMaterial color="#cccccc" metalness={0.9} roughness={0.1} />
+          </mesh>
+          {/* Baseplate */}
+          <mesh position={[0, 0.005, 0]} castShadow>
+            <boxGeometry args={[0.07, 0.01, 0.09]} />
+            <meshStandardMaterial color="#cccccc" metalness={0.9} roughness={0.1} />
+          </mesh>
+          {/* Loose screws */}
+          {[-0.12, 0.05, 0.18].map((x, idx) => (
+            <mesh key={x} position={[x, 0.005, 0.1 + idx * 0.03]} rotation={[0.4, idx * 0.8, 0.2]} castShadow>
+              <cylinderGeometry args={[0.006, 0.006, 0.05, 8]} />
+              <meshStandardMaterial color="#bbbbbb" metalness={0.9} />
+            </mesh>
+          ))}
+        </group>
+      </group>
+
+      {/* --- Stack of Wooden Fingerboard Decks to the Left --- */}
+      <group position={[-2.4, -0.425, 0.4]} rotation={[0.05, 0.5, 0]}>
+        {[0, 1, 2, 3, 4].map((index) => {
+          const woodHue = index === 4 ? woodColor : index % 2 === 0 ? '#8b5a2b' : '#6f4a27';
+          return (
+            <group key={index} position={[0, index * 0.045, 0]}>
+              {/* Deck Center */}
+              <mesh castShadow position={[0, 0, 0]}>
+                <boxGeometry args={[0.75, 0.04, 1.5]} />
+                <meshStandardMaterial color={woodHue} roughness={0.7} />
+              </mesh>
+              {/* Nose kick */}
+              <mesh castShadow position={[0, 0.06, 0.82]} rotation={[Math.PI / 10, 0, 0]}>
+                <boxGeometry args={[0.75, 0.04, 0.45]} />
+                <meshStandardMaterial color={woodHue} roughness={0.7} />
+              </mesh>
+              {/* Tail kick */}
+              <mesh castShadow position={[0, 0.06, -0.82]} rotation={[-Math.PI / 10, 0, 0]}>
+                <boxGeometry args={[0.75, 0.04, 0.45]} />
+                <meshStandardMaterial color={woodHue} roughness={0.7} />
+              </mesh>
+              {/* Laminated colored ply line */}
+              <mesh position={[0, -0.012, 0]}>
+                <boxGeometry args={[0.73, 0.008, 1.48]} />
+                <meshStandardMaterial color={index % 2 === 0 ? '#39FF14' : '#ef4444'} roughness={0.6} />
+              </mesh>
+
+              {/* Graphic on the top deck */}
+              {index === 4 && (
+                <group position={[0, 0.025, 0]}>
+                  {/* Outer graphic plate */}
+                  <mesh>
+                    <boxGeometry args={[0.45, 0.002, 0.9]} />
+                    <meshStandardMaterial color="#111" roughness={0.2} />
+                  </mesh>
+                  {/* Inside green graphic design */}
+                  <mesh position={[0, 0.001, 0]}>
+                    <boxGeometry args={[0.38, 0.002, 0.7]} />
+                    <meshStandardMaterial color={logoGreen} roughness={0.1} />
+                  </mesh>
+                </group>
+              )}
+            </group>
+          );
+        })}
+      </group>
+
+      {/* --- Detailed Stone Dice Tower to the Right --- */}
+      <group position={[2.2, -0.425, -0.6]} rotation={[0, -0.3, 0]}>
+        {/* Tower Base castle wall */}
+        <mesh castShadow position={[0, 0.7, 0]}>
+          <boxGeometry args={[0.9, 1.4, 0.9]} />
+          <meshStandardMaterial color="#4a4d48" roughness={0.9} />
+        </mesh>
+        {/* Battlements top rim */}
+        <mesh position={[0, 1.45, 0]} castShadow>
+          <boxGeometry args={[1.05, 0.2, 1.05]} />
+          <meshStandardMaterial color="#3f413d" roughness={0.9} />
+        </mesh>
+        {/* Battlement corner notches */}
+        {[-0.45, 0.45].map((x) =>
+          [-0.45, 0.45].map((z) => (
+            <mesh key={`${x}-${z}`} position={[x, 1.6, z]} castShadow>
+              <boxGeometry args={[0.2, 0.15, 0.2]} />
+              <meshStandardMaterial color="#3f413d" roughness={0.9} />
+            </mesh>
+          ))
+        )}
+        {/* Catch Tray front box */}
+        <mesh position={[0, 0.125, 0.65]} castShadow>
+          <boxGeometry args={[1.0, 0.25, 0.8]} />
+          <meshStandardMaterial color="#3f413d" roughness={0.9} />
+        </mesh>
+        {/* Dice Catch interior tray */}
+        <mesh position={[0, 0.05, 0.65]}>
+          <boxGeometry args={[0.85, 0.1, 0.65]} />
+          <meshStandardMaterial color="#2d2d2a" roughness={0.8} />
+        </mesh>
+        {/* Arch exit door */}
+        <mesh position={[0, 0.25, 0.451]}>
+          <boxGeometry args={[0.35, 0.5, 0.02]} />
+          <meshStandardMaterial color="#1a1a1a" />
+        </mesh>
+        {/* Engraved logo details on front */}
+        <mesh position={[0, 0.9, 0.452]}>
+          <boxGeometry args={[0.4, 0.3, 0.01]} />
+          <meshStandardMaterial color="#2b2d29" roughness={0.7} />
+        </mesh>
+        <mesh position={[0, 0.9, 0.458]}>
+          <boxGeometry args={[0.2, 0.2, 0.01]} />
+          <meshStandardMaterial color={isDark ? logoGreen : '#00aa00'} roughness={0.3} />
+        </mesh>
+      </group>
+
+      {/* --- Chess Board and pieces in Front Right --- */}
+      <group position={[1.7, -0.425, 1.1]} rotation={[0, -0.2, 0]}>
+        {/* Chess board base frame */}
+        <mesh castShadow receiveShadow position={[0, 0.05, 0]}>
+          <boxGeometry args={[2.5, 0.1, 2.5]} />
+          <meshStandardMaterial color="#4a3b32" roughness={0.6} />
+        </mesh>
+        {/* Lighter wooden inner board */}
+        <mesh position={[0, 0.105, 0]}>
+          <boxGeometry args={[2.3, 0.02, 2.3]} />
+          <meshStandardMaterial color="#bda591" roughness={0.4} />
+        </mesh>
+        {/* Visual dark squares grid pattern */}
+        {[-3, -1, 1, 3].map((xIdx) =>
+          [-3, -1, 1, 3].map((zIdx) => (
+            <mesh key={`${xIdx}-${zIdx}`} position={[xIdx * 0.26, 0.116, zIdx * 0.26]}>
+              <boxGeometry args={[0.26, 0.005, 0.26]} />
+              <meshStandardMaterial color="#30241b" roughness={0.7} />
+            </mesh>
+          ))
+        )}
+
+        {/* Simplified chess pieces lined up in 2 rows on each side */}
+        {/* Player 1 (Back Row/Dark pieces) */}
+        {[-3, -2, -1, 0, 1, 2, 3].map((colIdx) => {
+          const x = colIdx * 0.26;
+          return (
+            <group key={colIdx} position={[x, 0.12, -0.9]}>
+              <mesh castShadow position={[0, 0.12, 0]}>
+                <cylinderGeometry args={[0.04, 0.08, 0.24, 8]} />
+                <meshStandardMaterial color="#1a1a1a" roughness={0.2} />
+              </mesh>
+              {/* Pawns in front row */}
+              <mesh castShadow position={[0, 0.08, 0.26]}>
+                <cylinderGeometry args={[0.03, 0.06, 0.16, 8]} />
+                <meshStandardMaterial color="#1a1a1a" roughness={0.2} />
+              </mesh>
+            </group>
+          );
+        })}
+
+        {/* Player 2 (Front Row/Light pieces) */}
+        {[-3, -2, -1, 0, 1, 2, 3].map((colIdx) => {
+          const x = colIdx * 0.26;
+          return (
+            <group key={colIdx} position={[x, 0.12, 0.9]}>
+              <mesh castShadow position={[0, 0.12, 0]}>
+                <cylinderGeometry args={[0.04, 0.08, 0.24, 8]} />
+                <meshStandardMaterial color="#eaeaea" roughness={0.3} />
+              </mesh>
+              {/* Pawns in back row */}
+              <mesh castShadow position={[0, 0.08, -0.26]}>
+                <cylinderGeometry args={[0.03, 0.06, 0.16, 8]} />
+                <meshStandardMaterial color="#eaeaea" roughness={0.3} />
+              </mesh>
+            </group>
+          );
+        })}
       </group>
     </group>
   );
