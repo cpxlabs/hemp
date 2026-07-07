@@ -14,3 +14,8 @@ if (typeof (globalThis as any).process === 'undefined') {
   (globalThis as any).process.env = {};
 }
 
+if (typeof (globalThis as any).__ExpoImportMetaRegistry === 'undefined') {
+  (globalThis as any).__ExpoImportMetaRegistry = { env: {} };
+}
+
+
