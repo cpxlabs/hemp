@@ -86,7 +86,7 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       {/* Ground Carbon Fiber Slab */}
       <mesh receiveShadow position={[0, -0.5, 0]}>
         <boxGeometry args={[9.5, 0.15, 5.0]} />
-        <meshStandardMaterial color={parkColor} roughness={0.9} metalness={0.4} />
+        <meshPhysicalMaterial color={parkColor} roughness={0.2} metalness={0.9} clearcoat={1.0} clearcoatRoughness={0.1} />
       </mesh>
       
       {/* Visual carbon grid pattern (thin cylinders or boxes to create a high-tech weave texture) */}
@@ -109,11 +109,11 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
         {/* Curved ramp surface (using angled segment structure to make it transition smoothly) */}
         <mesh castShadow receiveShadow position={[0, 0.25, 0]} rotation={[Math.PI / 12, 0, 0]}>
           <boxGeometry args={[3.2, 0.06, 1.6]} />
-          <meshPhysicalMaterial color={woodColor} roughness={0.4} clearcoat={0.3} />
+          <meshPhysicalMaterial color={woodColor} roughness={0.25} clearcoat={1.0} clearcoatRoughness={0.1} />
         </mesh>
         <mesh castShadow receiveShadow position={[0, 0.6, -0.6]} rotation={[Math.PI / 4, 0, 0]}>
           <boxGeometry args={[3.2, 0.06, 1.2]} />
-          <meshPhysicalMaterial color={woodColor} roughness={0.4} clearcoat={0.3} />
+          <meshPhysicalMaterial color={woodColor} roughness={0.25} clearcoat={1.0} clearcoatRoughness={0.1} />
         </mesh>
         
         {/* Metal transition plate at bottom */}
@@ -411,65 +411,65 @@ const SkateDecks = ({ active, material, isDark, ...props }: any) => {
         <group position={[0, 0, 0]}>
           {/* Flat Center */}
           <mesh castShadow receiveShadow position={[0, 0, 0]}>
-            <boxGeometry args={[0.42, 0.04, 1.2]} />
-            <meshStandardMaterial {...matProps} />
+            <boxGeometry args={[0.42, 0.025, 1.2]} />
+            <meshPhysicalMaterial {...matProps} />
           </mesh>
           {/* Left Concave Rail */}
-          <mesh castShadow receiveShadow position={[-0.28, 0.02, 0]} rotation={[0, 0, Math.PI / 18]}>
-            <boxGeometry args={[0.16, 0.04, 1.2]} />
-            <meshStandardMaterial {...matProps} />
+          <mesh castShadow receiveShadow position={[-0.28, 0.035, 0]} rotation={[0, 0, Math.PI / 12]}>
+            <boxGeometry args={[0.16, 0.025, 1.2]} />
+            <meshPhysicalMaterial {...matProps} />
           </mesh>
           {/* Right Concave Rail */}
-          <mesh castShadow receiveShadow position={[0.26, 0.02, 0]} rotation={[0, 0, -Math.PI / 18]}>
-            <boxGeometry args={[0.16, 0.04, 1.2]} />
-            <meshStandardMaterial {...matProps} />
+          <mesh castShadow receiveShadow position={[0.28, 0.035, 0]} rotation={[0, 0, -Math.PI / 12]}>
+            <boxGeometry args={[0.16, 0.025, 1.2]} />
+            <meshPhysicalMaterial {...matProps} />
           </mesh>
 
           {/* Laminated Wood Core Layer (visible edge line) */}
-          <mesh position={[0, -0.015, 0]}>
-            <boxGeometry args={[0.74, 0.01, 1.18]} />
-            <meshStandardMaterial {...woodCoreProps} />
+          <mesh position={[0, -0.012, 0]}>
+            <boxGeometry args={[0.74, 0.008, 1.18]} />
+            <meshPhysicalMaterial {...woodCoreProps} />
           </mesh>
         </group>
 
         {/* --- Nose Kicktail (Front) Hinge Group --- */}
-        <group position={[0, 0, 0.6]} rotation={[Math.PI / 10, 0, 0]}>
+        <group position={[0, 0, 0.6]} rotation={[Math.PI / 8, 0, 0]}>
           <group position={[0, 0.015, 0.225]}>
             {/* Center */}
             <mesh castShadow>
-              <boxGeometry args={[0.42, 0.04, 0.45]} />
-              <meshStandardMaterial {...matProps} />
+              <boxGeometry args={[0.42, 0.025, 0.45]} />
+              <meshPhysicalMaterial {...matProps} />
             </mesh>
             {/* Left Concave */}
-            <mesh castShadow position={[-0.28, 0.02, 0]} rotation={[0, 0, Math.PI / 18]}>
-              <boxGeometry args={[0.16, 0.04, 0.45]} />
-              <meshStandardMaterial {...matProps} />
+            <mesh castShadow position={[-0.28, 0.035, 0]} rotation={[0, 0, Math.PI / 12]}>
+              <boxGeometry args={[0.16, 0.025, 0.45]} />
+              <meshPhysicalMaterial {...matProps} />
             </mesh>
             {/* Right Concave */}
-            <mesh castShadow position={[0.26, 0.02, 0]} rotation={[0, 0, -Math.PI / 18]}>
-              <boxGeometry args={[0.16, 0.04, 0.45]} />
-              <meshStandardMaterial {...matProps} />
+            <mesh castShadow position={[0.26, 0.035, 0]} rotation={[0, 0, -Math.PI / 12]}>
+              <boxGeometry args={[0.16, 0.025, 0.45]} />
+              <meshPhysicalMaterial {...matProps} />
             </mesh>
           </group>
         </group>
 
         {/* --- Tail Kicktail (Back) Hinge Group --- */}
-        <group position={[0, 0, -0.6]} rotation={[-Math.PI / 10, 0, 0]}>
+        <group position={[0, 0, -0.6]} rotation={[-Math.PI / 8, 0, 0]}>
           <group position={[0, 0.015, -0.225]}>
             {/* Center */}
             <mesh castShadow>
-              <boxGeometry args={[0.42, 0.04, 0.45]} />
-              <meshStandardMaterial {...matProps} />
+              <boxGeometry args={[0.42, 0.025, 0.45]} />
+              <meshPhysicalMaterial {...matProps} />
             </mesh>
             {/* Left Concave */}
-            <mesh castShadow position={[-0.28, 0.02, 0]} rotation={[0, 0, Math.PI / 18]}>
-              <boxGeometry args={[0.16, 0.04, 0.45]} />
-              <meshStandardMaterial {...matProps} />
+            <mesh castShadow position={[-0.28, 0.035, 0]} rotation={[0, 0, Math.PI / 12]}>
+              <boxGeometry args={[0.16, 0.025, 0.45]} />
+              <meshPhysicalMaterial {...matProps} />
             </mesh>
             {/* Right Concave */}
-            <mesh castShadow position={[0.26, 0.02, 0]} rotation={[0, 0, -Math.PI / 18]}>
-              <boxGeometry args={[0.16, 0.04, 0.45]} />
-              <meshStandardMaterial {...matProps} />
+            <mesh castShadow position={[0.26, 0.035, 0]} rotation={[0, 0, -Math.PI / 12]}>
+              <boxGeometry args={[0.16, 0.025, 0.45]} />
+              <meshPhysicalMaterial {...matProps} />
             </mesh>
           </group>
         </group>
