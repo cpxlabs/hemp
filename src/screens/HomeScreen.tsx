@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -7,7 +7,7 @@ import { Header } from '../components/Header';
 import { ConfiguratorPanel } from '../components/ConfiguratorPanel';
 import { Text } from '../components/ui/text';
 import { RootStackParamList } from '../types/navigation';
-import { ChevronRight } from 'lucide-react-native';
+import { ChevronRight, X, Compass } from 'lucide-react-native';
 
 const CATEGORIES = [
   { name: 'Rampas', route: 'Ramps' },
@@ -19,6 +19,8 @@ const CATEGORIES = [
 
 const HomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [isCategoriesMinimized, setIsCategoriesMinimized] = useState(false);
+
   return (
     <View className="flex-1 bg-carbon overflow-hidden">
       <Header />
@@ -46,27 +48,42 @@ const HomeScreen = () => {
       {/* Quick Access Categories (Hidden on very small screens, visible as a overlay bar) */}
       <View
         className="absolute bottom-10 right-10 z-40 hidden lg:flex"
-        style={{ width: 250 }}
+        style={{ width: isCategoriesMinimized ? 'auto' : 250 }}
       >
-        <View className="bg-black/40 backdrop-blur-xl border border-white/10 p-6 rounded-2xl">
-          <Text className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-4">
-            Explorar Categorias
-          </Text>
-          <View className="gap-2">
-            {CATEGORIES.map((cat) => (
-              <Pressable
-                key={cat.route}
-                onPress={() => navigation.navigate(cat.route as any)}
-                className="flex-row items-center justify-between py-2 group"
-              >
-                <Text className="text-white text-sm font-medium group-hover:text-primary transition-colors">
-                  {cat.name}
-                </Text>
-                <ChevronRight size={14} color="rgba(255,255,255,0.3)" />
-              </Pressable>
-            ))}
+        {isCategoriesMinimized ? (
+          <Pressable
+            onPress={() => setIsCategoriesMinimized(false)}
+            className="bg-black/60 backdrop-blur-xl border border-white/10 p-3 rounded-full flex-row items-center justify-center active:scale-95 shadow-lg pointer-events-auto"
+          >
+            <Compass size={18} color="#39FF14" />
+          </Pressable>
+        ) : (
+          <View className="bg-black/60 backdrop-blur-xl border border-white/10 p-6 rounded-2xl relative pointer-events-auto">
+            <Pressable
+              onPress={() => setIsCategoriesMinimized(true)}
+              className="absolute top-4 right-4 z-50 w-6 h-6 items-center justify-center rounded-full bg-white/5 active:scale-95"
+            >
+              <X size={12} color="rgba(255,255,255,0.6)" />
+            </Pressable>
+            <Text className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-4">
+              Explorar Categorias
+            </Text>
+            <View className="gap-2">
+              {CATEGORIES.map((cat) => (
+                <Pressable
+                  key={cat.route}
+                  onPress={() => navigation.navigate(cat.route as any)}
+                  className="flex-row items-center justify-between py-2 group"
+                >
+                  <Text className="text-white text-sm font-medium group-hover:text-primary transition-colors">
+                    {cat.name}
+                  </Text>
+                  <ChevronRight size={14} color="rgba(255,255,255,0.3)" />
+                </Pressable>
+              ))}
+            </View>
           </View>
-        </View>
+        )}
       </View>
     </View>
   );

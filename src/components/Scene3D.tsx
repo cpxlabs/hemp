@@ -75,22 +75,179 @@ const StadiumLight = ({ position, isDark }: any) => {
   );
 };
 
+const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
+  const matProps = {
+    color,
+    roughness: color === '#eaeaea' ? 0.35 : 0.25,
+  };
+  
+  if (type === 'pawn') {
+    return (
+      <group>
+        {/* Base */}
+        <mesh castShadow position={[0, 0.02, 0]}>
+          <cylinderGeometry args={[0.05, 0.06, 0.04, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Body */}
+        <mesh castShadow position={[0, 0.08, 0]}>
+          <coneGeometry args={[0.015, 0.045, 0.12, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Head */}
+        <mesh castShadow position={[0, 0.15, 0]}>
+          <sphereGeometry args={[0.032, 8, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (type === 'rook') {
+    return (
+      <group>
+        {/* Base */}
+        <mesh castShadow position={[0, 0.02, 0]}>
+          <cylinderGeometry args={[0.065, 0.075, 0.04, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Body */}
+        <mesh castShadow position={[0, 0.09, 0]}>
+          <cylinderGeometry args={[0.045, 0.055, 0.12, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Top Battlements */}
+        <mesh castShadow position={[0, 0.17, 0]}>
+          <cylinderGeometry args={[0.065, 0.065, 0.04, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (type === 'knight') {
+    return (
+      <group>
+        {/* Base */}
+        <mesh castShadow position={[0, 0.02, 0]}>
+          <cylinderGeometry args={[0.065, 0.075, 0.04, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Mane/Body */}
+        <mesh castShadow position={[0, 0.09, -0.01]}>
+          <boxGeometry args={[0.04, 0.11, 0.07]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Snout */}
+        <mesh castShadow position={[0, 0.13, 0.03]} rotation={[0.2, 0, 0]}>
+          <boxGeometry args={[0.04, 0.05, 0.07]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (type === 'bishop') {
+    return (
+      <group>
+        {/* Base */}
+        <mesh castShadow position={[0, 0.02, 0]}>
+          <cylinderGeometry args={[0.065, 0.075, 0.04, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Body */}
+        <mesh castShadow position={[0, 0.09, 0]}>
+          <coneGeometry args={[0.012, 0.048, 0.13, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Oval Head */}
+        <mesh castShadow position={[0, 0.16, 0]}>
+          <sphereGeometry args={[0.036, 8, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Tip */}
+        <mesh castShadow position={[0, 0.2, 0]}>
+          <sphereGeometry args={[0.01, 8, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (type === 'queen') {
+    return (
+      <group>
+        {/* Base */}
+        <mesh castShadow position={[0, 0.02, 0]}>
+          <cylinderGeometry args={[0.07, 0.08, 0.04, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Body */}
+        <mesh castShadow position={[0, 0.11, 0]}>
+          <coneGeometry args={[0.018, 0.052, 0.16, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Crown */}
+        <mesh castShadow position={[0, 0.2, 0]}>
+          <cylinderGeometry args={[0.055, 0.038, 0.04, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Tiny top sphere */}
+        <mesh castShadow position={[0, 0.23, 0]}>
+          <sphereGeometry args={[0.015, 8, 8]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+      </group>
+    );
+  }
+
+  // King
+  return (
+    <group>
+      {/* Base */}
+      <mesh castShadow position={[0, 0.02, 0]}>
+        <cylinderGeometry args={[0.07, 0.08, 0.04, 8]} />
+        <meshStandardMaterial {...matProps} />
+      </mesh>
+      {/* Body */}
+      <mesh castShadow position={[0, 0.12, 0]}>
+        <cylinderGeometry args={[0.03, 0.055, 0.18, 8]} />
+        <meshStandardMaterial {...matProps} />
+      </mesh>
+      {/* Head/Crown */}
+      <mesh castShadow position={[0, 0.22, 0]}>
+        <cylinderGeometry args={[0.055, 0.045, 0.04, 8]} />
+        <meshStandardMaterial {...matProps} />
+      </mesh>
+      {/* Cross on top */}
+      <mesh castShadow position={[0, 0.25, 0]}>
+        <boxGeometry args={[0.012, 0.036, 0.012]} />
+        <meshStandardMaterial {...matProps} />
+      </mesh>
+      <mesh castShadow position={[0, 0.25, 0]}>
+        <boxGeometry args={[0.036, 0.012, 0.012]} />
+        <meshStandardMaterial {...matProps} />
+      </mesh>
+    </group>
+  );
+};
+
 const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
-  const parkColor = '#0c0c0c'; // Carbon fiber grid color (deep dark gray/black)
+  const parkColor = '#b5b0a6'; // Concrete grey color for realistic skatepark ground
   const structuralColor = isDark ? '#1f1f1f' : '#d5cbbd';
   const woodColor = '#a87544'; // Beautiful rich warm wood color for the ramp face
   const logoGreen = '#39FF14';
 
   return (
     <group position={[0, -0.2, 0]}>
-      {/* Ground Carbon Fiber Slab */}
+      {/* Ground Concrete Slab */}
       <mesh receiveShadow position={[0, -0.5, 0]}>
         <boxGeometry args={[9.5, 0.15, 5.0]} />
-        <meshPhysicalMaterial color={parkColor} roughness={0.2} metalness={0.9} clearcoat={1.0} clearcoatRoughness={0.1} />
+        <meshStandardMaterial color={parkColor} roughness={0.85} metalness={0.15} />
       </mesh>
       
-      {/* Visual carbon grid pattern (thin cylinders or boxes to create a high-tech weave texture) */}
-      <gridHelper args={[9.5, 30, '#333333', '#222222']} position={[0, -0.42, 0]} />
+      {/* Concrete slab joint cuts (subtle grid lines) */}
+      <gridHelper args={[9.5, 12, '#8e8a82', '#9c978f']} position={[0, -0.42, 0]} />
 
       {/* --- Stadium Corner Lights for Sparks and Warm Glow --- */}
       <StadiumLight position={[-4.2, -0.525, -2.2]} isDark={isDark} />
@@ -195,7 +352,7 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       </group>
 
       {/* --- Stack of Wooden Fingerboard Decks to the Left --- */}
-      <group position={[-2.85, -0.425, 0.0]} rotation={[0.05, 0.5, 0]}>
+      <group position={[-3.1, -0.425, 0.0]} rotation={[0.05, 0.5, 0]}>
         {[0, 1, 2, 3, 4].map((index) => {
           const woodHue = index === 4 ? woodColor : index % 2 === 0 ? '#8b5a2b' : '#6f4a27';
           return (
@@ -242,7 +399,7 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       </group>
 
       {/* --- Detailed Stone Dice Tower to the Right --- */}
-      <group position={[2.55, -0.425, -0.7]} rotation={[0, -0.3, 0]}>
+      <group position={[2.8, -0.425, -0.9]} rotation={[0, -0.3, 0]}>
         {/* Tower Base castle wall */}
         <mesh castShadow position={[0, 0.7, 0]}>
           <boxGeometry args={[0.9, 1.4, 0.9]} />
@@ -289,7 +446,7 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       </group>
 
       {/* --- Chess Board and pieces in Front Right --- */}
-      <group position={[1.8, -0.425, 1.25]} rotation={[0, -0.2, 0]}>
+      <group position={[1.9, -0.425, 1.4]} rotation={[0, -0.2, 0]}>
         {/* Chess board base frame */}
         <mesh castShadow receiveShadow position={[0, 0.05, 0]}>
           <boxGeometry args={[2.5, 0.1, 2.5]} />
@@ -301,48 +458,59 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           <meshStandardMaterial color="#bda591" roughness={0.4} />
         </mesh>
         {/* Visual dark squares grid pattern */}
-        {[-3, -1, 1, 3].map((xIdx) =>
-          [-3, -1, 1, 3].map((zIdx) => (
-            <mesh key={`${xIdx}-${zIdx}`} position={[xIdx * 0.26, 0.116, zIdx * 0.26]}>
-              <boxGeometry args={[0.26, 0.005, 0.26]} />
-              <meshStandardMaterial color="#30241b" roughness={0.7} />
-            </mesh>
+        {[-3.5, -1.5, 0.5, 2.5].map((xOffset) =>
+          [-3.5, -1.5, 0.5, 2.5].map((zOffset) => (
+            <group key={`${xOffset}-${zOffset}`}>
+              {/* Checkerboard square alignment offsets */}
+              {[-0.5, 0.5].map((dx) =>
+                [-0.5, 0.5].map((dz) => {
+                  const isBlack = (Math.floor(xOffset) + Math.floor(zOffset) + (dx > 0 ? 1 : 0) + (dz > 0 ? 1 : 0)) % 2 === 0;
+                  if (isBlack) return null;
+                  return (
+                    <mesh key={`${dx}-${dz}`} position={[(xOffset + dx) * 0.275, 0.116, (zOffset + dz) * 0.275]}>
+                      <boxGeometry args={[0.275, 0.005, 0.275]} />
+                      <meshStandardMaterial color="#30241b" roughness={0.7} />
+                    </mesh>
+                  );
+                })
+              )}
+            </group>
           ))
         )}
 
-        {/* Simplified chess pieces lined up in 2 rows on each side */}
-        {/* Player 1 (Back Row/Dark pieces) */}
-        {[-3, -2, -1, 0, 1, 2, 3].map((colIdx) => {
-          const x = colIdx * 0.26;
+        {/* Detailed 3D Chess Pieces set (Full 8x2 set for each player) */}
+        {/* Player 1 (Black pieces - Back Row & Pawns) */}
+        {[0, 1, 2, 3, 4, 5, 6, 7].map((colIdx) => {
+          const x = (colIdx - 3.5) * 0.275;
+          const pieceType = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook'][colIdx];
           return (
-            <group key={colIdx} position={[x, 0.12, -0.9]}>
-              <mesh castShadow position={[0, 0.12, 0]}>
-                <cylinderGeometry args={[0.04, 0.08, 0.24, 8]} />
-                <meshStandardMaterial color="#1a1a1a" roughness={0.2} />
-              </mesh>
-              {/* Pawns in front row */}
-              <mesh castShadow position={[0, 0.08, 0.26]}>
-                <cylinderGeometry args={[0.03, 0.06, 0.16, 8]} />
-                <meshStandardMaterial color="#1a1a1a" roughness={0.2} />
-              </mesh>
+            <group key={`black-${colIdx}`}>
+              {/* Back Row */}
+              <group position={[x, 0.11, -0.96]}>
+                <ChessPiece3D type={pieceType} color="#1a1a1a" />
+              </group>
+              {/* Pawns Row */}
+              <group position={[x, 0.11, -0.685]}>
+                <ChessPiece3D type="pawn" color="#1a1a1a" />
+              </group>
             </group>
           );
         })}
 
-        {/* Player 2 (Front Row/Light pieces) */}
-        {[-3, -2, -1, 0, 1, 2, 3].map((colIdx) => {
-          const x = colIdx * 0.26;
+        {/* Player 2 (White pieces - Back Row & Pawns) */}
+        {[0, 1, 2, 3, 4, 5, 6, 7].map((colIdx) => {
+          const x = (colIdx - 3.5) * 0.275;
+          const pieceType = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook'][colIdx];
           return (
-            <group key={colIdx} position={[x, 0.12, 0.9]}>
-              <mesh castShadow position={[0, 0.12, 0]}>
-                <cylinderGeometry args={[0.04, 0.08, 0.24, 8]} />
-                <meshStandardMaterial color="#eaeaea" roughness={0.3} />
-              </mesh>
-              {/* Pawns in back row */}
-              <mesh castShadow position={[0, 0.08, -0.26]}>
-                <cylinderGeometry args={[0.03, 0.06, 0.16, 8]} />
-                <meshStandardMaterial color="#eaeaea" roughness={0.3} />
-              </mesh>
+            <group key={`white-${colIdx}`}>
+              {/* Back Row */}
+              <group position={[x, 0.11, 0.96]}>
+                <ChessPiece3D type={pieceType} color="#eaeaea" />
+              </group>
+              {/* Pawns Row */}
+              <group position={[x, 0.11, 0.685]}>
+                <ChessPiece3D type="pawn" color="#eaeaea" />
+              </group>
             </group>
           );
         })}
