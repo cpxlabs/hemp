@@ -672,17 +672,26 @@ const SkateRamp = ({ active, material, isDark, isCollapsed = false, ...props }: 
 };
 
 const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any, ref: any) => {
-  const matProps = getMaterialProps(material || 'wood', isDark);
-  const woodCoreProps = getMaterialProps('wood', isDark);
+  const matProps = {
+    color: '#1a1a1a', // Black grip tape look matching base photo
+    roughness: 0.85,
+    metalness: 0.1,
+  };
+  const woodCoreProps = {
+    color: '#e3be94', // Light birch ply color matching the photo edge
+    roughness: 0.45,
+    metalness: 0.1,
+    clearcoat: 0.25,
+  };
   
   const metalProps = {
-    color: '#dddddd',
-    roughness: 0.1,
-    metalness: 0.95,
+    color: '#262626', // Matte black metal trucks
+    roughness: 0.5,
+    metalness: 0.8,
   };
 
   return (
-    <group ref={ref} {...props} rotation={[0.1, 0.2, 0.05]}>
+    <group ref={ref} {...props} rotation={[0, 0, 0]}>
       {/* --- The Deck with Concave & Double Kicktail --- */}
       <group position={[0, 0.1, 0]}>
         {/* --- Middle Section with Concave (Split into center + side rails) --- */}
@@ -764,7 +773,7 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
           {/* Kingpin & Bushings */}
           <mesh position={[0, 0.01, 0]}>
             <cylinderGeometry args={[0.04, 0.04, 0.08, 8]} />
-            <meshStandardMaterial color={isDark ? '#39FF14' : '#ef4444'} roughness={0.3} />
+            <meshStandardMaterial color="#d4e310" roughness={0.3} />
           </mesh>
           {/* Hanger / Axle */}
           <mesh castShadow position={[0, -0.03, 0]} rotation={[0, 0, Math.PI / 2]}>
@@ -774,13 +783,26 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
           
           {/* Urethane Wheels */}
           <group position={[0, -0.03, 0]}>
+            {/* Left Wheel */}
             <mesh position={[-0.38, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
               <cylinderGeometry args={[0.13, 0.13, 0.09, 16]} />
-              <meshStandardMaterial color={isDark ? '#ffffff' : '#dddddd'} roughness={0.4} />
+              <meshPhysicalMaterial color="#d4e310" roughness={0.35} clearcoat={0.15} />
             </mesh>
+            {/* Left Bearings */}
+            <mesh position={[-0.43, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[0.06, 0.06, 0.01, 8]} />
+              <meshStandardMaterial color="#1a1a1a" metalness={0.9} roughness={0.2} />
+            </mesh>
+
+            {/* Right Wheel */}
             <mesh position={[0.38, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
               <cylinderGeometry args={[0.13, 0.13, 0.09, 16]} />
-              <meshStandardMaterial color={isDark ? '#ffffff' : '#dddddd'} roughness={0.4} />
+              <meshPhysicalMaterial color="#d4e310" roughness={0.35} clearcoat={0.15} />
+            </mesh>
+            {/* Right Bearings */}
+            <mesh position={[0.43, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[0.06, 0.06, 0.01, 8]} />
+              <meshStandardMaterial color="#1a1a1a" metalness={0.9} roughness={0.2} />
             </mesh>
           </group>
         </group>
