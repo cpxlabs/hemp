@@ -6,6 +6,7 @@ import { ShoppingCart, RotateCcw, X, Sliders } from 'lucide-react-native';
 import { useConfigurator } from '../providers/ConfiguratorProvider';
 import { useTheme } from '../providers/ThemeProvider';
 import { useCart } from '../providers/CartProvider';
+import { useTranslation } from 'react-i18next';
 
 const PRODUCTS = [
   { id: 1, name: 'RAMPA PROFISSIONAL', price: 'R$ 899,00' },
@@ -64,6 +65,7 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
   const [isMinimized, setIsMinimized] = React.useState(false);
   const { isDark } = useTheme();
   const { addToCart, setIsCartOpen } = useCart();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (selections.length === 0) {
@@ -118,7 +120,7 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
       >
         <Sliders size={14} color={isDark ? '#39FF14' : '#000'} />
         <Text className="text-foreground font-black uppercase text-[10px] tracking-widest">
-          Customizar
+          {t('configurator.customButton')}
         </Text>
       </Pressable>
     );
@@ -145,7 +147,7 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
         <X size={16} color={isDark ? '#ffffff' : '#111111'} />
       </Pressable>
       <Text className={`${isMobile ? 'text-xl' : 'text-3xl'} font-black tracking-tighter ${headingColor} mb-6 uppercase italic`}>
-        Configurar seu produto
+        {t('configurator.configureTitle')}
       </Text>
 
       <View className={`${isMobile ? 'gap-4' : 'gap-8'}`}>
@@ -164,7 +166,7 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
 
               <View className="flex-row gap-3">
                 <CustomSelect
-                  label="Material"
+                  label={t('configurator.material')}
                   options={MATERIALS}
                   value={selections[idx]?.material}
                   onChange={(val: string) => updateSelection(idx, 'material', val)}
@@ -172,7 +174,7 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
                 />
 
                 <CustomSelect
-                  label="Acabamento"
+                  label={t('configurator.finish')}
                   options={FINISHES}
                   value={selections[idx]?.finish}
                   onChange={(val: string) => updateSelection(idx, 'finish', val)}
@@ -189,8 +191,8 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
               {idx === 0 && activeProductIndex === 0 && (
                 <View className="flex-row items-center justify-between mt-3 bg-foreground/5 rounded-xl px-4 py-2 border border-border/20">
                   <View>
-                    <Text className="text-xs font-bold text-foreground">Estrutura Dobrável</Text>
-                    <Text className="text-[9px] text-muted-foreground">Recolhe as rampas laterais para transporte</Text>
+                    <Text className="text-xs font-bold text-foreground">{t('configurator.foldableStructure')}</Text>
+                    <Text className="text-[9px] text-muted-foreground">{t('configurator.foldableDesc')}</Text>
                   </View>
                   <Pressable
                     onPress={() => setIsRampCollapsed(!isRampCollapsed)}
@@ -207,7 +209,7 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
       
       {/* RGB Lighting Color Selector */}
       <View className="mt-4 px-4 py-3 bg-foreground/5 rounded-xl border border-border/20">
-        <Text className="text-[10px] font-bold text-foreground mb-2">COR DAS LUZES RGB (SECUNDÁRIAS)</Text>
+        <Text className="text-[10px] font-bold text-foreground mb-2">{t('configurator.rgbColor')}</Text>
         <View className="flex-row gap-3">
           {[
             { name: 'Green', hex: '#39FF14' },
@@ -241,14 +243,14 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
           className={`flex-1 ${resetBtnBorder} ${isMobile ? 'h-12' : 'h-14'} rounded-xl`}
         >
           <RotateCcw size={18} color={isDark ? 'white' : 'black'} />
-          {!isMobile && <Text className="text-foreground font-bold uppercase tracking-widest ml-2 text-xs">Reset</Text>}
+          {!isMobile && <Text className="text-foreground font-bold uppercase tracking-widest ml-2 text-xs">{t('configurator.reset')}</Text>}
         </Button>
         <Button
           onPress={handleCheckoutFlow}
           className={`flex-[2] ${isMobile ? 'h-12' : 'h-14'} shadow-lg rounded-xl`}
           variant="default"
         >
-          <Text className={`text-primary-foreground font-black uppercase tracking-widest ${isMobile ? 'text-xs' : 'text-sm'}`}>Finalizar Pedido</Text>
+          <Text className={`text-primary-foreground font-black uppercase tracking-widest ${isMobile ? 'text-xs' : 'text-sm'}`}>{t('configurator.checkout')}</Text>
         </Button>
       </View>
     </View>

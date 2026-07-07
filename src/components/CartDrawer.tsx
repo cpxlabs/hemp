@@ -7,6 +7,7 @@ import { Button } from './ui/button';
 import { useCart } from '../providers/CartProvider';
 import { useTheme } from '../providers/ThemeProvider';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const MotionDiv = motion.div;
 
@@ -21,6 +22,7 @@ export const CartDrawer: React.FC = () => {
     clearCart
   } = useCart();
   const { isDark } = useTheme();
+  const { t } = useTranslation();
 
   const [checkoutStep, setCheckoutStep] = useState<'cart' | 'checkout' | 'success'>('cart');
   const [cardNumber, setCardNumber] = useState('');
@@ -86,9 +88,9 @@ export const CartDrawer: React.FC = () => {
             <View className="flex-row items-center gap-2">
               <ShoppingBag size={20} color={accentColor} />
               <Text className="text-xl font-black uppercase tracking-tight italic">
-                {checkoutStep === 'cart' && 'Carrinho'}
-                {checkoutStep === 'checkout' && 'Pagamento'}
-                {checkoutStep === 'success' && 'Sucesso!'}
+                {checkoutStep === 'cart' && t('cart.titleCart')}
+                {checkoutStep === 'checkout' && t('cart.titlePayment')}
+                {checkoutStep === 'success' && t('cart.titleSuccess')}
               </Text>
             </View>
             <Pressable onPress={handleClose} className="p-1 rounded-full hover:bg-foreground/10 active:scale-95">
@@ -104,7 +106,7 @@ export const CartDrawer: React.FC = () => {
                   <View className="flex-1 items-center justify-center py-20 gap-4 opacity-60">
                     <ShoppingBag size={48} color={isDark ? '#333' : '#bbb'} />
                     <Text className="text-center text-sm font-semibold italic text-muted-foreground">
-                      Seu carrinho está vazio.
+                      {t('cart.empty')}
                     </Text>
                   </View>
                 ) : (
@@ -156,11 +158,11 @@ export const CartDrawer: React.FC = () => {
               {cartItems.length > 0 && (
                 <View className={`p-6 border-t ${dividerColor} bg-foreground/5`}>
                   <View className="flex-row justify-between items-center mb-4">
-                    <Text className="text-base font-bold text-muted-foreground uppercase tracking-wider text-xs">Total</Text>
+                    <Text className="text-base font-bold text-muted-foreground uppercase tracking-wider text-xs">{t('cart.total')}</Text>
                     <Text className="text-2xl font-black text-foreground">${totalAmount.toFixed(2)}</Text>
                   </View>
                   <Button className="w-full h-12 rounded-xl shadow-lg" variant="default" onPress={handleCheckout}>
-                    <Text className="text-primary-foreground font-black uppercase tracking-widest text-sm">Fechar Pedido</Text>
+                    <Text className="text-primary-foreground font-black uppercase tracking-widest text-sm">{t('cart.checkout')}</Text>
                   </Button>
                 </View>
               )}
@@ -171,11 +173,11 @@ export const CartDrawer: React.FC = () => {
           {checkoutStep === 'checkout' && (
             <React.Fragment>
               <ScrollView className="flex-1 px-6 py-4 gap-6">
-                <Text className="text-sm text-muted-foreground uppercase tracking-widest font-black mb-2">Simulação de Pagamento</Text>
+                <Text className="text-sm text-muted-foreground uppercase tracking-widest font-black mb-2">{t('cart.paymentSim')}</Text>
                 
                 <View className="gap-4">
                   <View className="gap-1">
-                    <Text className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Número do Cartão</Text>
+                    <Text className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">{t('cart.cardNumber')}</Text>
                     <TextInput
                       value={cardNumber}
                       onChangeText={setCardNumber}
@@ -186,7 +188,7 @@ export const CartDrawer: React.FC = () => {
                   </View>
 
                   <View className="gap-1">
-                    <Text className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Nome Impresso</Text>
+                    <Text className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">{t('cart.cardName')}</Text>
                     <TextInput
                       value={cardName}
                       onChangeText={setCardName}
@@ -198,7 +200,7 @@ export const CartDrawer: React.FC = () => {
 
                   <View className="flex-row gap-4">
                     <View className="flex-1 gap-1">
-                      <Text className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Validade</Text>
+                      <Text className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">{t('cart.cardExpiry')}</Text>
                       <TextInput
                         value={cardExpiry}
                         onChangeText={setCardExpiry}
@@ -208,7 +210,7 @@ export const CartDrawer: React.FC = () => {
                       />
                     </View>
                     <View className="flex-1 gap-1">
-                      <Text className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">CVV</Text>
+                      <Text className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">{t('cart.cardCvv')}</Text>
                       <TextInput
                         value={cardCvv}
                         onChangeText={setCardCvv}
@@ -223,15 +225,15 @@ export const CartDrawer: React.FC = () => {
 
               <View className={`p-6 border-t ${dividerColor} bg-foreground/5 gap-3`}>
                 <View className="flex-row justify-between items-center mb-1">
-                  <Text className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Valor total</Text>
+                  <Text className="text-xs text-muted-foreground uppercase font-bold tracking-wider">{t('cart.totalValue')}</Text>
                   <Text className="text-xl font-bold text-foreground">${totalAmount.toFixed(2)}</Text>
                 </View>
                 <Button className="w-full h-12 rounded-xl" variant="default" onPress={handlePay}>
                   <CreditCard size={18} color={isDark ? 'black' : 'white'} />
-                  <Text className="text-primary-foreground font-black uppercase tracking-widest text-sm ml-2">Confirmar e Pagar</Text>
+                  <Text className="text-primary-foreground font-black uppercase tracking-widest text-sm ml-2">{t('cart.confirmPay')}</Text>
                 </Button>
                 <Button className="w-full h-12 rounded-xl bg-transparent border border-border/40" variant="outline" onPress={() => setCheckoutStep('cart')}>
-                  <Text className="text-foreground font-bold uppercase tracking-wider text-xs">Voltar ao Carrinho</Text>
+                  <Text className="text-foreground font-bold uppercase tracking-wider text-xs">{t('cart.backToCart')}</Text>
                 </Button>
               </View>
             </React.Fragment>
@@ -242,13 +244,13 @@ export const CartDrawer: React.FC = () => {
             <View className="flex-1 justify-center items-center px-6 gap-6">
               <CheckCircle size={64} color={accentColor} />
               <View className="gap-2">
-                <Text className="text-2xl font-black text-center uppercase tracking-tight italic">Pedido Confirmado!</Text>
+                <Text className="text-2xl font-black text-center uppercase tracking-tight italic">{t('cart.orderConfirmed')}</Text>
                 <Text className="text-sm text-center text-muted-foreground leading-6">
-                  Seu pedido de equipamentos Hemp Ramps sustentáveis foi processado com sucesso. A engenharia da CPX Labs já iniciou a produção do seu pedido 3D personalizado!
+                  {t('cart.orderSuccessDesc')}
                 </Text>
               </View>
               <Button className="w-full h-12 rounded-xl mt-4" variant="default" onPress={handleClose}>
-                <Text className="text-primary-foreground font-black uppercase tracking-widest text-xs">Concluir</Text>
+                <Text className="text-primary-foreground font-black uppercase tracking-widest text-xs">{t('cart.finish')}</Text>
               </Button>
             </View>
           )}

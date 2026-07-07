@@ -99,5 +99,35 @@
       "boardsOnly": "Boards Only",
       "piecesOnly": "Pieces Only"
     }
+  },
+  "configurator": {
+    "customButton": "Customize",
+    "configureTitle": "Configure Your Product",
+    "material": "Material",
+    "finish": "Finish",
+    "foldableStructure": "Foldable Structure",
+    "foldableDesc": "Folds side ramps for transport",
+    "rgbColor": "RGB LIGHT COLOR (SECONDARY)",
+    "reset": "Reset",
+    "checkout": "Place Order"
+  },
+  "cart": {
+    "titleCart": "Cart",
+    "titlePayment": "Payment",
+    "titleSuccess": "Success!",
+    "empty": "Your cart is empty.",
+    "total": "Total",
+    "checkout": "Checkout",
+    "paymentSim": "Payment Simulation",
+    "cardNumber": "Card Number",
+    "cardName": "Printed Name",
+    "cardExpiry": "Expiry",
+    "cardCvv": "CVV",
+    "totalValue": "Total Value",
+    "confirmPay": "Confirm and Pay",
+    "backToCart": "Back to Cart",
+    "orderConfirmed": "Order Confirmed!",
+    "orderSuccessDesc": "Your order for sustainable Hemp Ramps gear has been processed successfully. CPX Labs engineering has already started production on your custom 3D order!",
+    "finish": "Finish"
   }
 }

@@ -99,5 +99,35 @@
       "boardsOnly": "Apenas Tabuleiros",
       "piecesOnly": "Apenas Peças"
     }
+  },
+  "configurator": {
+    "customButton": "Customizar",
+    "configureTitle": "Configurar seu produto",
+    "material": "Material",
+    "finish": "Acabamento",
+    "foldableStructure": "Estrutura Dobrável",
+    "foldableDesc": "Recolhe as rampas laterais para transporte",
+    "rgbColor": "COR DAS LUZES RGB (SECUNDÁRIAS)",
+    "reset": "Reset",
+    "checkout": "Finalizar Pedido"
+  },
+  "cart": {
+    "titleCart": "Carrinho",
+    "titlePayment": "Pagamento",
+    "titleSuccess": "Sucesso!",
+    "empty": "Seu carrinho está vazio.",
+    "total": "Total",
+    "checkout": "Fechar Pedido",
+    "paymentSim": "Simulação de Pagamento",
+    "cardNumber": "Número do Cartão",
+    "cardName": "Nome Impresso",
+    "cardExpiry": "Validade",
+    "cardCvv": "CVV",
+    "totalValue": "Valor total",
+    "confirmPay": "Confirmar e Pagar",
+    "backToCart": "Voltar ao Carrinho",
+    "orderConfirmed": "Pedido Confirmado!",
+    "orderSuccessDesc": "Seu pedido de equipamentos Hemp Ramps sustentáveis foi processado com sucesso. A engenharia da CPX Labs já iniciou a produção do seu pedido 3D personalizado!",
+    "finish": "Concluir"
   }
 }
