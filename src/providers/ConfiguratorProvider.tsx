@@ -7,6 +7,8 @@ interface ConfiguratorContextType {
   activeProductIndex: number;
   setActiveProductIndex: (index: number) => void;
   resetSelections: () => void;
+  isRampCollapsed: boolean;
+  setIsRampCollapsed: (val: boolean) => void;
 }
 
 const ConfiguratorContext = createContext<ConfiguratorContextType | undefined>(undefined);
@@ -14,6 +16,7 @@ const ConfiguratorContext = createContext<ConfiguratorContextType | undefined>(u
 export const ConfiguratorProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selections, setSelections] = useState<any[]>([]);
   const [activeProductIndex, setActiveProductIndex] = useState(0);
+  const [isRampCollapsed, setIsRampCollapsed] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -21,6 +24,8 @@ export const ConfiguratorProvider: React.FC<{ children: React.ReactNode }> = ({ 
       if (saved) setSelections(saved);
       const savedIndex = await storage.getItem<number>('active-product-index');
       if (typeof savedIndex === 'number') setActiveProductIndex(savedIndex);
+      const savedCollapsed = await storage.getItem<boolean>('ramp-collapsed');
+      if (typeof savedCollapsed === 'boolean') setIsRampCollapsed(savedCollapsed);
     };
     load();
   }, []);
@@ -35,9 +40,13 @@ export const ConfiguratorProvider: React.FC<{ children: React.ReactNode }> = ({ 
     storage.setItem('active-product-index', index);
   };
 
+  const handleSetRampCollapsed = (val: boolean) => {
+    setIsRampCollapsed(val);
+    storage.setItem('ramp-collapsed', val);
+  };
+
   const resetSelections = () => {
-    // This should ideally be passed from where the default products are defined
-    // but for simplicity we'll let the component handle the initial state
+    // defaults
   };
 
   return (
@@ -46,7 +55,9 @@ export const ConfiguratorProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setSelections: handleSetSelections,
       activeProductIndex,
       setActiveProductIndex: handleSetActiveIndex,
-      resetSelections
+      resetSelections,
+      isRampCollapsed,
+      setIsRampCollapsed: handleSetRampCollapsed
     }}>
       {children}
     </ConfiguratorContext.Provider>

@@ -7,11 +7,13 @@ import { Text } from '../components/ui/text';
 import Scene3D from '../components/Scene3D';
 import { MOCK_PRODUCTS } from '../services/mockData';
 import { cn } from '@/lib/utils';
+import { useConfigurator } from '../providers/ConfiguratorProvider';
 
 const MATERIALS = ['All', 'Wood', 'Acrylic', 'Natural Fiber'];
 
 const RampsScreen = () => {
   const [selectedMaterial, setSelectedMaterial] = useState('All');
+  const { isRampCollapsed, setIsRampCollapsed } = useConfigurator();
   
   const filteredProducts = useMemo(() => {
     return MOCK_PRODUCTS.filter(
@@ -83,6 +85,20 @@ const RampsScreen = () => {
                 </Pressable>
               ))}
             </ScrollView>
+          </View>
+
+          {/* Collapse Toggle */}
+          <View className="flex-row items-center justify-between mb-6 bg-foreground/5 rounded-xl px-4 py-2.5 border border-border/20">
+            <View>
+              <Text className="text-xs font-bold text-foreground">Estrutura Dobrável</Text>
+              <Text className="text-[9px] text-muted-foreground">Simular fechamento da rampa na visualização 3D</Text>
+            </View>
+            <Pressable
+              onPress={() => setIsRampCollapsed(!isRampCollapsed)}
+              className={`w-10 h-6 rounded-full p-0.5 justify-center ${isRampCollapsed ? 'bg-primary items-end' : 'bg-foreground/25 items-start'}`}
+            >
+              <View className="w-5 h-5 rounded-full bg-white shadow-sm" />
+            </Pressable>
           </View>
 
           {/* Product Cards List */}

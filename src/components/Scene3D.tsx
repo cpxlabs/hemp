@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Suspense } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import {
   OrbitControls,
   PerspectiveCamera,
@@ -12,6 +12,7 @@ import {
   Float
 } from '@react-three/drei';
 import { useTheme } from '../providers/ThemeProvider';
+import { useConfigurator } from '../providers/ConfiguratorProvider';
 
 // --- Material Selector Helper ---
 const getMaterialProps = (materialName?: string, isDark?: boolean) => {
@@ -19,23 +20,28 @@ const getMaterialProps = (materialName?: string, isDark?: boolean) => {
   if (name.includes('carbon') || name.includes('polymer') || name.includes('neon') || name.includes('acrylic')) {
     return {
       color: isDark ? '#39FF14' : '#00aa00',
-      roughness: 0.15,
-      metalness: 0.8,
+      roughness: 0.1,
+      metalness: 0.95,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.05,
       emissive: isDark ? '#052200' : '#001100',
     };
   }
   if (name.includes('wood') || name.includes('walnut') || name.includes('bamboo') || name.includes('maple')) {
     return {
-      color: '#8b5a2b',
-      roughness: 0.6,
-      metalness: 0.1,
+      color: '#6f4a27',
+      roughness: 0.75,
+      metalness: 0.05,
+      clearcoat: 0.15,
+      clearcoatRoughness: 0.4,
     };
   }
   // Default / Natural Fiber
   return {
     color: isDark ? '#d4af37' : '#b89223', // gold / brass tones
-    roughness: 0.4,
-    metalness: 0.5,
+    roughness: 0.35,
+    metalness: 0.6,
+    clearcoat: 0.5,
   };
 };
 
@@ -150,8 +156,28 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
   );
 };
 
-const SkateRamp = ({ active, material, isDark, ...props }: any) => {
+const SkateRamp = ({ active, material, isDark, isCollapsed = false, ...props }: any) => {
   const matProps = getMaterialProps(material, isDark);
+  const leftSlopeRef = React.useRef<any>();
+  const rightSlopeRef = React.useRef<any>();
+
+  const targetRotation = isCollapsed ? 0 : Math.PI / 6;
+  const targetY = isCollapsed ? 0.05 : 0.3;
+  const targetXOffset = isCollapsed ? 0.75 : 1.2;
+
+  useFrame(() => {
+    if (leftSlopeRef.current && rightSlopeRef.current) {
+      leftSlopeRef.current.rotation.z += (targetRotation - leftSlopeRef.current.rotation.z) * 0.1;
+      rightSlopeRef.current.rotation.z += (-targetRotation - rightSlopeRef.current.rotation.z) * 0.1;
+      
+      leftSlopeRef.current.position.y += (targetY - leftSlopeRef.current.position.y) * 0.1;
+      rightSlopeRef.current.position.y += (targetY - rightSlopeRef.current.position.y) * 0.1;
+      
+      leftSlopeRef.current.position.x += (-targetXOffset - leftSlopeRef.current.position.x) * 0.1;
+      rightSlopeRef.current.position.x += (targetXOffset - rightSlopeRef.current.position.x) * 0.1;
+    }
+  });
+
   return (
     <group {...props}>
       {/* Base Ramp Structure */}
@@ -160,11 +186,11 @@ const SkateRamp = ({ active, material, isDark, ...props }: any) => {
         <meshStandardMaterial {...matProps} />
       </mesh>
       {/* Slopes */}
-      <mesh position={[-1.2, 0.3, 0]} rotation={[0, 0, Math.PI / 6]} castShadow>
+      <mesh ref={leftSlopeRef} position={[-1.2, 0.3, 0]} rotation={[0, 0, Math.PI / 6]} castShadow>
         <boxGeometry args={[1.5, 0.1, 1.8]} />
         <meshStandardMaterial {...matProps} />
       </mesh>
-      <mesh position={[1.2, 0.3, 0]} rotation={[0, 0, -Math.PI / 6]} castShadow>
+      <mesh ref={rightSlopeRef} position={[1.2, 0.3, 0]} rotation={[0, 0, -Math.PI / 6]} castShadow>
         <boxGeometry args={[1.5, 0.1, 1.8]} />
         <meshStandardMaterial {...matProps} />
       </mesh>
@@ -174,24 +200,87 @@ const SkateRamp = ({ active, material, isDark, ...props }: any) => {
 
 const SkateDecks = ({ active, material, isDark, ...props }: any) => {
   const matProps = getMaterialProps(material, isDark);
+  const gripProps = {
+    color: '#1a1a1a', // Black griptape
+    roughness: 1.0,
+    metalness: 0.1,
+  };
+  const metalProps = {
+    color: '#dddddd',
+    roughness: 0.1,
+    metalness: 0.95,
+  };
+
   return (
-    <group {...props}>
-      {/* Deck Board */}
-      <mesh castShadow position={[0, 0.2, 0]} rotation={[0.1, 0, 0.1]}>
-        <boxGeometry args={[0.8, 0.06, 2.4]} />
-        <meshStandardMaterial {...matProps} />
-      </mesh>
-      {/* Wheels */}
-      {[-0.8, 0.8].map((z) => (
-        <group key={z} position={[0, 0.05, z]}>
-          <mesh position={[-0.35, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
-            <cylinderGeometry args={[0.18, 0.18, 0.15, 16]} />
-            <meshStandardMaterial color={isDark ? '#ffffff' : '#333333'} roughness={0.5} />
+    <group {...props} rotation={[0.1, 0.2, 0.05]}>
+      {/* --- The Deck (Standard double-kick shape) --- */}
+      <group position={[0, 0.1, 0]}>
+        {/* Middle Flat Section */}
+        <mesh castShadow receiveShadow position={[0, 0, 0]}>
+          <boxGeometry args={[0.78, 0.04, 1.2]} />
+          <meshStandardMaterial {...matProps} />
+        </mesh>
+        {/* Middle Griptape */}
+        <mesh position={[0, 0.025, 0]}>
+          <boxGeometry args={[0.76, 0.01, 1.18]} />
+          <meshStandardMaterial {...gripProps} />
+        </mesh>
+
+        {/* Nose Kicktail (Front) */}
+        <group position={[0, 0.075, 0.75]} rotation={[Math.PI / 10, 0, 0]}>
+          <mesh castShadow position={[0, 0, 0]}>
+            <boxGeometry args={[0.78, 0.04, 0.45]} />
+            <meshStandardMaterial {...matProps} />
           </mesh>
-          <mesh position={[0.35, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
-            <cylinderGeometry args={[0.18, 0.18, 0.15, 16]} />
-            <meshStandardMaterial color={isDark ? '#ffffff' : '#333333'} roughness={0.5} />
+          <mesh position={[0, 0.025, 0]}>
+            <boxGeometry args={[0.76, 0.01, 0.43]} />
+            <meshStandardMaterial {...gripProps} />
           </mesh>
+        </group>
+
+        {/* Tail Kicktail (Back) */}
+        <group position={[0, 0.075, -0.75]} rotation={[-Math.PI / 10, 0, 0]}>
+          <mesh castShadow position={[0, 0, 0]}>
+            <boxGeometry args={[0.78, 0.04, 0.45]} />
+            <meshStandardMaterial {...matProps} />
+          </mesh>
+          <mesh position={[0, 0.025, 0]}>
+            <boxGeometry args={[0.76, 0.01, 0.43]} />
+            <meshStandardMaterial {...gripProps} />
+          </mesh>
+        </group>
+      </group>
+
+      {/* --- Pro Metal Trucks (Front & Back) --- */}
+      {[-0.5, 0.5].map((z) => (
+        <group key={z} position={[0, 0.04, z]}>
+          {/* Baseplate */}
+          <mesh castShadow position={[0, 0.04, 0]}>
+            <boxGeometry args={[0.2, 0.03, 0.25]} />
+            <meshStandardMaterial {...metalProps} />
+          </mesh>
+          {/* Kingpin & Bushings */}
+          <mesh position={[0, 0.01, 0]}>
+            <cylinderGeometry args={[0.04, 0.04, 0.08, 8]} />
+            <meshStandardMaterial color={isDark ? '#39FF14' : '#ef4444'} roughness={0.3} />
+          </mesh>
+          {/* Hanger / Axle */}
+          <mesh castShadow position={[0, -0.03, 0]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.035, 0.035, 0.72, 16]} />
+            <meshStandardMaterial {...metalProps} />
+          </mesh>
+          
+          {/* Urethane Wheels */}
+          <group position={[0, -0.03, 0]}>
+            <mesh position={[-0.38, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+              <cylinderGeometry args={[0.13, 0.13, 0.09, 16]} />
+              <meshStandardMaterial color={isDark ? '#ffffff' : '#dddddd'} roughness={0.4} />
+            </mesh>
+            <mesh position={[0.38, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+              <cylinderGeometry args={[0.13, 0.13, 0.09, 16]} />
+              <meshStandardMaterial color={isDark ? '#ffffff' : '#dddddd'} roughness={0.4} />
+            </mesh>
+          </group>
         </group>
       ))}
     </group>
@@ -286,6 +375,7 @@ const Scene3D: React.FC<Scene3DProps> = ({
   finish
 }) => {
   const { isDark } = useTheme();
+  const { isRampCollapsed } = useConfigurator();
 
   const backgroundColor = isDark ? '#050505' : '#f7f0e6';
   const ambientIntensity = isDark ? 0.3 : 0.6;
@@ -326,7 +416,7 @@ const Scene3D: React.FC<Scene3DProps> = ({
           ) : (
             <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.3}>
               {category === 'Ramps' && (
-                <SkateRamp active={true} material={material} isDark={isDark} />
+                <SkateRamp active={true} material={material} isDark={isDark} isCollapsed={isRampCollapsed} />
               )}
 
               {category === 'Decks' && (

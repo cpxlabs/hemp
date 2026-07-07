@@ -60,7 +60,7 @@ const CustomSelect = ({ label, options, value, onChange, isDark }: any) => {
 };
 
 export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) => {
-  const { selections, setSelections, activeProductIndex, setActiveProductIndex } = useConfigurator();
+  const { selections, setSelections, activeProductIndex, setActiveProductIndex, isRampCollapsed, setIsRampCollapsed } = useConfigurator();
   const { isDark } = useTheme();
   const { addToCart, setIsCartOpen } = useCart();
 
@@ -160,6 +160,20 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
                   <ShoppingCart size={isMobile ? 18 : 20} color={cartIconColor} strokeWidth={2.5} />
                 </Pressable>
               </View>
+              {idx === 0 && activeProductIndex === 0 && (
+                <View className="flex-row items-center justify-between mt-3 bg-foreground/5 rounded-xl px-4 py-2 border border-border/20">
+                  <View>
+                    <Text className="text-xs font-bold text-foreground">Estrutura Dobrável</Text>
+                    <Text className="text-[9px] text-muted-foreground">Recolhe as rampas laterais para transporte</Text>
+                  </View>
+                  <Pressable
+                    onPress={() => setIsRampCollapsed(!isRampCollapsed)}
+                    className={`w-10 h-6 rounded-full p-0.5 justify-center ${isRampCollapsed ? 'bg-primary items-end' : 'bg-foreground/25 items-start'}`}
+                  >
+                    <View className="w-5 h-5 rounded-full bg-white shadow-sm" />
+                  </Pressable>
+                </View>
+              )}
             </View>
           </Pressable>
         ))}
