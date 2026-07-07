@@ -362,7 +362,34 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       </group>
       
       {/* Concrete slab joint cuts (subtle grid lines) */}
-      <gridHelper args={[9.5, 12, isDark ? '#2a2825' : '#8e8a82', isDark ? '#1a1917' : '#9c978f']} position={[0, -0.44, 0]} />
+      <gridHelper args={[9.5, 10, isDark ? '#c0c0c0' : '#999999', isDark ? '#b8b8b8' : '#aaaaaa']} position={[0, -0.44, 0]} />
+
+      {/* Painted floor markings - start/boundary lines */}
+      {/* Center line */}
+      <mesh position={[0, -0.437, 0]}>
+        <boxGeometry args={[0.06, 0.001, 5.0]} />
+        <meshBasicMaterial color={isDark ? '#555555' : '#aaaaaa'} />
+      </mesh>
+      {/* Left boundary */}
+      <mesh position={[-2.5, -0.437, 0]}>
+        <boxGeometry args={[0.06, 0.001, 5.0]} />
+        <meshBasicMaterial color={isDark ? '#555555' : '#aaaaaa'} />
+      </mesh>
+      {/* Right boundary */}
+      <mesh position={[2.5, -0.437, 0]}>
+        <boxGeometry args={[0.06, 0.001, 5.0]} />
+        <meshBasicMaterial color={isDark ? '#555555' : '#aaaaaa'} />
+      </mesh>
+      {/* Front boundary (bright accent) */}
+      <mesh position={[0, -0.437, 1.8]}>
+        <boxGeometry args={[9.5, 0.001, 0.08]} />
+        <meshBasicMaterial color={lightsColor || '#39FF14'} transparent opacity={0.5} />
+      </mesh>
+      {/* Back boundary accent */}
+      <mesh position={[0, -0.437, -1.8]}>
+        <boxGeometry args={[9.5, 0.001, 0.08]} />
+        <meshBasicMaterial color={lightsColor || '#39FF14'} transparent opacity={0.3} />
+      </mesh>
 
       {/* --- Stadium Corner Lights for Sparks and Warm Glow --- */}
       <StadiumLight position={[-4.2, -0.425, -2.2]} isDark={isDark} color={lightsColor} />
@@ -399,28 +426,56 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
 
       {/* --- Central Skate Ramp (Quarterpipe with L-shaped Curved Corner Pocket) --- */}
       <group position={[-0.4, -0.425, -0.5]}>
-        {/* Base block */}
+        {/* Base block - now with richer material */}
         <mesh castShadow receiveShadow position={[0.5, 0.4, -0.8]}>
           <boxGeometry args={[2.2, 0.8, 1.2]} />
-          <meshStandardMaterial color="#121212" roughness={0.55} metalness={0.6} />
+          <meshPhysicalMaterial color="#151515" roughness={0.5} metalness={0.4} clearcoat={0.2} />
         </mesh>
 
         {/* Left corner block extension for L-shaped pocket */}
         <mesh castShadow receiveShadow position={[-1.1, 0.4, -0.8]}>
           <boxGeometry args={[1.0, 0.8, 1.2]} />
-          <meshStandardMaterial color="#121212" roughness={0.55} metalness={0.6} />
+          <meshPhysicalMaterial color="#151515" roughness={0.5} metalness={0.4} clearcoat={0.2} />
+        </mesh>
+
+        {/* Concrete wall backdrop behind the ramp for scene depth */}
+        <mesh receiveShadow position={[0, 0.6, -2.1]}>
+          <boxGeometry args={[4.0, 2.8, 0.12]} />
+          <meshPhysicalMaterial color={isDark ? '#111111' : '#cccccc'} roughness={0.95} metalness={0.0} />
+        </mesh>
+        {/* Wall accent stripe */}
+        <mesh position={[0, 1.4, -2.03]}>
+          <boxGeometry args={[4.0, 0.06, 0.02]} />
+          <meshBasicMaterial color={lightsColor || '#39FF14'} transparent opacity={0.6} />
+        </mesh>
+        {/* Lower wall skirt */}
+        <mesh position={[0, -0.1, -2.03]}>
+          <boxGeometry args={[4.0, 0.3, 0.02]} />
+          <meshStandardMaterial color={isDark ? '#0a0a0a' : '#bbbbbb'} roughness={0.9} />
         </mesh>
         
-        {/* Curved ramp surface - Straight center section */}
+        {/* Curved ramp surface - Straight center section with richer maple */}
         <mesh castShadow receiveShadow position={[0.5, 0.8, -0.4]} rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.8, 0.8, 2.2, 32, 1, true, Math.PI, Math.PI / 2]} />
-          <meshPhysicalMaterial color="#e3be94" roughness={0.35} clearcoat={0.3} clearcoatRoughness={0.15} side={2} />
+          <meshPhysicalMaterial color="#d4a66a" roughness={0.28} clearcoat={0.5} clearcoatRoughness={0.1} side={2} />
         </mesh>
+        {/* Wood plank ribs on center ramp (horizontal lines across the surface) */}
+        {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => {
+          const angle = Math.PI + (Math.PI / 2) * (i / 7);
+          const ry = 0.8 + Math.sin(angle) * 0.8;
+          const rz = -0.4 + Math.cos(angle) * 0.8;
+          return (
+            <mesh key={`rib-${i}`} position={[0.5, ry, rz]} rotation={[angle, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[0.808, 0.808, 2.2, 4, 1, true, 0, 0.03]} />
+              <meshBasicMaterial color={isDark ? '#1a1108' : '#3a200a'} transparent opacity={0.5} />
+            </mesh>
+          );
+        })}
 
         {/* Curved ramp surface - Left wrapping corner pocket section */}
         <mesh castShadow receiveShadow position={[-0.6, 0.8, -0.4]} rotation={[0, Math.PI / 2, Math.PI / 2]}>
           <cylinderGeometry args={[0.8, 0.8, 1.2, 32, 1, true, Math.PI, Math.PI / 2]} />
-          <meshPhysicalMaterial color="#e3be94" roughness={0.35} clearcoat={0.3} clearcoatRoughness={0.15} side={2} />
+          <meshPhysicalMaterial color="#d4a66a" roughness={0.28} clearcoat={0.5} clearcoatRoughness={0.1} side={2} />
         </mesh>
 
         {/* Left carbon side wall enclosing transition curve */}
@@ -504,34 +559,41 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           <meshPhysicalMaterial color="#e5e5e5" metalness={0.98} roughness={0.05} clearcoat={1.0} clearcoatRoughness={0.02} />
         </mesh>
 
-        {/* Coping metal rail at top - Straight center section */}
+        {/* Coping metal rail at top - Straight center section (GLOWING) */}
         <mesh castShadow position={[0.5, 0.8, -1.2]} rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.05, 0.05, 2.2, 16]} />
-          <meshPhysicalMaterial color="#f0f0f0" metalness={0.98} roughness={0.02} clearcoat={1.0} clearcoatRoughness={0.02} />
+          <meshPhysicalMaterial color="#f8f8f8" metalness={0.99} roughness={0.01} clearcoat={1.0} clearcoatRoughness={0.01} emissive="#ffffff" emissiveIntensity={isDark ? 0.4 : 0.1} />
         </mesh>
+        {/* Coping glow fill light */}
+        {isDark && <pointLight position={[0.5, 0.85, -1.15]} intensity={1.5} distance={3} color="#ffffff" />}
 
-        {/* Coping metal rail at top - 90-degree curved corner section wrapping around the left pocket */}
+        {/* Coping metal rail at top - 90-degree curved corner section */}
         <mesh castShadow position={[-0.6, 0.8, -0.6]} rotation={[Math.PI / 2, 0, 0]}>
           <cylinderGeometry args={[0.05, 0.05, 1.2, 16]} />
-          <meshPhysicalMaterial color="#f0f0f0" metalness={0.98} roughness={0.02} clearcoat={1.0} clearcoatRoughness={0.02} />
+          <meshPhysicalMaterial color="#f8f8f8" metalness={0.99} roughness={0.01} clearcoat={1.0} clearcoatRoughness={0.01} emissive="#ffffff" emissiveIntensity={isDark ? 0.3 : 0.1} />
         </mesh>
 
-        {/* Wooden guard rail fence behind top platform */}
+        {/* Wooden guard rail fence behind top platform - warmer wood */}
         <group position={[0, 0.8, -1.35]}>
           {/* Vertical posts */}
           {[-1.5, 0, 1.5].map((x) => (
             <mesh key={x} position={[x, 0.45, 0]} castShadow>
-              <boxGeometry args={[0.06, 0.9, 0.06]} />
-              <meshStandardMaterial color={isDark ? '#333333' : '#a87544'} roughness={0.8} />
+              <boxGeometry args={[0.05, 0.9, 0.05]} />
+              <meshPhysicalMaterial color="#8b5e2c" roughness={0.65} clearcoat={0.3} />
             </mesh>
           ))}
           {/* Horizontal rails */}
-          {[0.3, 0.6, 0.85].map((y) => (
+          {[0.25, 0.55, 0.82].map((y) => (
             <mesh key={y} position={[0, y, 0]} castShadow>
-              <boxGeometry args={[3.1, 0.08, 0.04]} />
-              <meshStandardMaterial color={isDark ? '#333333' : '#a87544'} roughness={0.8} />
+              <boxGeometry args={[3.15, 0.055, 0.04]} />
+              <meshPhysicalMaterial color="#8b5e2c" roughness={0.6} clearcoat={0.3} />
             </mesh>
           ))}
+          {/* Safety net between rails */}
+          <mesh position={[0, 0.5, 0]}>
+            <boxGeometry args={[3.1, 0.7, 0.005]} />
+            <meshBasicMaterial color={isDark ? '#111111' : '#888888'} transparent opacity={0.35} />
+          </mesh>
         </group>
 
 
@@ -583,33 +645,64 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           ))}
         </group>
 
-        {/* Graffiti / sticker tag on the left black side wall */}
-        <group position={[-1.58, 0.4, -0.3]}>
-          {/* Sticker background */}
+        {/* Graffiti / sticker tag on the LEFT black side wall */}
+        <group position={[-1.585, 0.42, -0.28]}>
           <mesh rotation={[0, Math.PI / 2, 0]}>
-            <planeGeometry args={[0.45, 0.25]} />
-            <meshBasicMaterial color="#111111" transparent opacity={0.8} />
+            <planeGeometry args={[0.5, 0.28]} />
+            <meshBasicMaterial color="#080808" transparent opacity={0.9} />
           </mesh>
-          {/* CPX in neon green */}
-          <mesh position={[0.021, 0.05, 0]} rotation={[0, Math.PI / 2, 0]}>
-            <boxGeometry args={[0.3, 0.05, 0.01]} />
+          <mesh position={[0.022, 0.06, 0]} rotation={[0, Math.PI / 2, 0]}>
+            <boxGeometry args={[0.32, 0.06, 0.008]} />
             <meshBasicMaterial color={lightsColor || '#39FF14'} />
           </mesh>
-          <mesh position={[0.021, -0.01, 0]} rotation={[0, Math.PI / 2, 0]}>
-            <boxGeometry args={[0.22, 0.03, 0.01]} />
-            <meshBasicMaterial color={'#ffffff'} />
+          <mesh position={[0.022, -0.005, 0]} rotation={[0, Math.PI / 2, 0]}>
+            <boxGeometry args={[0.25, 0.035, 0.008]} />
+            <meshBasicMaterial color="#ffffff" transparent opacity={0.8} />
+          </mesh>
+          {/* Point light so the sticker glows */}
+          {isDark && <pointLight position={[0.1, 0.42, -0.28]} intensity={1.5} distance={1.5} color={lightsColor || '#39FF14'} />}
+        </group>
+
+        {/* Graffiti sticker on the RIGHT black side wall */}
+        <group position={[1.585, 0.4, -0.55]} rotation={[0, Math.PI, 0]}>
+          <mesh rotation={[0, Math.PI / 2, 0]}>
+            <planeGeometry args={[0.4, 0.22]} />
+            <meshBasicMaterial color="#080808" transparent opacity={0.85} />
+          </mesh>
+          {/* Star shape approximation */}
+          <mesh position={[-0.022, 0.02, 0]} rotation={[0, -Math.PI / 2, 0]}>
+            <boxGeometry args={[0.2, 0.04, 0.008]} />
+            <meshBasicMaterial color="#FF1493" />
+          </mesh>
+          <mesh position={[-0.022, 0.02, 0]} rotation={[0, -Math.PI / 2, 0.9]}>
+            <boxGeometry args={[0.18, 0.035, 0.008]} />
+            <meshBasicMaterial color="#FF1493" />
+          </mesh>
+          <mesh position={[-0.022, -0.04, 0]} rotation={[0, -Math.PI / 2, 0]}>
+            <boxGeometry args={[0.14, 0.02, 0.008]} />
+            <meshBasicMaterial color="#ffffff" transparent opacity={0.7} />
           </mesh>
         </group>
 
         {/* Small stack of spare wheels on the right wall */}
-        <group position={[1.58, 0.14, -0.6]}>
+        <group position={[1.585, 0.09, -0.7]}>
           {[0, 1, 2].map((i) => (
-            <mesh key={i} position={[0, i * 0.055, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
-              <cylinderGeometry args={[0.08, 0.07, 0.05, 20]} />
-              <meshPhysicalMaterial color="#eeeeee" roughness={0.5} clearcoat={0.2} />
+            <mesh key={i} position={[0, i * 0.06, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+              <cylinderGeometry args={[0.085, 0.075, 0.055, 20]} />
+              <meshPhysicalMaterial color="#eeeeee" roughness={0.45} clearcoat={0.3} />
             </mesh>
           ))}
         </group>
+
+        {/* Skid mark on the flat bottom surface */}
+        <mesh position={[0.5, 0.07, 0.4]} rotation={[-Math.PI / 2, 0, 0.3]}>
+          <planeGeometry args={[0.8, 0.06]} />
+          <meshBasicMaterial color={isDark ? '#333333' : '#888888'} transparent opacity={0.4} />
+        </mesh>
+        <mesh position={[0.3, 0.07, 0.6]} rotation={[-Math.PI / 2, 0, 0.1]}>
+          <planeGeometry args={[0.5, 0.04]} />
+          <meshBasicMaterial color={isDark ? '#2a2a2a' : '#777777'} transparent opacity={0.3} />
+        </mesh>
       </group>
 
       {/* --- Stack of Premium Cardboard Packaging Boxes to the Left --- */}
