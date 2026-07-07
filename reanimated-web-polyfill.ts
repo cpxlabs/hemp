@@ -7,3 +7,10 @@
 if (typeof (globalThis as any)._removeFromPropsRegistry === 'undefined') {
   (globalThis as any)._removeFromPropsRegistry = () => {};
 }
+
+if (typeof (globalThis as any).process === 'undefined') {
+  (globalThis as any).process = { env: {} };
+} else if (typeof (globalThis as any).process.env === 'undefined') {
+  (globalThis as any).process.env = {};
+}
+
