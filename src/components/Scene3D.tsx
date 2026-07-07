@@ -359,6 +359,66 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
         </>
       )}
 
+      {/* Large CPX glowing floor stencil — platform center */}
+      <group position={[-0.5, -0.437, 0.9]}>
+        {/* Outer ring */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[0.55, 0.62, 48]} />
+          <meshBasicMaterial color={lightsColor || '#39FF14'} transparent opacity={isDark ? 0.55 : 0.3} />
+        </mesh>
+        {/* Inner ring */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[0.3, 0.35, 48]} />
+          <meshBasicMaterial color={lightsColor || '#39FF14'} transparent opacity={isDark ? 0.4 : 0.2} />
+        </mesh>
+        {/* Cross bars */}
+        <mesh position={[0, 0.001, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[1.2, 0.04]} />
+          <meshBasicMaterial color={lightsColor || '#39FF14'} transparent opacity={isDark ? 0.35 : 0.18} />
+        </mesh>
+        <mesh position={[0, 0.001, 0]} rotation={[-Math.PI / 2, Math.PI / 2, 0]}>
+          <planeGeometry args={[1.2, 0.04]} />
+          <meshBasicMaterial color={lightsColor || '#39FF14'} transparent opacity={isDark ? 0.35 : 0.18} />
+        </mesh>
+        {/* Glow from floor art in dark mode */}
+        {isDark && <pointLight position={[0, 0.1, 0]} intensity={1.5} distance={2.5} color={lightsColor || '#39FF14'} />}
+      </group>
+
+      {/* Front-edge safety barriers — crowd control metal railings */}
+      {[-3.5, -2.0, -0.5, 1.0, 2.5, 4.0].map((bx, i) => (
+        <group key={`barrier-${i}`} position={[bx, -0.42, 2.3]} rotation={[0, 0, 0]}>
+          {/* Barrier horizontal top rail */}
+          <mesh castShadow>
+            <boxGeometry args={[1.4, 0.04, 0.04]} />
+            <meshPhysicalMaterial color="#cccccc" metalness={0.9} roughness={0.1} clearcoat={0.8} />
+          </mesh>
+          {/* Barrier left leg */}
+          <mesh castShadow position={[-0.55, -0.18, 0]}>
+            <boxGeometry args={[0.04, 0.4, 0.04]} />
+            <meshStandardMaterial color="#aaaaaa" metalness={0.85} roughness={0.2} />
+          </mesh>
+          {/* Barrier right leg */}
+          <mesh castShadow position={[0.55, -0.18, 0]}>
+            <boxGeometry args={[0.04, 0.4, 0.04]} />
+            <meshStandardMaterial color="#aaaaaa" metalness={0.85} roughness={0.2} />
+          </mesh>
+          {/* Barrier lower rail */}
+          <mesh castShadow position={[0, -0.28, 0]}>
+            <boxGeometry args={[1.4, 0.025, 0.025]} />
+            <meshStandardMaterial color="#bbbbbb" metalness={0.8} roughness={0.2} />
+          </mesh>
+          {/* Barrier base feet */}
+          <mesh position={[-0.45, -0.38, 0]}>
+            <boxGeometry args={[0.25, 0.04, 0.18]} />
+            <meshStandardMaterial color="#999999" metalness={0.7} roughness={0.3} />
+          </mesh>
+          <mesh position={[0.45, -0.38, 0]}>
+            <boxGeometry args={[0.25, 0.04, 0.18]} />
+            <meshStandardMaterial color="#999999" metalness={0.7} roughness={0.3} />
+          </mesh>
+        </group>
+      ))}
+
       {/* Diagonal bevelled sloped ramp on the left-front corner of the slab */}
       <mesh position={[-4.0, -0.65, 1.8]} rotation={[0.3, -0.6, 0.1]} castShadow receiveShadow>
         <boxGeometry args={[1.5, 0.4, 2.0]} />
@@ -838,6 +898,54 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
         </mesh>
       </group>
 
+      {/* Standalone steel grind rail obstacle */}
+      <group position={[-1.2, -0.425, 0.8]} rotation={[0, 0.2, 0]}>
+        {/* Main grind pipe */}
+        <mesh castShadow rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.035, 0.035, 1.8, 16]} />
+          <meshPhysicalMaterial color="#e8e8e8" metalness={0.98} roughness={0.02} clearcoat={1.0} emissive="#ffffff" emissiveIntensity={isDark ? 0.3 : 0.05} />
+        </mesh>
+        {/* Left support leg */}
+        <mesh castShadow position={[-0.65, -0.1, 0]} rotation={[0, 0, 0.2]}>
+          <cylinderGeometry args={[0.02, 0.025, 0.22, 8]} />
+          <meshStandardMaterial color="#cccccc" metalness={0.9} roughness={0.15} />
+        </mesh>
+        <mesh castShadow position={[-0.65, -0.1, 0]} rotation={[0, 0, -0.2]}>
+          <cylinderGeometry args={[0.02, 0.025, 0.22, 8]} />
+          <meshStandardMaterial color="#cccccc" metalness={0.9} roughness={0.15} />
+        </mesh>
+        {/* Right support leg */}
+        <mesh castShadow position={[0.65, -0.1, 0]} rotation={[0, 0, 0.2]}>
+          <cylinderGeometry args={[0.02, 0.025, 0.22, 8]} />
+          <meshStandardMaterial color="#cccccc" metalness={0.9} roughness={0.15} />
+        </mesh>
+        <mesh castShadow position={[0.65, -0.1, 0]} rotation={[0, 0, -0.2]}>
+          <cylinderGeometry args={[0.02, 0.025, 0.22, 8]} />
+          <meshStandardMaterial color="#cccccc" metalness={0.9} roughness={0.15} />
+        </mesh>
+        {/* Foot pads */}
+        <mesh position={[-0.65, -0.22, 0]}>
+          <boxGeometry args={[0.14, 0.025, 0.1]} />
+          <meshStandardMaterial color="#111111" roughness={0.9} />
+        </mesh>
+        <mesh position={[0.65, -0.22, 0]}>
+          <boxGeometry args={[0.14, 0.025, 0.1]} />
+          <meshStandardMaterial color="#111111" roughness={0.9} />
+        </mesh>
+        {/* Grind chalk mark on the rail */}
+        <mesh position={[0.1, 0.037, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.037, 0.037, 0.4, 4, 1, true, 0, 0.15]} />
+          <meshBasicMaterial color="#cccccc" transparent opacity={0.4} />
+        </mesh>
+        {/* Rail glow in dark mode */}
+        {isDark && <pointLight position={[0, 0.08, 0]} intensity={1.0} distance={1.5} color="#ffffff" />}
+      </group>
+
+      {/* Leaning skateboard propped against right ramp wall */}
+      <group position={[1.18, -0.12, -0.9]} rotation={[0, -0.1, -0.3]}>
+        <SkateDecks active={false} material="wood" isDark={isDark} scale={0.36} />
+      </group>
+
       {/* Concrete ledge/kicker obstacle near right side */}
       <group position={[3.2, -0.425, 0.3]}>
         {/* Ledge base block */}
@@ -873,34 +981,48 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       {/* --- Stack of Premium Cardboard Packaging Boxes to the Left --- */}
       <group position={[-3.3, -0.425, 0.4]} rotation={[0.05, 0.5, 0]}>
         {[0, 1, 2].map((index) => {
-          // Subtle organic offsets for hand-stacked realism
           const randRotY = index === 2 ? 0 : Math.sin(index * 45) * 0.08;
           const randOffsetX = index === 2 ? 0 : Math.cos(index * 30) * 0.05;
           const randOffsetZ = index === 2 ? 0 : Math.sin(index * 20) * 0.05;
-          
+          const boxColor = isDark ? (index === 0 ? '#2a2520' : index === 1 ? '#1e1c18' : '#252220') : '#d9cfc1';
           return (
             <group key={index} position={[randOffsetX, 0.06 + index * 0.12, randOffsetZ]} rotation={[0, randRotY, 0]}>
-              {/* Premium Matte Cardboard Box */}
+              {/* Premium Matte Cardboard Box — visible charcoal in dark mode */}
               <mesh castShadow position={[0, 0, 0]}>
                 <boxGeometry args={[0.9, 0.11, 1.8]} />
-                <meshStandardMaterial color={isDark ? '#1a1a1a' : '#d9cfc1'} roughness={0.9} />
+                <meshPhysicalMaterial color={boxColor} roughness={0.88} metalness={0.0} />
               </mesh>
-              
-              {/* Colored Foil Trim (Side accents) */}
+              {/* Colored Foil Trim */}
               <mesh position={[0, 0, 0]}>
                 <boxGeometry args={[0.91, 0.01, 1.81]} />
                 <meshPhysicalMaterial color={index % 2 === 0 ? (lightsColor || '#39FF14') : '#f5f5f5'} metalness={1.0} roughness={0.1} clearcoat={1.0} />
               </mesh>
-
-              {/* Holographic / Emissive Screen on the top box */}
+              {/* Shipping label on box side */}
+              <mesh position={[0.452, 0, 0.3]}>
+                <boxGeometry args={[0.005, 0.07, 0.45]} />
+                <meshBasicMaterial color="#f0ece0" />
+              </mesh>
+              {/* Label neon bar */}
+              <mesh position={[0.456, 0.02, 0.3]}>
+                <boxGeometry args={[0.003, 0.015, 0.3]} />
+                <meshBasicMaterial color={lightsColor || '#39FF14'} />
+              </mesh>
+              {/* Label text bars */}
+              <mesh position={[0.456, -0.01, 0.28]}>
+                <boxGeometry args={[0.003, 0.008, 0.22]} />
+                <meshBasicMaterial color="#333333" />
+              </mesh>
+              <mesh position={[0.456, -0.022, 0.32]}>
+                <boxGeometry args={[0.003, 0.006, 0.16]} />
+                <meshBasicMaterial color="#555555" />
+              </mesh>
+              {/* Holographic screen on top box */}
               {index === 2 && (
                 <group position={[0, 0.056, 0]}>
-                  {/* Outer gloss plate */}
                   <mesh>
                     <boxGeometry args={[0.6, 0.002, 1.2]} />
                     <meshPhysicalMaterial color="#050505" roughness={0.05} metalness={0.8} clearcoat={1.0} />
                   </mesh>
-                  {/* Inside glowing holographic screen */}
                   <mesh position={[0, 0.002, 0]}>
                     <boxGeometry args={[0.5, 0.002, 1.0]} />
                     <meshBasicMaterial color={lightsColor || logoGreen} />
@@ -969,6 +1091,15 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
 
       {/* --- Chess Board and pieces in Front Right --- */}
       <group position={[2.0, -0.425, 0.75]} rotation={[0, -0.15, 0]} scale={0.78}>
+        {/* Overhead chess spotlight for drama */}
+        <spotLight
+          position={[0, 4, 0]}
+          angle={0.4}
+          penumbra={0.8}
+          intensity={isDark ? 3.0 : 1.5}
+          color="#fff8e8"
+          castShadow={false}
+        />
         {/* Chess board base frame main block */}
         <mesh castShadow receiveShadow position={[0, 0.05, 0]}>
           <boxGeometry args={[2.5, 0.1, 2.5]} />
