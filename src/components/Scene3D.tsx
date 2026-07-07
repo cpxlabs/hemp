@@ -78,7 +78,10 @@ const StadiumLight = ({ position, isDark }: any) => {
 const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
   const matProps = {
     color,
-    roughness: color === '#eaeaea' ? 0.35 : 0.25,
+    roughness: color === '#eaeaea' ? 0.2 : 0.12,
+    metalness: color === '#eaeaea' ? 0.05 : 0.15,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.06,
   };
   
   if (type === 'pawn') {
@@ -87,17 +90,17 @@ const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
         {/* Base */}
         <mesh castShadow position={[0, 0.02, 0]}>
           <cylinderGeometry args={[0.05, 0.06, 0.04, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Body */}
         <mesh castShadow position={[0, 0.08, 0]}>
           <coneGeometry args={[0.015, 0.045, 0.12, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Head */}
         <mesh castShadow position={[0, 0.15, 0]}>
           <sphereGeometry args={[0.032, 8, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
       </group>
     );
@@ -109,17 +112,17 @@ const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
         {/* Base */}
         <mesh castShadow position={[0, 0.02, 0]}>
           <cylinderGeometry args={[0.065, 0.075, 0.04, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Body */}
         <mesh castShadow position={[0, 0.09, 0]}>
           <cylinderGeometry args={[0.045, 0.055, 0.12, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Top Battlements */}
         <mesh castShadow position={[0, 0.17, 0]}>
           <cylinderGeometry args={[0.065, 0.065, 0.04, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
       </group>
     );
@@ -131,17 +134,17 @@ const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
         {/* Base */}
         <mesh castShadow position={[0, 0.02, 0]}>
           <cylinderGeometry args={[0.065, 0.075, 0.04, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Mane/Body */}
         <mesh castShadow position={[0, 0.09, -0.01]}>
           <boxGeometry args={[0.04, 0.11, 0.07]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Snout */}
         <mesh castShadow position={[0, 0.13, 0.03]} rotation={[0.2, 0, 0]}>
           <boxGeometry args={[0.04, 0.05, 0.07]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
       </group>
     );
@@ -153,22 +156,22 @@ const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
         {/* Base */}
         <mesh castShadow position={[0, 0.02, 0]}>
           <cylinderGeometry args={[0.065, 0.075, 0.04, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Body */}
         <mesh castShadow position={[0, 0.09, 0]}>
           <coneGeometry args={[0.012, 0.048, 0.13, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Oval Head */}
         <mesh castShadow position={[0, 0.16, 0]}>
           <sphereGeometry args={[0.036, 8, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Tip */}
         <mesh castShadow position={[0, 0.2, 0]}>
           <sphereGeometry args={[0.01, 8, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
       </group>
     );
@@ -180,22 +183,22 @@ const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
         {/* Base */}
         <mesh castShadow position={[0, 0.02, 0]}>
           <cylinderGeometry args={[0.07, 0.08, 0.04, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Body */}
         <mesh castShadow position={[0, 0.11, 0]}>
           <coneGeometry args={[0.018, 0.052, 0.16, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Crown */}
         <mesh castShadow position={[0, 0.2, 0]}>
           <cylinderGeometry args={[0.055, 0.038, 0.04, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Tiny top sphere */}
         <mesh castShadow position={[0, 0.23, 0]}>
           <sphereGeometry args={[0.015, 8, 8]} />
-          <meshStandardMaterial {...matProps} />
+          <meshPhysicalMaterial {...matProps} />
         </mesh>
       </group>
     );
@@ -207,26 +210,26 @@ const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
       {/* Base */}
       <mesh castShadow position={[0, 0.02, 0]}>
         <cylinderGeometry args={[0.07, 0.08, 0.04, 8]} />
-        <meshStandardMaterial {...matProps} />
+        <meshPhysicalMaterial {...matProps} />
       </mesh>
       {/* Body */}
       <mesh castShadow position={[0, 0.12, 0]}>
         <cylinderGeometry args={[0.03, 0.055, 0.18, 8]} />
-        <meshStandardMaterial {...matProps} />
+        <meshPhysicalMaterial {...matProps} />
       </mesh>
       {/* Head/Crown */}
       <mesh castShadow position={[0, 0.22, 0]}>
         <cylinderGeometry args={[0.055, 0.045, 0.04, 8]} />
-        <meshStandardMaterial {...matProps} />
+        <meshPhysicalMaterial {...matProps} />
       </mesh>
       {/* Cross on top */}
       <mesh castShadow position={[0, 0.25, 0]}>
         <boxGeometry args={[0.012, 0.036, 0.012]} />
-        <meshStandardMaterial {...matProps} />
+        <meshPhysicalMaterial {...matProps} />
       </mesh>
       <mesh castShadow position={[0, 0.25, 0]}>
         <boxGeometry args={[0.036, 0.012, 0.012]} />
-        <meshStandardMaterial {...matProps} />
+        <meshPhysicalMaterial {...matProps} />
       </mesh>
     </group>
   );
@@ -285,14 +288,68 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
         {/* Base block */}
         <mesh castShadow receiveShadow position={[0, 0.4, -0.8]}>
           <boxGeometry args={[3.2, 0.8, 1.2]} />
-          <meshStandardMaterial color={structuralColor} roughness={0.7} />
+          <meshStandardMaterial color="#a6a195" roughness={0.9} />
         </mesh>
         
         {/* Curved ramp surface (Quadrant segment of a cylinder) */}
         <mesh castShadow receiveShadow position={[0, 0.8, -0.4]} rotation={[0, 0, Math.PI / 2]}>
           <cylinderGeometry args={[0.8, 0.8, 3.2, 32, 1, true, Math.PI, Math.PI / 2]} />
-          <meshPhysicalMaterial color={woodColor} roughness={0.25} clearcoat={1.0} clearcoatRoughness={0.1} side={2} />
+          <meshPhysicalMaterial color="#b0aba0" roughness={0.8} clearcoat={0.0} side={2} />
         </mesh>
+
+        {/* Left concrete side wall enclosing transition curve */}
+        <mesh castShadow receiveShadow position={[-1.58, 0.4, -0.4]}>
+          <boxGeometry args={[0.04, 0.8, 0.8]} />
+          <meshStandardMaterial color="#a6a195" roughness={0.9} />
+        </mesh>
+        {/* Right concrete side wall enclosing transition curve */}
+        <mesh castShadow receiveShadow position={[1.58, 0.4, -0.4]}>
+          <boxGeometry args={[0.04, 0.8, 0.8]} />
+          <meshStandardMaterial color="#a6a195" roughness={0.9} />
+        </mesh>
+
+        {/* Colorful spray-painted graffiti tag mural on concrete transition */}
+        <group position={[0.7, 0.28, 0.05]} rotation={[Math.PI / 6, 0.2, -0.1]}>
+          {/* Graffiti bubble backdrop */}
+          <mesh position={[0, 0, 0]}>
+            <planeGeometry args={[0.9, 0.45]} />
+            <meshBasicMaterial color="#ff00ff" transparent opacity={0.85} depthWrite={false} />
+          </mesh>
+          {/* Inner bubble glow */}
+          <mesh position={[-0.05, 0.02, 0.001]}>
+            <planeGeometry args={[0.7, 0.35]} />
+            <meshBasicMaterial color="#ffff00" transparent opacity={0.9} depthWrite={false} />
+          </mesh>
+          {/* Main tags lettering represent CPX street art */}
+          <mesh position={[0, 0, 0.002]}>
+            <boxGeometry args={[0.5, 0.04, 0.002]} />
+            <meshBasicMaterial color="#00ffff" />
+          </mesh>
+          <mesh position={[-0.15, -0.05, 0.002]} rotation={[0, 0, 0.4]}>
+            <boxGeometry args={[0.4, 0.04, 0.002]} />
+            <meshBasicMaterial color="#00ffff" />
+          </mesh>
+          <mesh position={[0.15, 0.05, 0.002]} rotation={[0, 0, -0.4]}>
+            <boxGeometry args={[0.4, 0.04, 0.002]} />
+            <meshBasicMaterial color="#00ffff" />
+          </mesh>
+          {/* Black outline detailing */}
+          <mesh position={[0, 0.08, 0.003]}>
+            <boxGeometry args={[0.6, 0.015, 0.002]} />
+            <meshBasicMaterial color="#111111" />
+          </mesh>
+          <mesh position={[0, -0.08, 0.003]}>
+            <boxGeometry args={[0.6, 0.015, 0.002]} />
+            <meshBasicMaterial color="#111111" />
+          </mesh>
+          {/* Spray paint drips */}
+          {[-0.2, 0, 0.2].map((xOffset, idx) => (
+            <mesh key={idx} position={[xOffset, -0.15, 0.002]}>
+              <boxGeometry args={[0.015, 0.15, 0.002]} />
+              <meshBasicMaterial color="#ff00ff" />
+            </mesh>
+          ))}
+        </group>
         
         {/* Metal transition plate at bottom */}
         <mesh receiveShadow position={[0, 0.05, 0.75]} rotation={[-Math.PI / 24, 0, 0]}>
@@ -376,8 +433,13 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       <group position={[-3.3, -0.425, 0.4]} rotation={[0.05, 0.5, 0]}>
         {[0, 1, 2, 3, 4].map((index) => {
           const woodHue = index === 4 ? woodColor : index % 2 === 0 ? '#8b5a2b' : '#6f4a27';
+          // Subtle organic offsets for hand-stacked realism
+          const randRotY = index === 4 ? 0 : Math.sin(index * 45) * 0.06;
+          const randOffsetX = index === 4 ? 0 : Math.cos(index * 30) * 0.03;
+          const randOffsetZ = index === 4 ? 0 : Math.sin(index * 20) * 0.03;
+          
           return (
-            <group key={index} position={[0, index * 0.045, 0]}>
+            <group key={index} position={[randOffsetX, index * 0.045, randOffsetZ]} rotation={[0, randRotY, 0]}>
               {/* Deck Center */}
               <mesh castShadow position={[0, 0, 0]}>
                 <boxGeometry args={[0.75, 0.04, 1.5]} />
