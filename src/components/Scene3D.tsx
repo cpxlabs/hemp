@@ -276,7 +276,7 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       </mesh>
       
       {/* Concrete slab joint cuts (subtle grid lines) */}
-      <gridHelper args={[9.5, 12, '#8e8a82', '#9c978f']} position={[0, -0.42, 0]} />
+      <gridHelper args={[9.5, 12, isDark ? '#2a2825' : '#8e8a82', isDark ? '#1a1917' : '#9c978f']} position={[0, -0.42, 0]} />
 
       {/* --- Stadium Corner Lights for Sparks and Warm Glow --- */}
       <StadiumLight position={[-4.2, -0.525, -2.2]} isDark={isDark} color={lightsColor} />
@@ -928,8 +928,8 @@ const Scene3D: React.FC<Scene3DProps> = ({
   const { isRampCollapsed } = useConfigurator();
 
   const backgroundColor = isDark ? '#050505' : '#f7f0e6';
-  const ambientIntensity = isDark ? 0.45 : 0.75;
-  const spotIntensity = isDark ? 2.5 : 1.5;
+  const ambientIntensity = isDark ? 0.75 : 0.95;
+  const spotIntensity = isDark ? 3.0 : 2.0;
   const shadowColor = isDark ? '#39FF14' : '#4d372c';
 
   return (
@@ -949,11 +949,11 @@ const Scene3D: React.FC<Scene3DProps> = ({
           />
 
           <ambientLight intensity={ambientIntensity} />
-          <directionalLight position={[0, 10, 0]} intensity={isDark ? 1.8 : 1.2} castShadow shadow-mapSize={[1024, 1024]} />
+          <directionalLight position={[0, 10, 2]} intensity={isDark ? 2.2 : 1.5} castShadow shadow-mapSize={[1024, 1024]} />
           
           <spotLight
             position={[6, 9, 6]}
-            angle={0.3}
+            angle={0.6}
             penumbra={1}
             intensity={spotIntensity}
             castShadow
@@ -961,9 +961,17 @@ const Scene3D: React.FC<Scene3DProps> = ({
           />
           <spotLight
             position={[-6, 9, -6]}
-            angle={0.4}
+            angle={0.6}
             penumbra={1}
-            intensity={isDark ? 1.5 : 1.0}
+            intensity={isDark ? 2.0 : 1.2}
+          />
+          {/* Front-fill light to ensure the wood ramp surface, logo shield, and wheels are bright and clear */}
+          <spotLight
+            position={[0, 4, 6]}
+            angle={0.8}
+            penumbra={0.5}
+            intensity={isDark ? 2.5 : 1.5}
+            color="#ffffff"
           />
           {isDark && (
             <pointLight position={[-5, 5, -5]} intensity={1.5} color="#39FF14" />
