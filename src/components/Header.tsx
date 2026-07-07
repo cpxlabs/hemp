@@ -7,7 +7,7 @@ import { RootStackParamList } from '../types/navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../providers/ThemeProvider';
 import { useCart } from '../providers/CartProvider';
-import { ShoppingCart } from 'lucide-react-native';
+import { ShoppingCart, User } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 
 const NAV_LINKS = [
@@ -88,10 +88,12 @@ export const Header = () => {
           )}
         </Pressable>
 
-        <Pressable className={`border ${btnBorderColor} px-4 py-2 rounded-sm active:bg-primary/20 transition-all`}>
-          <Text className={`text-[10px] font-black tracking-widest ${btnTextColor} uppercase`}>
-            {t('common.sustainability')}
-          </Text>
+        {/* User Account button */}
+        <Pressable
+          onPress={() => console.log('User Account Clicked')}
+          className="w-10 h-10 items-center justify-center rounded-full bg-foreground/5 hover:bg-foreground/10 active:scale-95 transition-all"
+        >
+          <User size={20} color={iconColor} />
         </Pressable>
       </View>
     </MotionView>

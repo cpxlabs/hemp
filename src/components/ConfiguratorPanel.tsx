@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Pressable, Platform } from 'react-native';
+import { View, Pressable, Platform, ScrollView } from 'react-native';
 import { Text } from './ui/text';
 import { Button } from './ui/button';
 import { ShoppingCart, RotateCcw, X, Sliders } from 'lucide-react-native';
@@ -156,38 +156,43 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
   const activeBorderColor = isDark ? 'border-white/20' : 'border-black/10';
 
   return (
-    <View className={containerClasses}>
+    <View className={containerClasses} style={isMobile ? { maxHeight: '80%' } : undefined}>
       <Pressable
         onPress={() => setIsMinimized(true)}
         className="absolute top-4 right-4 z-50 w-8 h-8 items-center justify-center rounded-full bg-foreground/5 hover:bg-foreground/10 active:scale-95"
       >
         <X size={16} color={isDark ? '#ffffff' : '#111111'} />
       </Pressable>
-      <Text className={`${isMobile ? 'text-xl' : 'text-3xl'} font-black tracking-tighter ${headingColor} mb-6 uppercase italic`}>
+      <Text className={`${isMobile ? 'text-lg' : 'text-3xl'} font-black tracking-tighter ${headingColor} mb-4 uppercase italic`}>
         {t('configurator.configureTitle')}
       </Text>
 
-      <View className={`${isMobile ? 'gap-4' : 'gap-8'}`}>
-        {selections.map((sel: any, idx: number) => (
-          <Pressable
-            key={idx}
-            onPress={() => setActiveProductIndex(idx)}
-            className={`p-4 rounded-2xl border transition-all ${
-              activeProductIndex === idx 
-                ? `${activeBorderColor} bg-foreground/5 shadow-md` 
-                : 'border-transparent hover:bg-foreground/5'
-            }`}
-          >
-            <View className="flex-row justify-between items-center mb-3">
-              <Text className={`text-sm font-black tracking-widest ${activeProductIndex === idx ? 'text-foreground' : 'text-foreground/50'}`}>
-                {getProducts(t).find(p => p.id === sel.productId)?.name}
-              </Text>
-              <Text className={`text-xs font-bold ${activeProductIndex === idx ? 'text-primary' : 'text-muted-foreground'}`}>
-                {getProducts(t).find(p => p.id === sel.productId)?.price}
-              </Text>
-            </View>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1, marginBottom: 12 }}
+        contentContainerStyle={{ gap: isMobile ? 8 : 16 }}
+      >
+        <View className={`${isMobile ? 'gap-3' : 'gap-6'}`}>
+          {selections.map((sel: any, idx: number) => (
+            <Pressable
+              key={idx}
+              onPress={() => setActiveProductIndex(idx)}
+              className={`p-4 rounded-2xl border transition-all ${
+                activeProductIndex === idx 
+                  ? `${activeBorderColor} bg-foreground/5 shadow-md` 
+                  : 'border-transparent hover:bg-foreground/5'
+              }`}
+            >
+              <View className="flex-row justify-between items-center mb-3">
+                <Text className={`text-sm font-black tracking-widest ${activeProductIndex === idx ? 'text-foreground' : 'text-foreground/50'}`}>
+                  {getProducts(t).find(p => p.id === sel.productId)?.name}
+                </Text>
+                <Text className={`text-xs font-bold ${activeProductIndex === idx ? 'text-primary' : 'text-muted-foreground'}`}>
+                  {getProducts(t).find(p => p.id === sel.productId)?.price}
+                </Text>
+              </View>
 
-            <View className="flex-row gap-3">
+              <View className="flex-row gap-3">
                 <CustomSelect
                   label={t('configurator.material')}
                   options={MATERIALS}
@@ -225,40 +230,41 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
                   </Pressable>
                 </View>
               )}
-          </Pressable>
-        ))}
-      </View>
-      
-      {/* RGB Lighting Color Selector */}
-      <View className="mt-4 px-4 py-3 bg-foreground/5 rounded-xl border border-border/20">
-        <Text className="text-[10px] font-bold text-foreground mb-2">{t('configurator.rgbColor')}</Text>
-        <View className="flex-row gap-3">
-          {[
-            { name: 'Green', hex: '#39FF14' },
-            { name: 'Pink', hex: '#FF1493' },
-            { name: 'Blue', hex: '#00E5FF' },
-            { name: 'Purple', hex: '#BD00FF' },
-            { name: 'Orange', hex: '#FF4500' },
-            { name: 'White', hex: '#FFFFFF' }
-          ].map((col) => (
-            <Pressable
-              key={col.hex}
-              onPress={() => setLightsColor(col.hex)}
-              className="w-8 h-8 rounded-full items-center justify-center active:scale-90 border border-white/20"
-              style={{
-                backgroundColor: col.hex,
-                borderColor: lightsColor === col.hex ? '#ffffff' : 'rgba(255,255,255,0.2)'
-              }}
-            >
-              {lightsColor === col.hex && (
-                <View className="w-2.5 h-2.5 rounded-full bg-black/60" />
-              )}
             </Pressable>
           ))}
         </View>
-      </View>
+        
+        {/* RGB Lighting Color Selector */}
+        <View className="px-4 py-3 bg-foreground/5 rounded-xl border border-border/20">
+          <Text className="text-[10px] font-bold text-foreground mb-2">{t('configurator.rgbColor')}</Text>
+          <View className="flex-row gap-3">
+            {[
+              { name: 'Green', hex: '#39FF14' },
+              { name: 'Pink', hex: '#FF1493' },
+              { name: 'Blue', hex: '#00E5FF' },
+              { name: 'Purple', hex: '#BD00FF' },
+              { name: 'Orange', hex: '#FF4500' },
+              { name: 'White', hex: '#FFFFFF' }
+            ].map((col) => (
+              <Pressable
+                key={col.hex}
+                onPress={() => setLightsColor(col.hex)}
+                className="w-8 h-8 rounded-full items-center justify-center active:scale-90 border border-white/20"
+                style={{
+                  backgroundColor: col.hex,
+                  borderColor: lightsColor === col.hex ? '#ffffff' : 'rgba(255,255,255,0.2)'
+                }}
+              >
+                {lightsColor === col.hex && (
+                  <View className="w-2.5 h-2.5 rounded-full bg-black/60" />
+                )}
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
 
-      <View className={`flex-row gap-4 ${isMobile ? 'mt-6' : 'mt-10'}`}>
+      <View className="flex-row gap-4 border-t border-border/10 pt-3">
         <Button
           variant="outline"
           onPress={resetSelections}
