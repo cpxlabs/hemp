@@ -9,6 +9,8 @@ import { AuthProvider } from './src/providers/AuthProvider';
 import { AdProvider } from './src/providers/AdProvider';
 import { ToastProvider } from './src/providers/ToastProvider';
 import { ConfiguratorProvider } from './src/providers/ConfiguratorProvider';
+import { CartProvider } from './src/providers/CartProvider';
+import { CartDrawer } from './src/components/CartDrawer';
 import AppNavigator from './src/navigation/AppNavigator';
 import './src/i18n';
 
@@ -22,7 +24,10 @@ export default function App() {
               <AdProvider>
                 <ToastProvider>
                   <ConfiguratorProvider>
-                    <AppNavigator />
+                    <CartProvider>
+                      <AppNavigator />
+                      <CartDrawer />
+                    </CartProvider>
                   </ConfiguratorProvider>
                 </ToastProvider>
               </AdProvider>

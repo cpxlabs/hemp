@@ -1,7 +1,34 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable react/display-name */
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import HomeScreen from '../HomeScreen';
 import { ConfiguratorProvider } from '../../providers/ConfiguratorProvider';
+
+// Mock ThemeProvider
+jest.mock('../../providers/ThemeProvider', () => ({
+  useTheme: () => ({
+    theme: 'dark',
+    isDark: true,
+    toggleTheme: jest.fn(),
+    setTheme: jest.fn(),
+  }),
+}));
+
+// Mock CartProvider
+jest.mock('../../providers/CartProvider', () => ({
+  useCart: () => ({
+    cartItems: [],
+    addToCart: jest.fn(),
+    removeFromCart: jest.fn(),
+    updateQuantity: jest.fn(),
+    clearCart: jest.fn(),
+    totalAmount: 0,
+    totalItems: 0,
+    isCartOpen: false,
+    setIsCartOpen: jest.fn(),
+  }),
+}));
 
 // Mock Scene3D
 jest.mock('../../components/Scene3D', () => {

@@ -1,18 +1,19 @@
 import React, { useState, useMemo } from 'react';
-import { View, FlatList, Pressable } from 'react-native';
+import { View, Pressable, ScrollView, FlatList } from 'react-native';
 import { CategoryHeader } from '../components/CategoryHeader';
 import { ProductCard } from '../components/ProductCard';
 import { EmptyState } from '../components/EmptyState';
 import { Text } from '../components/ui/text';
+import Scene3D from '../components/Scene3D';
 import { MOCK_PRODUCTS } from '../services/mockData';
 import { cn } from '@/lib/utils';
 
-const FILTERS = ['All', 'Complete Sets', 'Boards Only', 'Pieces Only'];
+const FILTERS = ['All', 'Complete Sets', 'Boards Only', 'Modern'];
 
 const XadrezScreen = () => {
   const [selectedFilter, setSelectedFilter] = useState('All');
 
-  const products = useMemo(() => {
+  const filteredProducts = useMemo(() => {
     return MOCK_PRODUCTS.filter(
       (p) =>
         p.category === 'Xadrez' &&
@@ -20,55 +21,89 @@ const XadrezScreen = () => {
     );
   }, [selectedFilter]);
 
-  return (
-    <View className="flex-1 bg-[#0A0A0A]">
-      <CategoryHeader title="XADREZ" onSearchPress={() => {}} />
+  const [activeProduct, setActiveProduct] = useState(filteredProducts[0] || MOCK_PRODUCTS[0]);
 
-      {/* Elegant Filter Toggle */}
-      <View className="px-6 py-6">
-        <View className="flex-row bg-white/5 p-1 rounded-lg border border-white/10">
-          {FILTERS.map((f) => (
-            <Pressable
-              key={f}
-              onPress={() => setSelectedFilter(f)}
-              className={cn(
-                'flex-1 py-2 rounded-md transition-all items-center justify-center',
-                selectedFilter === f ? 'bg-primary' : ''
-              )}
-            >
-              <Text
-                className={cn(
-                  'text-[10px] font-bold tracking-widest uppercase text-center',
-                  selectedFilter === f ? 'text-black' : 'text-white/40'
-                )}
-              >
-                {f}
+  React.useEffect(() => {
+    if (filteredProducts.length > 0 && !filteredProducts.find(p => p.id === activeProduct.id)) {
+      setActiveProduct(filteredProducts[0]);
+    }
+  }, [filteredProducts, activeProduct.id]);
+
+  return (
+    <View className="flex-1 bg-background">
+      <CategoryHeader title="XADREZ" />
+
+      <View className="flex-1 flex-col lg:flex-row">
+        {/* Immersive 3D Chess Viewer */}
+        <View className="flex-[1.5] lg:order-2 relative bg-black/20">
+          <Scene3D
+            category="Xadrez"
+            activeProductId={activeProduct.id}
+            material={activeProduct.specs.find(s => s.label === 'Material')?.value || selectedFilter}
+          />
+          {activeProduct && (
+            <View className="absolute bottom-6 left-6 right-6 bg-black/60 backdrop-blur-md p-4 rounded-xl border border-white/10 pointer-events-none">
+              <Text className="text-primary text-[10px] font-black tracking-widest uppercase mb-1">
+                Visualização 3D
               </Text>
-            </Pressable>
-          ))}
+              <Text className="text-white text-lg font-bold uppercase">{activeProduct.name}</Text>
+              <Text className="text-white/60 text-xs mt-1">{activeProduct.description}</Text>
+            </View>
+          )}
+        </View>
+
+        {/* Side Catalog Overlay */}
+        <View className="flex-1 lg:order-1 border-r border-border/20 bg-card/60 backdrop-blur-xl p-6">
+          <Text className="text-2xl font-black text-foreground uppercase tracking-tight italic mb-4">
+            Catálogo de Xadrez
+          </Text>
+
+          {/* Filters */}
+          <View className="mb-6">
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+              {FILTERS.map((f) => (
+                <Pressable
+                  key={f}
+                  onPress={() => setSelectedFilter(f)}
+                  className={cn(
+                    'px-4 py-2 rounded-full border transition-all',
+                    selectedFilter === f
+                      ? 'bg-primary border-primary'
+                      : 'bg-white/5 border-white/10'
+                  )}
+                >
+                  <Text
+                    className={cn(
+                      'text-[10px] font-bold tracking-widest uppercase',
+                      selectedFilter === f ? 'text-black' : 'text-foreground/60'
+                    )}
+                  >
+                    {f}
+                  </Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+          </View>
+
+          {/* Product Cards List */}
+          <FlatList
+            data={filteredProducts}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{ gap: 16, paddingBottom: 40 }}
+            renderItem={({ item }) => (
+              <ProductCard
+                product={item}
+                onPress={() => setActiveProduct(item)}
+                className={cn(
+                  'border-2 rounded-xl transition-all',
+                  activeProduct.id === item.id ? 'border-primary' : 'border-transparent'
+                )}
+              />
+            )}
+            ListEmptyComponent={<EmptyState message={`Nenhum item de xadrez encontrado.`} />}
+          />
         </View>
       </View>
-
-      <FlatList
-        data={products}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 24, gap: 24, paddingBottom: 40 }}
-        renderItem={({ item }) => (
-          <View className="gap-4">
-             <ProductCard product={item} orientation="horizontal" className="h-48" />
-             <View className="flex-row gap-4 px-2">
-                {item.specs.map(spec => (
-                  <View key={spec.label} className="flex-1">
-                    <Text className="text-[10px] text-white/40 uppercase font-bold tracking-tighter">{spec.label}</Text>
-                    <Text className="text-xs text-white/80 font-medium" numberOfLines={1}>{spec.value}</Text>
-                  </View>
-                ))}
-             </View>
-             <View className="h-px bg-white/5 mt-4" />
-          </View>
-        )}
-        ListEmptyComponent={<EmptyState message={`No ${selectedFilter} items available.`} />}
-      />
     </View>
   );
 };

@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, Pressable, Platform, ScrollView } from 'react-native';
+import { View, Pressable, Platform } from 'react-native';
 import { Text } from './ui/text';
 import { Button } from './ui/button';
 import { ShoppingCart, RotateCcw } from 'lucide-react-native';
 import { useConfigurator } from '../providers/ConfiguratorProvider';
+import { useTheme } from '../providers/ThemeProvider';
+import { useCart } from '../providers/CartProvider';
 
 const PRODUCTS = [
   { id: 1, name: 'RAMPA PROFISSIONAL', price: 'R$ 899,00' },
@@ -14,28 +16,34 @@ const PRODUCTS = [
 const MATERIALS = ['Carbonized Hemp Wood', 'Recycled Polymer', 'Natural Fiber'];
 const FINISHES = ['Matte Recycled', 'Glossy Eco', 'Raw Texture'];
 
-const CustomSelect = ({ label, options, value, onChange }: any) => {
+const CustomSelect = ({ label, options, value, onChange, isDark }: any) => {
+  const labelColor = isDark ? 'text-white/40' : 'text-foreground/50';
+  const textColor = isDark ? 'white' : '#111111';
+  const optionBg = isDark ? '#0A0A0A' : '#f7f0e6';
+  const optionColor = isDark ? 'white' : '#111111';
+  const containerBorder = isDark ? 'border-white/10 bg-white/5' : 'border-border/30 bg-foreground/5';
+
   if (Platform.OS === 'web') {
     return (
-      <View className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5">
-        <Text className="text-[10px] text-white/40 uppercase mb-0.5 font-bold tracking-wider">{label}</Text>
+      <View className={`flex-1 border rounded-lg px-3 py-1.5 ${containerBorder}`}>
+        <Text className={`text-[9px] uppercase mb-0.5 font-bold tracking-wider ${labelColor}`}>{label}</Text>
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
           style={{
             background: 'transparent',
-            color: 'white',
+            color: textColor,
             border: 'none',
-            fontSize: '13px',
+            fontSize: '12px',
             width: '100%',
             outline: 'none',
             cursor: 'pointer',
             padding: '2px 0',
-            fontWeight: '500'
+            fontWeight: '600'
           }}
         >
           {options.map((opt: string) => (
-            <option key={opt} value={opt} style={{ background: '#0A0A0A', color: 'white' }}>
+            <option key={opt} value={opt} style={{ background: optionBg, color: optionColor }}>
               {opt}
             </option>
           ))}
@@ -44,15 +52,17 @@ const CustomSelect = ({ label, options, value, onChange }: any) => {
     );
   }
   return (
-    <View className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5">
-       <Text className="text-[10px] text-white/40 uppercase mb-0.5 font-bold tracking-wider">{label}</Text>
-       <Text className="text-white text-xs font-medium">{value}</Text>
+    <View className={`flex-1 border rounded-lg px-3 py-1.5 ${containerBorder}`}>
+       <Text className={`text-[9px] uppercase mb-0.5 font-bold tracking-wider ${labelColor}`}>{label}</Text>
+       <Text className="text-foreground text-xs font-semibold">{value}</Text>
     </View>
   );
 };
 
 export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) => {
   const { selections, setSelections, activeProductIndex, setActiveProductIndex } = useConfigurator();
+  const { isDark } = useTheme();
+  const { addToCart, setIsCartOpen } = useCart();
 
   useEffect(() => {
     if (selections.length === 0) {
@@ -72,15 +82,43 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
     setSelections(defaultSelections);
   };
 
+  const handleAddToCart = (idx: number) => {
+    const product = PRODUCTS[idx];
+    // Parse price: "R$ 899,00" -> 899.00
+    const rawPrice = parseFloat(product.price.replace('R$ ', '').replace('.', '').replace(',', '.'));
+    addToCart({
+      id: `conf-${product.id}`,
+      name: product.name,
+      price: rawPrice,
+      material: selections[idx]?.material || MATERIALS[0],
+      finish: selections[idx]?.finish || FINISHES[0],
+      imageUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=800',
+      category: idx === 0 ? 'Ramps' : idx === 1 ? 'Decks' : 'Dice Tower'
+    });
+  };
+
+  const handleCheckoutFlow = () => {
+    handleAddToCart(activeProductIndex);
+    setIsCartOpen(true);
+  };
+
   if (selections.length === 0) return null;
 
+  const bgClasses = isDark
+    ? "bg-black/60 border-white/10 shadow-2xl shadow-black/50"
+    : "bg-white/70 border-border/40 shadow-xl shadow-black/5";
+
   const containerClasses = isMobile
-    ? "absolute bottom-5 left-5 right-5 z-40 p-5 rounded-3xl bg-black/70 backdrop-blur-2xl border border-white/10"
-    : "w-full max-w-[500px] p-8 rounded-[32px] bg-black/60 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/50";
+    ? `absolute bottom-5 left-5 right-5 z-40 p-5 rounded-3xl backdrop-blur-2xl border ${bgClasses}`
+    : `w-full max-w-[500px] p-8 rounded-[32px] backdrop-blur-2xl border shadow-2xl ${bgClasses}`;
+
+  const headingColor = isDark ? 'text-white' : 'text-foreground';
+  const cartIconColor = isDark ? '#000' : '#fff';
+  const resetBtnBorder = isDark ? 'border-white/10 bg-white/5' : 'border-border/30 bg-foreground/5';
 
   return (
     <View className={containerClasses}>
-      <Text className={`${isMobile ? 'text-xl' : 'text-3xl'} font-black tracking-tighter text-white mb-6 uppercase italic`}>
+      <Text className={`${isMobile ? 'text-xl' : 'text-3xl'} font-black tracking-tighter ${headingColor} mb-6 uppercase italic`}>
         Configurar seu produto
       </Text>
 
@@ -90,9 +128,9 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
             key={product.id}
             onPress={() => setActiveProductIndex(idx)}
           >
-            <View className={`gap-4 border-l-4 pl-4 py-1 ${idx === activeProductIndex ? 'border-primary opacity-100' : 'border-white/5 opacity-40'}`}>
+            <View className={`gap-4 border-l-4 pl-4 py-1 ${idx === activeProductIndex ? 'border-primary opacity-100' : 'border-foreground/5 opacity-40'}`}>
               <View className="flex-row justify-between items-center">
-                <Text className={`${isMobile ? 'text-sm' : 'text-lg'} font-black tracking-tight ${idx === activeProductIndex ? 'text-white' : 'text-white/50'}`}>
+                <Text className={`${isMobile ? 'text-sm' : 'text-lg'} font-black tracking-tight ${idx === activeProductIndex ? headingColor : 'text-foreground/50'}`}>
                   {product.name}
                 </Text>
                 <Text className={`${isMobile ? 'text-xs' : 'text-base'} text-primary font-mono font-bold tracking-tighter`}>{product.price}</Text>
@@ -104,6 +142,7 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
                   options={MATERIALS}
                   value={selections[idx]?.material}
                   onChange={(val: string) => updateSelection(idx, 'material', val)}
+                  isDark={isDark}
                 />
 
                 <CustomSelect
@@ -111,12 +150,14 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
                   options={FINISHES}
                   value={selections[idx]?.finish}
                   onChange={(val: string) => updateSelection(idx, 'finish', val)}
+                  isDark={isDark}
                 />
 
                 <Pressable
-                  className={`${isMobile ? 'w-10 h-10' : 'w-14 h-14'} items-center justify-center bg-primary rounded-xl active:scale-90`}
+                  onPress={() => handleAddToCart(idx)}
+                  className={`${isMobile ? 'w-10 h-10' : 'w-12 h-12'} items-center justify-center bg-primary rounded-xl active:scale-95 shadow-sm`}
                 >
-                  <ShoppingCart size={isMobile ? 18 : 22} color="#000" strokeWidth={2.5} />
+                  <ShoppingCart size={isMobile ? 18 : 20} color={cartIconColor} strokeWidth={2.5} />
                 </Pressable>
               </View>
             </View>
@@ -124,17 +165,21 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
         ))}
       </View>
 
-      <View className={`flex-row gap-4 ${isMobile ? 'mt-6' : 'mt-12'}`}>
+      <View className={`flex-row gap-4 ${isMobile ? 'mt-6' : 'mt-10'}`}>
         <Button
           variant="outline"
           onPress={resetSelections}
-          className={`flex-1 border-white/10 ${isMobile ? 'h-12' : 'h-16'} bg-white/5 rounded-xl`}
+          className={`flex-1 ${resetBtnBorder} ${isMobile ? 'h-12' : 'h-14'} rounded-xl`}
         >
-          <RotateCcw size={18} color="white" />
-          {!isMobile && <Text className="text-white font-bold uppercase tracking-widest ml-2">Reset</Text>}
+          <RotateCcw size={18} color={isDark ? 'white' : 'black'} />
+          {!isMobile && <Text className="text-foreground font-bold uppercase tracking-widest ml-2 text-xs">Reset</Text>}
         </Button>
-        <Button className={`flex-[2] ${isMobile ? 'h-12' : 'h-16'} shadow-2xl shadow-primary/30 rounded-xl`} variant="default">
-          <Text className={`text-black font-black uppercase tracking-widest ${isMobile ? 'text-sm' : 'text-lg'}`}>Finalizar Pedido</Text>
+        <Button
+          onPress={handleCheckoutFlow}
+          className={`flex-[2] ${isMobile ? 'h-12' : 'h-14'} shadow-lg rounded-xl`}
+          variant="default"
+        >
+          <Text className={`text-primary-foreground font-black uppercase tracking-widest ${isMobile ? 'text-xs' : 'text-sm'}`}>Finalizar Pedido</Text>
         </Button>
       </View>
     </View>

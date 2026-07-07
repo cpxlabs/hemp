@@ -5,6 +5,9 @@ import { Text } from './ui/text';
 import { motion } from 'framer-motion';
 import { RootStackParamList } from '../types/navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTheme } from '../providers/ThemeProvider';
+import { useCart } from '../providers/CartProvider';
+import { ShoppingCart } from 'lucide-react-native';
 
 const NAV_LINKS = [
   { label: 'RAMPAS', route: 'Ramps' },
@@ -18,6 +21,17 @@ const MotionView = motion.div;
 
 export const Header = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { isDark } = useTheme();
+  const { totalItems, setIsCartOpen } = useCart();
+
+  const headerBgColor = isDark ? 'rgba(0, 0, 0, 0.7)' : 'rgba(247, 240, 230, 0.85)';
+  const borderBottomColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+  const titleColor = isDark ? 'text-white' : 'text-foreground';
+  const subtitleColor = isDark ? 'text-white/50' : 'text-foreground/50';
+  const linkColor = isDark ? 'text-white/70' : 'text-foreground/70';
+  const btnBorderColor = isDark ? 'border-primary' : 'border-foreground';
+  const btnTextColor = isDark ? 'text-primary' : 'text-foreground';
+  const iconColor = isDark ? '#39FF14' : '#c49a3a';
 
   return (
     <MotionView
@@ -35,31 +49,44 @@ export const Header = () => {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '0 32px',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        backdropFilter: 'blur(12px)',
+        backgroundColor: headerBgColor,
+        backdropFilter: 'blur(16px)',
         height: '80px',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+        borderBottom: `1px solid ${borderBottomColor}`
       }}
     >
       <View style={{ flexShrink: 0 }}>
-        <Text className="text-xl font-bold tracking-tighter text-white">
-          HEMP RAMPS <Text className="text-sm font-normal text-white/50">by CPX Labs</Text>
+        <Text className={`text-xl font-black tracking-tighter ${titleColor} uppercase italic`}>
+          HEMP RAMPS <Text className={`text-[10px] font-bold tracking-widest ${subtitleColor}`}>by CPX Labs</Text>
         </Text>
       </View>
 
       <View className="hidden flex-row gap-8 md:flex" style={{ flexGrow: 1, justifyContent: 'center' }}>
         {NAV_LINKS.map((link) => (
           <Pressable key={link.route} onPress={() => navigation.navigate(link.route as any)}>
-            <Text className="text-xs font-bold tracking-widest text-white/70 hover:text-primary transition-colors">
+            <Text className={`text-xs font-black tracking-widest ${linkColor} hover:text-primary transition-colors uppercase`}>
               {link.label}
             </Text>
           </Pressable>
         ))}
       </View>
 
-      <View style={{ flexShrink: 0 }}>
-        <Pressable className="border border-primary px-4 py-2 rounded-sm active:bg-primary/20 transition-all">
-          <Text className="text-xs font-bold tracking-widest text-primary uppercase">
+      <View className="flex-row items-center gap-4" style={{ flexShrink: 0 }}>
+        {/* Shopping Cart button with floating badge */}
+        <Pressable
+          onPress={() => setIsCartOpen(true)}
+          className="relative w-10 h-10 items-center justify-center rounded-full bg-foreground/5 hover:bg-foreground/10 active:scale-95 transition-all"
+        >
+          <ShoppingCart size={20} color={iconColor} />
+          {totalItems > 0 && (
+            <View className="absolute -top-1 -right-1 bg-primary w-5 h-5 rounded-full items-center justify-center shadow-sm">
+              <Text className="text-primary-foreground text-[10px] font-black text-center">{totalItems}</Text>
+            </View>
+          )}
+        </Pressable>
+
+        <Pressable className={`border ${btnBorderColor} px-4 py-2 rounded-sm active:bg-primary/20 transition-all`}>
+          <Text className={`text-[10px] font-black tracking-widest ${btnTextColor} uppercase`}>
             SUSTENTABILIDADE
           </Text>
         </Pressable>

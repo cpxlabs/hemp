@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Pressable, ScrollView } from 'react-native';
+import { View, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Scene3D from '../components/Scene3D';
@@ -26,7 +26,7 @@ const HomeScreen = () => {
       <View className="flex-1 flex-col lg:flex-row">
         {/* 3D Model View - Takes full screen on mobile, right side on desktop */}
         <View className="flex-[1.5] lg:order-2">
-          <Scene3D />
+          <Scene3D category="Home" />
         </View>
 
         {/* Configurator Panel - Overlays on mobile (handled by absolute pos in component) or stays left on desktop */}

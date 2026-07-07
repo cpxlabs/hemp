@@ -51,7 +51,7 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
   const currentLanguageLabel =
     LANGUAGES.find((l) => l.code === language)?.label ?? language;
 
-  const iconColor = isDark ? '#fffbe8' : '#0b234a';
+  const iconColor = isDark ? '#39FF14' : '#111111';
   return (
     <View className="flex-1 bg-background">
       {/* Scrollable area: header + navigation only */}
@@ -152,8 +152,8 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
           <Toggle
             value={isDark}
             onValueChange={toggleTheme}
-            activeColor="#d3b03b"
-            inactiveColor="#3664a0"
+            activeColor="#39FF14"
+            inactiveColor="#333333"
           />
         </View>
 
