@@ -2,7 +2,8 @@
   "common": {
     "confirm": "Confirmar",
     "cancel": "Cancelar",
-    "back": "Voltar"
+    "back": "Voltar",
+    "sustainability": "Sustentabilidade"
   },
   "home": {
     "title": "Hemp Ramps",
@@ -109,7 +110,22 @@
     "foldableDesc": "Recolhe as rampas laterais para transporte",
     "rgbColor": "COR DAS LUZES RGB (SECUNDÁRIAS)",
     "reset": "Reset",
-    "checkout": "Finalizar Pedido"
+    "checkout": "Finalizar Pedido",
+    "products": {
+      "ramp": "RAMPA PROFISSIONAL",
+      "deck": "DECK CARBONIZED",
+      "diceTower": "DICE TOWER HEMP"
+    },
+    "materials": {
+      "carbonized": "Madeira de Cânhamo Carbonizada",
+      "recycled": "Polímero Reciclado",
+      "natural": "Fibra Natural"
+    },
+    "finishes": {
+      "matte": "Fosco Reciclado",
+      "glossy": "Eco Brilhante",
+      "raw": "Textura Crua"
+    }
   },
   "cart": {
     "titleCart": "Carrinho",

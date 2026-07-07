@@ -8,14 +8,23 @@ import { useTheme } from '../providers/ThemeProvider';
 import { useCart } from '../providers/CartProvider';
 import { useTranslation } from 'react-i18next';
 
-const PRODUCTS = [
-  { id: 1, name: 'RAMPA PROFISSIONAL', price: 'R$ 899,00' },
-  { id: 2, name: 'DECK CARBONIZED', price: 'R$ 349,00' },
-  { id: 3, name: 'DICE TOWER HEMP', price: 'R$ 199,00' },
+const getProducts = (t: any) => [
+  { id: 1, name: t('configurator.products.ramp'), price: 'R$ 899,00' },
+  { id: 2, name: t('configurator.products.deck'), price: 'R$ 349,00' },
+  { id: 3, name: t('configurator.products.diceTower'), price: 'R$ 199,00' },
 ];
 
-const MATERIALS = ['Carbonized Hemp Wood', 'Recycled Polymer', 'Natural Fiber'];
-const FINISHES = ['Matte Recycled', 'Glossy Eco', 'Raw Texture'];
+const getMaterials = (t: any) => [
+  { value: 'carbonized', label: t('configurator.materials.carbonized') },
+  { value: 'recycled', label: t('configurator.materials.recycled') },
+  { value: 'natural', label: t('configurator.materials.natural') },
+];
+
+const getFinishes = (t: any) => [
+  { value: 'matte', label: t('configurator.finishes.matte') },
+  { value: 'glossy', label: t('configurator.finishes.glossy') },
+  { value: 'raw', label: t('configurator.finishes.raw') },
+];
 
 const CustomSelect = ({ label, options, value, onChange, isDark }: any) => {
   const labelColor = isDark ? 'text-white/40' : 'text-foreground/50';
@@ -43,19 +52,22 @@ const CustomSelect = ({ label, options, value, onChange, isDark }: any) => {
             fontWeight: '600'
           }}
         >
-          {options.map((opt: string) => (
-            <option key={opt} value={opt} style={{ background: optionBg, color: optionColor }}>
-              {opt}
+          {options.map((opt: any) => (
+            <option key={opt.value} value={opt.value} style={{ background: optionBg, color: optionColor }}>
+              {opt.label}
             </option>
           ))}
         </select>
       </View>
     );
   }
+
   return (
-    <View className={`flex-1 border rounded-lg px-3 py-1.5 ${containerBorder}`}>
-       <Text className={`text-[9px] uppercase mb-0.5 font-bold tracking-wider ${labelColor}`}>{label}</Text>
-       <Text className="text-foreground text-xs font-semibold">{value}</Text>
+    <View className={`flex-1 border rounded-lg px-3 py-2 ${containerBorder}`}>
+      <Text className={`text-[9px] uppercase mb-0.5 font-bold tracking-wider ${labelColor}`}>{label}</Text>
+      <Text className="text-[11px] font-black uppercase text-foreground" numberOfLines={1}>
+        {options.find((o: any) => o.value === value)?.label || value}
+      </Text>
     </View>
   );
 };
@@ -67,9 +79,13 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
   const { addToCart, setIsCartOpen } = useCart();
   const { t } = useTranslation();
 
+  const PRODUCTS = getProducts(t);
+  const MATERIALS = getMaterials(t);
+  const FINISHES = getFinishes(t);
+
   useEffect(() => {
     if (selections.length === 0) {
-      setSelections(PRODUCTS.map(() => ({ material: MATERIALS[0], finish: FINISHES[0] })));
+      setSelections(PRODUCTS.map((p) => ({ productId: p.id, material: MATERIALS[0].value, finish: FINISHES[0].value })));
     }
   }, []);
 
@@ -81,20 +97,19 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
   };
 
   const resetSelections = () => {
-    const defaultSelections = PRODUCTS.map(() => ({ material: MATERIALS[0], finish: FINISHES[0] }));
+    const defaultSelections = PRODUCTS.map((p) => ({ productId: p.id, material: MATERIALS[0].value, finish: FINISHES[0].value }));
     setSelections(defaultSelections);
   };
 
   const handleAddToCart = (idx: number) => {
     const product = PRODUCTS[idx];
-    // Parse price: "R$ 899,00" -> 899.00
     const rawPrice = parseFloat(product.price.replace('R$ ', '').replace('.', '').replace(',', '.'));
     addToCart({
       id: `conf-${product.id}`,
       name: product.name,
       price: rawPrice,
-      material: selections[idx]?.material || MATERIALS[0],
-      finish: selections[idx]?.finish || FINISHES[0],
+      material: selections[idx]?.material || MATERIALS[0].value,
+      finish: selections[idx]?.finish || FINISHES[0].value,
       imageUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=800',
       category: idx === 0 ? 'Ramps' : idx === 1 ? 'Decks' : 'Dice Tower'
     });
@@ -137,6 +152,7 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
   const headingColor = isDark ? 'text-white' : 'text-foreground';
   const cartIconColor = isDark ? '#000' : '#fff';
   const resetBtnBorder = isDark ? 'border-white/10 bg-white/5' : 'border-border/30 bg-foreground/5';
+  const activeBorderColor = isDark ? 'border-white/20' : 'border-black/10';
 
   return (
     <View className={containerClasses}>
@@ -151,20 +167,26 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
       </Text>
 
       <View className={`${isMobile ? 'gap-4' : 'gap-8'}`}>
-        {PRODUCTS.map((product, idx) => (
+        {selections.map((sel: any, idx: number) => (
           <Pressable
-            key={product.id}
+            key={idx}
             onPress={() => setActiveProductIndex(idx)}
+            className={`p-4 rounded-2xl border transition-all ${
+              activeProductIndex === idx 
+                ? `${activeBorderColor} bg-foreground/5 shadow-md` 
+                : 'border-transparent hover:bg-foreground/5'
+            }`}
           >
-            <View className={`gap-4 border-l-4 pl-4 py-1 ${idx === activeProductIndex ? 'border-primary opacity-100' : 'border-foreground/5 opacity-40'}`}>
-              <View className="flex-row justify-between items-center">
-                <Text className={`${isMobile ? 'text-sm' : 'text-lg'} font-black tracking-tight ${idx === activeProductIndex ? headingColor : 'text-foreground/50'}`}>
-                  {product.name}
-                </Text>
-                <Text className={`${isMobile ? 'text-xs' : 'text-base'} text-primary font-mono font-bold tracking-tighter`}>{product.price}</Text>
-              </View>
+            <View className="flex-row justify-between items-center mb-3">
+              <Text className={`text-sm font-black tracking-widest ${activeProductIndex === idx ? 'text-foreground' : 'text-foreground/50'}`}>
+                {getProducts(t).find(p => p.id === sel.productId)?.name}
+              </Text>
+              <Text className={`text-xs font-bold ${activeProductIndex === idx ? 'text-primary' : 'text-muted-foreground'}`}>
+                {getProducts(t).find(p => p.id === sel.productId)?.price}
+              </Text>
+            </View>
 
-              <View className="flex-row gap-3">
+            <View className="flex-row gap-3">
                 <CustomSelect
                   label={t('configurator.material')}
                   options={MATERIALS}
@@ -202,7 +224,6 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
                   </Pressable>
                 </View>
               )}
-            </View>
           </Pressable>
         ))}
       </View>

@@ -8,13 +8,14 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../providers/ThemeProvider';
 import { useCart } from '../providers/CartProvider';
 import { ShoppingCart } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 
 const NAV_LINKS = [
-  { label: 'RAMPAS', route: 'Ramps' },
-  { label: 'DECKS', route: 'Decks' },
-  { label: 'ACESSÓRIOS', route: 'Acessorios' },
-  { label: 'DICE TOWER', route: 'DiceTower' },
-  { label: 'XADREZ', route: 'Xadrez' },
+  { key: 'sidemenu.ramps', route: 'Ramps' },
+  { key: 'sidemenu.decks', route: 'Decks' },
+  { key: 'sidemenu.accessories', route: 'Acessorios' },
+  { key: 'sidemenu.diceTower', route: 'DiceTower' },
+  { key: 'sidemenu.chess', route: 'Xadrez' },
 ] as const;
 
 const MotionView = motion.div;
@@ -23,6 +24,7 @@ export const Header = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { isDark } = useTheme();
   const { totalItems, setIsCartOpen } = useCart();
+  const { t } = useTranslation();
 
   const headerBgColor = isDark ? 'rgba(0, 0, 0, 0.7)' : 'rgba(247, 240, 230, 0.85)';
   const borderBottomColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
@@ -66,7 +68,7 @@ export const Header = () => {
         {NAV_LINKS.map((link) => (
           <Pressable key={link.route} onPress={() => navigation.navigate(link.route as any)}>
             <Text className={`text-xs font-black tracking-widest ${linkColor} hover:text-primary transition-colors uppercase`}>
-              {link.label}
+              {t(link.key)}
             </Text>
           </Pressable>
         ))}
@@ -88,7 +90,7 @@ export const Header = () => {
 
         <Pressable className={`border ${btnBorderColor} px-4 py-2 rounded-sm active:bg-primary/20 transition-all`}>
           <Text className={`text-[10px] font-black tracking-widest ${btnTextColor} uppercase`}>
-            SUSTENTABILIDADE
+            {t('common.sustainability')}
           </Text>
         </Pressable>
       </View>

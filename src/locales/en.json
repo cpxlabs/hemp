@@ -2,7 +2,8 @@
   "common": {
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "back": "Back"
+    "back": "Back",
+    "sustainability": "Sustainability"
   },
   "home": {
     "title": "Hemp Ramps",
@@ -106,10 +107,25 @@
     "material": "Material",
     "finish": "Finish",
     "foldableStructure": "Foldable Structure",
-    "foldableDesc": "Folds side ramps for transport",
-    "rgbColor": "RGB LIGHT COLOR (SECONDARY)",
+    "foldableDesc": "Collapses side ramps for easy transport",
+    "rgbColor": "RGB LIGHTING COLOR (SECONDARY)",
     "reset": "Reset",
-    "checkout": "Place Order"
+    "checkout": "Checkout",
+    "products": {
+      "ramp": "PRO RAMP",
+      "deck": "CARBONIZED DECK",
+      "diceTower": "HEMP DICE TOWER"
+    },
+    "materials": {
+      "carbonized": "Carbonized Hemp Wood",
+      "recycled": "Recycled Polymer",
+      "natural": "Natural Fiber"
+    },
+    "finishes": {
+      "matte": "Matte Recycled",
+      "glossy": "Glossy Eco",
+      "raw": "Raw Texture"
+    }
   },
   "cart": {
     "titleCart": "Cart",
