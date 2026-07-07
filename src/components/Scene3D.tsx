@@ -46,35 +46,58 @@ const getMaterialProps = (materialName?: string, isDark?: boolean) => {
 };
 
 const StadiumLight = ({ position, isDark, color }: any) => {
-  const poleColor = isDark ? '#222222' : '#888888';
+  const poleColor = isDark ? '#1a1a1a' : '#666666';
   const lightColor = color || (isDark ? '#39FF14' : '#fff9e6');
   return (
     <group position={position}>
-      {/* Pole */}
-      <mesh castShadow position={[0, 1.2, 0]}>
-        <cylinderGeometry args={[0.03, 0.05, 2.4, 8]} />
-        <meshStandardMaterial color={poleColor} roughness={0.5} metalness={0.7} />
+      {/* Pole - tapered for realism */}
+      <mesh castShadow position={[0, 1.1, 0]}>
+        <cylinderGeometry args={[0.025, 0.06, 2.2, 8]} />
+        <meshStandardMaterial color={poleColor} roughness={0.3} metalness={0.85} />
       </mesh>
-      {/* Light Head */}
-      <mesh castShadow position={[0, 2.4, 0]} rotation={[0.3, 0, 0]}>
-        <boxGeometry args={[0.25, 0.12, 0.18]} />
-        <meshStandardMaterial color={poleColor} />
+      {/* Pole base flange */}
+      <mesh position={[0, 0.04, 0]}>
+        <cylinderGeometry args={[0.1, 0.1, 0.08, 8]} />
+        <meshStandardMaterial color={poleColor} roughness={0.4} metalness={0.9} />
       </mesh>
-      {/* Glowing Light Lens Panel */}
-      <mesh position={[0, 2.335, 0.01]} rotation={[0.3, 0, 0]}>
-        <boxGeometry args={[0.21, 0.02, 0.15]} />
+      {/* Arm bracket */}
+      <mesh castShadow position={[0.1, 2.2, 0]} rotation={[0, 0, -0.3]}>
+        <boxGeometry args={[0.2, 0.02, 0.02]} />
+        <meshStandardMaterial color={poleColor} metalness={0.9} />
+      </mesh>
+      {/* Light Head housing */}
+      <mesh castShadow position={[0.15, 2.3, 0]} rotation={[0.5, 0, 0]}>
+        <boxGeometry args={[0.22, 0.1, 0.16]} />
+        <meshStandardMaterial color="#111111" roughness={0.2} metalness={0.8} />
+      </mesh>
+      {/* Glowing Lens Panel */}
+      <mesh position={[0.15, 2.26, 0.05]} rotation={[0.5, 0, 0]}>
+        <boxGeometry args={[0.18, 0.02, 0.13]} />
         <meshBasicMaterial color={lightColor} />
       </mesh>
-      {/* SpotLight */}
+      {/* Inner glow halo mesh */}
+      <mesh position={[0.15, 2.28, 0.07]} rotation={[0.5, 0, 0]}>
+        <boxGeometry args={[0.22, 0.01, 0.17]} />
+        <meshBasicMaterial color={lightColor} transparent opacity={0.3} />
+      </mesh>
+      {/* SpotLight — narrow theatrical beam */}
       <spotLight
-        position={[0, 2.4, 0]}
-        intensity={isDark ? 8.0 : 4.0}
-        distance={12}
-        angle={Math.PI / 2.5}
-        penumbra={0.4}
+        position={[0.15, 2.35, 0.1]}
+        target-position={[0, -0.4, 0]}
+        intensity={isDark ? 12.0 : 5.0}
+        distance={14}
+        angle={Math.PI / 3}
+        penumbra={0.6}
         color={lightColor}
         castShadow
         shadow-mapSize={[512, 512]}
+      />
+      {/* Halo point light for color bleed */}
+      <pointLight
+        position={[0.15, 2.3, 0.1]}
+        intensity={isDark ? 3.0 : 1.0}
+        distance={4}
+        color={lightColor}
       />
     </group>
   );
@@ -282,19 +305,41 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       {/* Ground Concrete Slab - Thick elevated platform */}
       <mesh receiveShadow position={[0, -0.65, 0]}>
         <boxGeometry args={[9.5, 0.4, 5.0]} />
-        <meshStandardMaterial color={parkColor} roughness={0.7} metalness={0.2} />
+        <meshPhysicalMaterial
+          color={parkColor}
+          roughness={0.75}
+          metalness={0.05}
+          clearcoat={0.1}
+          clearcoatRoughness={0.8}
+        />
       </mesh>
 
-      {/* RGB LED Underglow Strip around the base of the concrete slab */}
-      <mesh position={[0, -0.825, 0]}>
-        <boxGeometry args={[9.6, 0.05, 5.1]} />
+      {/* Concrete slab beveled edge strips for premium look */}
+      {/* Front edge */}
+      <mesh position={[0, -0.84, 2.55]}>
+        <boxGeometry args={[9.5, 0.02, 0.08]} />
+        <meshStandardMaterial color="#c8c8c8" roughness={0.3} metalness={0.5} />
+      </mesh>
+      {/* Back edge */}
+      <mesh position={[0, -0.84, -2.55]}>
+        <boxGeometry args={[9.5, 0.02, 0.08]} />
+        <meshStandardMaterial color="#c8c8c8" roughness={0.3} metalness={0.5} />
+      </mesh>
+
+      {/* RGB LED Underglow Strip — thicker glow bar */}
+      <mesh position={[0, -0.855, 0]}>
+        <boxGeometry args={[9.62, 0.06, 5.12]} />
         <meshBasicMaterial color={lightsColor || '#39FF14'} />
       </mesh>
+      {/* Underglow point lights for realistic color bleed onto floor */}
+      <pointLight position={[-3.5, -0.9, 0]} intensity={isDark ? 2.0 : 0.5} distance={5} color={lightsColor || '#39FF14'} />
+      <pointLight position={[3.5, -0.9, 0]} intensity={isDark ? 2.0 : 0.5} distance={5} color={lightsColor || '#39FF14'} />
+      <pointLight position={[0, -0.9, 2]} intensity={isDark ? 1.5 : 0.4} distance={4} color={lightsColor || '#39FF14'} />
 
       {/* Diagonal bevelled sloped ramp on the left-front corner of the slab */}
       <mesh position={[-4.0, -0.65, 1.8]} rotation={[0.3, -0.6, 0.1]} castShadow receiveShadow>
         <boxGeometry args={[1.5, 0.4, 2.0]} />
-        <meshStandardMaterial color={parkColor} roughness={0.7} metalness={0.2} />
+        <meshPhysicalMaterial color={parkColor} roughness={0.8} metalness={0.05} />
       </mesh>
 
       {/* Catalog booklet resting on the sloped bevel corner */}
@@ -324,21 +369,32 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       <StadiumLight position={[4.2, -0.425, -2.2]} isDark={isDark} color={lightsColor} />
       <StadiumLight position={[-4.2, -0.425, 2.2]} isDark={isDark} color={lightsColor} />
       <StadiumLight position={[4.2, -0.425, 2.2]} isDark={isDark} color={lightsColor} />
+      {/* Mid-side accent poles */}
+      <StadiumLight position={[-4.2, -0.425, 0]} isDark={isDark} color={lightsColor} />
+      <StadiumLight position={[4.2, -0.425, 0]} isDark={isDark} color={lightsColor} />
 
-      {/* Secondary glowing RGB light bulbs at the sides of the concrete park */}
+      {/* Secondary glowing RGB light orbs at the sides of the concrete park */}
       <group position={[-3.8, -0.3, -0.5]}>
         <mesh castShadow>
-          <sphereGeometry args={[0.08, 16, 16]} />
+          <sphereGeometry args={[0.07, 16, 16]} />
           <meshBasicMaterial color={lightsColor} />
         </mesh>
-        <pointLight color={lightsColor} intensity={2.5} distance={5} />
+        <pointLight color={lightsColor} intensity={isDark ? 4.0 : 1.5} distance={6} />
       </group>
       <group position={[3.8, -0.3, -0.5]}>
         <mesh castShadow>
-          <sphereGeometry args={[0.08, 16, 16]} />
+          <sphereGeometry args={[0.07, 16, 16]} />
           <meshBasicMaterial color={lightsColor} />
         </mesh>
-        <pointLight color={lightsColor} intensity={2.5} distance={5} />
+        <pointLight color={lightsColor} intensity={isDark ? 4.0 : 1.5} distance={6} />
+      </group>
+      {/* Back-center accent orb */}
+      <group position={[0, -0.3, -2.0]}>
+        <mesh>
+          <sphereGeometry args={[0.06, 16, 16]} />
+          <meshBasicMaterial color={lightsColor} />
+        </mesh>
+        <pointLight color={lightsColor} intensity={isDark ? 2.5 : 0.8} distance={4} />
       </group>
 
       {/* --- Central Skate Ramp (Quarterpipe with L-shaped Curved Corner Pocket) --- */}
@@ -480,7 +536,31 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
 
 
         {/* Complete Miniature Skateboard (Tech Deck) sliding slowly back and forth */}
-        <SkateDecks ref={miniSkateRef} active={false} material="wood" isDark={isDark} scale={0.35} />
+        <SkateDecks ref={miniSkateRef} active={false} material="wood" isDark={isDark} scale={0.42} />
+
+        {/* Spray can prop on the flat surface */}
+        <group position={[1.1, 0.1, 0.55]} rotation={[0, -0.8, 0]}>
+          {/* Can body */}
+          <mesh castShadow rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.06, 0.06, 0.32, 16]} />
+            <meshPhysicalMaterial color={lightsColor || '#39FF14'} roughness={0.15} metalness={0.7} clearcoat={1.0} />
+          </mesh>
+          {/* Can cap */}
+          <mesh castShadow position={[0, 0, 0.2]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.04, 0.06, 0.06, 12]} />
+            <meshStandardMaterial color="#111111" roughness={0.3} />
+          </mesh>
+          {/* Can nozzle */}
+          <mesh position={[0, 0, 0.245]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.012, 0.012, 0.04, 8]} />
+            <meshStandardMaterial color="#dddddd" metalness={0.8} roughness={0.2} />
+          </mesh>
+          {/* Label band */}
+          <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.062, 0.062, 0.15, 16]} />
+            <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
+          </mesh>
+        </group>
 
         {/* Miniature metal trucks and loose screws lying on the flat surface */}
         <group position={[0.2, 0.1, 0.3]} rotation={[0, -0.4, 0]} scale={1.5}>
@@ -499,6 +579,34 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
             <mesh key={x} position={[x, 0.005, 0.1 + idx * 0.03]} rotation={[0.4, idx * 0.8, 0.2]} castShadow>
               <cylinderGeometry args={[0.006, 0.006, 0.05, 8]} />
               <meshPhysicalMaterial color={lightsColor || "#39FF14"} metalness={0.8} roughness={0.2} emissive={lightsColor || "#39FF14"} emissiveIntensity={0.5} />
+            </mesh>
+          ))}
+        </group>
+
+        {/* Graffiti / sticker tag on the left black side wall */}
+        <group position={[-1.58, 0.4, -0.3]}>
+          {/* Sticker background */}
+          <mesh rotation={[0, Math.PI / 2, 0]}>
+            <planeGeometry args={[0.45, 0.25]} />
+            <meshBasicMaterial color="#111111" transparent opacity={0.8} />
+          </mesh>
+          {/* CPX in neon green */}
+          <mesh position={[0.021, 0.05, 0]} rotation={[0, Math.PI / 2, 0]}>
+            <boxGeometry args={[0.3, 0.05, 0.01]} />
+            <meshBasicMaterial color={lightsColor || '#39FF14'} />
+          </mesh>
+          <mesh position={[0.021, -0.01, 0]} rotation={[0, Math.PI / 2, 0]}>
+            <boxGeometry args={[0.22, 0.03, 0.01]} />
+            <meshBasicMaterial color={'#ffffff'} />
+          </mesh>
+        </group>
+
+        {/* Small stack of spare wheels on the right wall */}
+        <group position={[1.58, 0.14, -0.6]}>
+          {[0, 1, 2].map((i) => (
+            <mesh key={i} position={[0, i * 0.055, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+              <cylinderGeometry args={[0.08, 0.07, 0.05, 20]} />
+              <meshPhysicalMaterial color="#eeeeee" roughness={0.5} clearcoat={0.2} />
             </mesh>
           ))}
         </group>
@@ -1101,58 +1209,77 @@ const Scene3D: React.FC<Scene3DProps> = ({
   const { isDark } = useTheme();
   const { isRampCollapsed } = useConfigurator();
 
-  const backgroundColor = isDark ? '#050505' : '#f7f0e6';
-  const ambientIntensity = isDark ? 1.2 : 1.1;
-  const spotIntensity = isDark ? 4.0 : 2.5;
-  const shadowColor = isDark ? '#39FF14' : '#4d372c';
+  const backgroundColor = isDark ? '#080808' : '#f0ebe0';
+  const ambientIntensity = isDark ? 0.6 : 1.0;
+  const spotIntensity = isDark ? 5.0 : 2.5;
+  const shadowColor = isDark ? '#1a3a0a' : '#4d372c';
 
   return (
     <View style={styles.container}>
       <Suspense fallback={<Loader />}>
         <Canvas shadows dpr={[1, 2]}>
           <color attach="background" args={[backgroundColor]} />
-          <fog attach="fog" args={[backgroundColor, 7, 18]} />
+          <fog attach="fog" args={[backgroundColor, 8, 20]} />
 
-          <PerspectiveCamera makeDefault position={[0, 2.7, 5.2]} fov={42} />
+          <PerspectiveCamera makeDefault position={[0, 2.5, 4.8]} fov={44} />
           <OrbitControls
             enablePan={false}
             minPolarAngle={Math.PI / 6}
             maxPolarAngle={Math.PI / 2.1}
             makeDefault
             autoRotate={category === 'Home'}
-            autoRotateSpeed={0.3}
+            autoRotateSpeed={0.25}
           />
 
           <ambientLight intensity={ambientIntensity} />
-          {/* Key Light */}
-          <directionalLight position={[5, 12, 8]} intensity={isDark ? 4.0 : 2.5} castShadow shadow-mapSize={[1024, 1024]} />
-          {/* Rim Light for separation */}
-          <directionalLight position={[-8, 5, -8]} intensity={isDark ? 3.0 : 1.5} color={isDark ? "#88aaff" : "#ffffff"} />
-          
+          {/* Key Light - warm from upper right */}
+          <directionalLight
+            position={[5, 12, 8]}
+            intensity={isDark ? 3.5 : 2.5}
+            color={isDark ? '#ffffff' : '#fff8f0'}
+            castShadow
+            shadow-mapSize={[2048, 2048]}
+            shadow-bias={-0.0005}
+          />
+          {/* Cool rim light for separation */}
+          <directionalLight
+            position={[-8, 6, -8]}
+            intensity={isDark ? 2.5 : 1.2}
+            color={isDark ? '#6688ff' : '#e0e8ff'}
+          />
+          {/* Main theatrical spot */}
           <spotLight
-            position={[6, 9, 6]}
-            angle={0.6}
-            penumbra={1}
+            position={[0, 10, 6]}
+            angle={0.5}
+            penumbra={0.9}
             intensity={spotIntensity}
             castShadow
             shadow-mapSize={[2048, 2048]}
-          />
-          <spotLight
-            position={[-6, 9, -6]}
-            angle={0.6}
-            penumbra={1}
-            intensity={isDark ? 2.0 : 1.2}
-          />
-          {/* Front-fill light to ensure the wood ramp surface, logo shield, and wheels are bright and clear */}
-          <spotLight
-            position={[0, 4, 6]}
-            angle={0.8}
-            penumbra={0.5}
-            intensity={isDark ? 2.5 : 1.5}
+            shadow-bias={-0.0005}
             color="#ffffff"
           />
+          {/* Counter spot from back */}
+          <spotLight
+            position={[-4, 8, -6]}
+            angle={0.5}
+            penumbra={1}
+            intensity={isDark ? 2.0 : 1.0}
+            color={isDark ? '#88aaff' : '#ffffff'}
+          />
+          {/* Front fill to brighten ramp face */}
+          <spotLight
+            position={[0, 3, 7]}
+            angle={0.9}
+            penumbra={0.6}
+            intensity={isDark ? 2.0 : 1.2}
+            color="#ffffff"
+          />
+          {/* Neon underbelly RGB fill */}
           {isDark && (
-            <pointLight position={[-5, 5, -5]} intensity={1.5} color="#39FF14" />
+            <>
+              <pointLight position={[-3, -1, 2]} intensity={3.5} color="#39FF14" distance={8} />
+              <pointLight position={[3, -1, -2]} intensity={2.0} color="#39FF14" distance={6} />
+            </>
           )}
 
           {category === 'Home' ? (
