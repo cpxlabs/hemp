@@ -60,6 +60,11 @@ const StadiumLight = ({ position, isDark, color }: any) => {
         <boxGeometry args={[0.25, 0.12, 0.18]} />
         <meshStandardMaterial color={poleColor} />
       </mesh>
+      {/* Glowing Light Lens Panel */}
+      <mesh position={[0, 2.335, 0.01]} rotation={[0.3, 0, 0]}>
+        <boxGeometry args={[0.21, 0.02, 0.15]} />
+        <meshBasicMaterial color={lightColor} />
+      </mesh>
       {/* SpotLight */}
       <spotLight
         position={[0, 2.4, 0]}
