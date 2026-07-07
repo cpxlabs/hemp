@@ -68,9 +68,9 @@ const StadiumLight = ({ position, isDark, color }: any) => {
       {/* SpotLight */}
       <spotLight
         position={[0, 2.4, 0]}
-        intensity={isDark ? 3.0 : 1.5}
-        distance={7}
-        angle={Math.PI / 3}
+        intensity={isDark ? 8.0 : 4.0}
+        distance={12}
+        angle={Math.PI / 2.5}
         penumbra={0.4}
         color={lightColor}
         castShadow
@@ -83,10 +83,10 @@ const StadiumLight = ({ position, isDark, color }: any) => {
 const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
   const matProps = {
     color,
-    roughness: color === '#eaeaea' ? 0.2 : 0.12,
-    metalness: color === '#eaeaea' ? 0.05 : 0.15,
+    roughness: color === '#eaeaea' ? 0.08 : 0.05,
+    metalness: color === '#eaeaea' ? 0.2 : 0.8,
     clearcoat: 1.0,
-    clearcoatRoughness: 0.06,
+    clearcoatRoughness: 0.05,
   };
   
   if (type === 'pawn') {
@@ -94,17 +94,22 @@ const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
       <group>
         {/* Base */}
         <mesh castShadow position={[0, 0.02, 0]}>
-          <cylinderGeometry args={[0.05, 0.06, 0.04, 8]} />
+          <cylinderGeometry args={[0.06, 0.07, 0.04, 16]} />
+          <meshPhysicalMaterial {...matProps} />
+        </mesh>
+        {/* Collar */}
+        <mesh castShadow position={[0, 0.045, 0]}>
+          <cylinderGeometry args={[0.04, 0.05, 0.01, 16]} />
           <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Body */}
-        <mesh castShadow position={[0, 0.08, 0]}>
-          <coneGeometry args={[0.015, 0.045, 0.12, 8]} />
+        <mesh castShadow position={[0, 0.09, 0]}>
+          <cylinderGeometry args={[0.02, 0.04, 0.1, 16]} />
           <meshPhysicalMaterial {...matProps} />
         </mesh>
         {/* Head */}
-        <mesh castShadow position={[0, 0.15, 0]}>
-          <sphereGeometry args={[0.032, 8, 8]} />
+        <mesh castShadow position={[0, 0.16, 0]}>
+          <sphereGeometry args={[0.035, 16, 16]} />
           <meshPhysicalMaterial {...matProps} />
         </mesh>
       </group>
@@ -242,7 +247,7 @@ const ChessPiece3D = ({ type, color }: { type: string; color: string }) => {
 
 const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
   const { lightsColor } = useConfigurator();
-  const parkColor = '#b5b0a6'; // Concrete grey color for realistic skatepark ground
+  const parkColor = '#dcdcdc'; // Crisper off-white concrete for premium look
   const structuralColor = isDark ? '#1f1f1f' : '#d5cbbd';
   const woodColor = '#a87544'; // Beautiful rich warm wood color for the ramp face
   const logoGreen = '#39FF14';
@@ -277,13 +282,19 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       {/* Ground Concrete Slab - Thick elevated platform */}
       <mesh receiveShadow position={[0, -0.65, 0]}>
         <boxGeometry args={[9.5, 0.4, 5.0]} />
-        <meshStandardMaterial color={parkColor} roughness={0.8} metalness={0.15} />
+        <meshStandardMaterial color={parkColor} roughness={0.7} metalness={0.2} />
+      </mesh>
+
+      {/* RGB LED Underglow Strip around the base of the concrete slab */}
+      <mesh position={[0, -0.825, 0]}>
+        <boxGeometry args={[9.6, 0.05, 5.1]} />
+        <meshBasicMaterial color={lightsColor || '#39FF14'} />
       </mesh>
 
       {/* Diagonal bevelled sloped ramp on the left-front corner of the slab */}
       <mesh position={[-4.0, -0.65, 1.8]} rotation={[0.3, -0.6, 0.1]} castShadow receiveShadow>
         <boxGeometry args={[1.5, 0.4, 2.0]} />
-        <meshStandardMaterial color="#ababa1" roughness={0.8} />
+        <meshStandardMaterial color={parkColor} roughness={0.7} metalness={0.2} />
       </mesh>
 
       {/* Catalog booklet resting on the sloped bevel corner */}
@@ -472,71 +483,62 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
         <SkateDecks ref={miniSkateRef} active={false} material="wood" isDark={isDark} scale={0.35} />
 
         {/* Miniature metal trucks and loose screws lying on the flat surface */}
-        <group position={[0.2, 0.1, 0.3]} rotation={[0, -0.4, 0]}>
+        <group position={[0.2, 0.1, 0.3]} rotation={[0, -0.4, 0]} scale={1.5}>
           {/* Tiny truck hanger */}
           <mesh position={[0, 0.02, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
             <cylinderGeometry args={[0.015, 0.015, 0.25, 8]} />
-            <meshStandardMaterial color="#cccccc" metalness={0.9} roughness={0.1} />
+            <meshPhysicalMaterial color="#ffffff" metalness={1.0} roughness={0.05} clearcoat={1.0} />
           </mesh>
           {/* Baseplate */}
           <mesh position={[0, 0.005, 0]} castShadow>
             <boxGeometry args={[0.07, 0.01, 0.09]} />
-            <meshStandardMaterial color="#cccccc" metalness={0.9} roughness={0.1} />
+            <meshPhysicalMaterial color="#e0e0e0" metalness={0.9} roughness={0.2} />
           </mesh>
           {/* Loose screws */}
           {[-0.12, 0.05, 0.18].map((x, idx) => (
             <mesh key={x} position={[x, 0.005, 0.1 + idx * 0.03]} rotation={[0.4, idx * 0.8, 0.2]} castShadow>
               <cylinderGeometry args={[0.006, 0.006, 0.05, 8]} />
-              <meshStandardMaterial color="#bbbbbb" metalness={0.9} />
+              <meshPhysicalMaterial color={lightsColor || "#39FF14"} metalness={0.8} roughness={0.2} emissive={lightsColor || "#39FF14"} emissiveIntensity={0.5} />
             </mesh>
           ))}
         </group>
       </group>
 
-      {/* --- Stack of Wooden Fingerboard Decks to the Left --- */}
+      {/* --- Stack of Premium Cardboard Packaging Boxes to the Left --- */}
       <group position={[-3.3, -0.425, 0.4]} rotation={[0.05, 0.5, 0]}>
-        {[0, 1, 2, 3, 4].map((index) => {
-          const woodHue = index === 4 ? woodColor : index % 2 === 0 ? '#8b5a2b' : '#6f4a27';
+        {[0, 1, 2].map((index) => {
           // Subtle organic offsets for hand-stacked realism
-          const randRotY = index === 4 ? 0 : Math.sin(index * 45) * 0.06;
-          const randOffsetX = index === 4 ? 0 : Math.cos(index * 30) * 0.03;
-          const randOffsetZ = index === 4 ? 0 : Math.sin(index * 20) * 0.03;
+          const randRotY = index === 2 ? 0 : Math.sin(index * 45) * 0.08;
+          const randOffsetX = index === 2 ? 0 : Math.cos(index * 30) * 0.05;
+          const randOffsetZ = index === 2 ? 0 : Math.sin(index * 20) * 0.05;
           
           return (
-            <group key={index} position={[randOffsetX, index * 0.045, randOffsetZ]} rotation={[0, randRotY, 0]}>
-              {/* Deck Center */}
+            <group key={index} position={[randOffsetX, 0.06 + index * 0.12, randOffsetZ]} rotation={[0, randRotY, 0]}>
+              {/* Premium Matte Cardboard Box */}
               <mesh castShadow position={[0, 0, 0]}>
-                <boxGeometry args={[0.75, 0.04, 1.5]} />
-                <meshStandardMaterial color={woodHue} roughness={0.7} />
+                <boxGeometry args={[0.9, 0.11, 1.8]} />
+                <meshStandardMaterial color={isDark ? '#1a1a1a' : '#d9cfc1'} roughness={0.9} />
               </mesh>
-              {/* Nose kick */}
-              <mesh castShadow position={[0, 0.06, 0.82]} rotation={[Math.PI / 10, 0, 0]}>
-                <boxGeometry args={[0.75, 0.04, 0.45]} />
-                <meshStandardMaterial color={woodHue} roughness={0.7} />
-              </mesh>
-              {/* Tail kick */}
-              <mesh castShadow position={[0, 0.06, -0.82]} rotation={[-Math.PI / 10, 0, 0]}>
-                <boxGeometry args={[0.75, 0.04, 0.45]} />
-                <meshStandardMaterial color={woodHue} roughness={0.7} />
-              </mesh>
-              {/* Laminated colored ply line */}
-              <mesh position={[0, -0.012, 0]}>
-                <boxGeometry args={[0.73, 0.008, 1.48]} />
-                <meshStandardMaterial color={index % 2 === 0 ? '#39FF14' : '#ef4444'} roughness={0.6} />
+              
+              {/* Colored Foil Trim (Side accents) */}
+              <mesh position={[0, 0, 0]}>
+                <boxGeometry args={[0.91, 0.01, 1.81]} />
+                <meshPhysicalMaterial color={index % 2 === 0 ? (lightsColor || '#39FF14') : '#f5f5f5'} metalness={1.0} roughness={0.1} clearcoat={1.0} />
               </mesh>
 
-              {/* Graphic on the top deck */}
-              {index === 4 && (
-                <group position={[0, 0.025, 0]}>
-                  {/* Outer graphic plate */}
+              {/* Holographic / Emissive Screen on the top box */}
+              {index === 2 && (
+                <group position={[0, 0.056, 0]}>
+                  {/* Outer gloss plate */}
                   <mesh>
-                    <boxGeometry args={[0.45, 0.002, 0.9]} />
-                    <meshStandardMaterial color="#111" roughness={0.2} />
+                    <boxGeometry args={[0.6, 0.002, 1.2]} />
+                    <meshPhysicalMaterial color="#050505" roughness={0.05} metalness={0.8} clearcoat={1.0} />
                   </mesh>
-                  {/* Inside green graphic design */}
-                  <mesh position={[0, 0.001, 0]}>
-                    <boxGeometry args={[0.38, 0.002, 0.7]} />
-                    <meshStandardMaterial color={logoGreen} roughness={0.1} />
+                  {/* Inside glowing holographic screen */}
+                  <mesh position={[0, 0.002, 0]}>
+                    <boxGeometry args={[0.5, 0.002, 1.0]} />
+                    <meshBasicMaterial color={lightsColor || logoGreen} />
+                    <pointLight position={[0, 0.5, 0]} intensity={isDark ? 1.5 : 0.5} distance={2} color={lightsColor || logoGreen} />
                   </mesh>
                 </group>
               )}
@@ -576,10 +578,11 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           <boxGeometry args={[0.85, 0.1, 0.65]} />
           <meshStandardMaterial color="#0c0c0a" roughness={0.8} />
         </mesh>
-        {/* Arch exit door */}
+        {/* Arch exit door / Glowing Portal */}
         <mesh position={[0, 0.25, 0.451]}>
           <boxGeometry args={[0.35, 0.5, 0.02]} />
-          <meshStandardMaterial color="#1a1a1a" />
+          <meshBasicMaterial color={lightsColor || '#39FF14'} />
+          <pointLight position={[0, 0, 0.3]} intensity={isDark ? 2.5 : 1.0} distance={3} color={lightsColor || '#39FF14'} />
         </mesh>
         {/* Engraved logo details on front */}
         <mesh position={[0, 0.9, 0.452]}>
@@ -589,25 +592,30 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
         {/* Left Glass Chute */}
         <mesh position={[-0.8, 0.18, 0.65]} rotation={[0, 0, Math.PI / 8]} castShadow>
           <boxGeometry args={[0.6, 0.02, 0.65]} />
-          <meshPhysicalMaterial color="#ffffff" transparent opacity={0.35} roughness={0.15} transmission={0.9} thickness={0.5} />
+          <meshPhysicalMaterial color="#ffffff" transparent opacity={0.4} roughness={0.05} transmission={0.95} thickness={0.5} clearcoat={1.0} />
         </mesh>
         {/* Right Glass Chute */}
         <mesh position={[0.8, 0.18, 0.65]} rotation={[0, 0, -Math.PI / 8]} castShadow>
           <boxGeometry args={[0.6, 0.02, 0.65]} />
-          <meshPhysicalMaterial color="#ffffff" transparent opacity={0.35} roughness={0.15} transmission={0.9} thickness={0.5} />
+          <meshPhysicalMaterial color="#ffffff" transparent opacity={0.4} roughness={0.05} transmission={0.95} thickness={0.5} clearcoat={1.0} />
         </mesh>
       </group>
 
       {/* --- Chess Board and pieces in Front Right --- */}
       <group position={[2.0, -0.425, 0.75]} rotation={[0, -0.15, 0]} scale={0.78}>
-        {/* Chess board base frame */}
+        {/* Chess board base frame main block */}
         <mesh castShadow receiveShadow position={[0, 0.05, 0]}>
           <boxGeometry args={[2.5, 0.1, 2.5]} />
           <meshStandardMaterial color="#1a1a1a" roughness={0.65} metalness={0.3} />
         </mesh>
-        {/* Lighter wooden inner board */}
-        <mesh position={[0, 0.105, 0]}>
-          <boxGeometry args={[2.3, 0.02, 2.3]} />
+        {/* Beveled top rim for premium feel */}
+        <mesh receiveShadow position={[0, 0.11, 0]}>
+          <boxGeometry args={[2.4, 0.02, 2.4]} />
+          <meshStandardMaterial color="#1a1a1a" roughness={0.65} metalness={0.3} />
+        </mesh>
+        {/* Lighter wooden inner board inset */}
+        <mesh position={[0, 0.121, 0]}>
+          <boxGeometry args={[2.3, 0.005, 2.3]} />
           <meshStandardMaterial color="#bda591" roughness={0.4} />
         </mesh>
         {/* Visual dark squares grid pattern */}
@@ -717,8 +725,8 @@ const SkateRamp = ({ active, material, isDark, isCollapsed = false, ...props }: 
 const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any, ref: any) => {
   const matProps = {
     color: '#1a1a1a', // Black grip tape look matching base photo
-    roughness: 0.85,
-    metalness: 0.1,
+    roughness: 0.98,
+    metalness: 0.05,
   };
   const woodCoreProps = {
     color: '#e3be94', // Light birch ply color matching the photo edge
@@ -993,8 +1001,8 @@ const Scene3D: React.FC<Scene3DProps> = ({
   const { isRampCollapsed } = useConfigurator();
 
   const backgroundColor = isDark ? '#050505' : '#f7f0e6';
-  const ambientIntensity = isDark ? 0.75 : 0.95;
-  const spotIntensity = isDark ? 3.0 : 2.0;
+  const ambientIntensity = isDark ? 1.2 : 1.1;
+  const spotIntensity = isDark ? 4.0 : 2.5;
   const shadowColor = isDark ? '#39FF14' : '#4d372c';
 
   return (
@@ -1002,7 +1010,7 @@ const Scene3D: React.FC<Scene3DProps> = ({
       <Suspense fallback={<Loader />}>
         <Canvas shadows dpr={[1, 2]}>
           <color attach="background" args={[backgroundColor]} />
-          <fog attach="fog" args={[backgroundColor, 5, 13]} />
+          <fog attach="fog" args={[backgroundColor, 7, 18]} />
 
           <PerspectiveCamera makeDefault position={[0, 2.7, 5.2]} fov={42} />
           <OrbitControls
@@ -1015,7 +1023,10 @@ const Scene3D: React.FC<Scene3DProps> = ({
           />
 
           <ambientLight intensity={ambientIntensity} />
-          <directionalLight position={[0, 10, 2]} intensity={isDark ? 2.2 : 1.5} castShadow shadow-mapSize={[1024, 1024]} />
+          {/* Key Light */}
+          <directionalLight position={[5, 12, 8]} intensity={isDark ? 4.0 : 2.5} castShadow shadow-mapSize={[1024, 1024]} />
+          {/* Rim Light for separation */}
+          <directionalLight position={[-8, 5, -8]} intensity={isDark ? 3.0 : 1.5} color={isDark ? "#88aaff" : "#ffffff"} />
           
           <spotLight
             position={[6, 9, 6]}
