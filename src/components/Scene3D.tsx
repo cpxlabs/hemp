@@ -269,30 +269,55 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
 
   return (
     <group position={[0, -0.2, 0]}>
-      {/* Ground Concrete Slab */}
-      <mesh receiveShadow position={[0, -0.5, 0]}>
-        <boxGeometry args={[9.5, 0.15, 5.0]} />
-        <meshStandardMaterial color={parkColor} roughness={0.85} metalness={0.15} />
+      {/* Ground Concrete Slab - Thick elevated platform */}
+      <mesh receiveShadow position={[0, -0.65, 0]}>
+        <boxGeometry args={[9.5, 0.4, 5.0]} />
+        <meshStandardMaterial color={parkColor} roughness={0.8} metalness={0.15} />
       </mesh>
+
+      {/* Diagonal bevelled sloped ramp on the left-front corner of the slab */}
+      <mesh position={[-4.0, -0.65, 1.8]} rotation={[0.3, -0.6, 0.1]} castShadow receiveShadow>
+        <boxGeometry args={[1.5, 0.4, 2.0]} />
+        <meshStandardMaterial color="#ababa1" roughness={0.8} />
+      </mesh>
+
+      {/* Catalog booklet resting on the sloped bevel corner */}
+      <group position={[-3.8, -0.42, 1.6]} rotation={[-0.2, 0.6, -0.15]}>
+        {/* Book Cover */}
+        <mesh castShadow>
+          <boxGeometry args={[0.55, 0.03, 0.8]} />
+          <meshStandardMaterial color="#cbd3c9" roughness={0.4} />
+        </mesh>
+        {/* Green CPX Label on the cover */}
+        <mesh position={[0, 0.016, 0.02]}>
+          <boxGeometry args={[0.38, 0.005, 0.4]} />
+          <meshBasicMaterial color="#39FF14" />
+        </mesh>
+        {/* Label content lettering */}
+        <mesh position={[0, 0.02, 0.02]}>
+          <boxGeometry args={[0.22, 0.002, 0.08]} />
+          <meshBasicMaterial color="#111111" />
+        </mesh>
+      </group>
       
       {/* Concrete slab joint cuts (subtle grid lines) */}
-      <gridHelper args={[9.5, 12, isDark ? '#2a2825' : '#8e8a82', isDark ? '#1a1917' : '#9c978f']} position={[0, -0.42, 0]} />
+      <gridHelper args={[9.5, 12, isDark ? '#2a2825' : '#8e8a82', isDark ? '#1a1917' : '#9c978f']} position={[0, -0.44, 0]} />
 
       {/* --- Stadium Corner Lights for Sparks and Warm Glow --- */}
-      <StadiumLight position={[-4.2, -0.525, -2.2]} isDark={isDark} color={lightsColor} />
-      <StadiumLight position={[4.2, -0.525, -2.2]} isDark={isDark} color={lightsColor} />
-      <StadiumLight position={[-4.2, -0.525, 2.2]} isDark={isDark} color={lightsColor} />
-      <StadiumLight position={[4.2, -0.525, 2.2]} isDark={isDark} color={lightsColor} />
+      <StadiumLight position={[-4.2, -0.425, -2.2]} isDark={isDark} color={lightsColor} />
+      <StadiumLight position={[4.2, -0.425, -2.2]} isDark={isDark} color={lightsColor} />
+      <StadiumLight position={[-4.2, -0.425, 2.2]} isDark={isDark} color={lightsColor} />
+      <StadiumLight position={[4.2, -0.425, 2.2]} isDark={isDark} color={lightsColor} />
 
       {/* Secondary glowing RGB light bulbs at the sides of the concrete park */}
-      <group position={[-3.8, -0.38, -0.5]}>
+      <group position={[-3.8, -0.3, -0.5]}>
         <mesh castShadow>
           <sphereGeometry args={[0.08, 16, 16]} />
           <meshBasicMaterial color={lightsColor} />
         </mesh>
         <pointLight color={lightsColor} intensity={2.5} distance={5} />
       </group>
-      <group position={[3.8, -0.38, -0.5]}>
+      <group position={[3.8, -0.3, -0.5]}>
         <mesh castShadow>
           <sphereGeometry args={[0.08, 16, 16]} />
           <meshBasicMaterial color={lightsColor} />
@@ -300,17 +325,29 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
         <pointLight color={lightsColor} intensity={2.5} distance={5} />
       </group>
 
-      {/* --- Central Skate Ramp (Quarterpipe) --- */}
+      {/* --- Central Skate Ramp (Quarterpipe with L-shaped Curved Corner Pocket) --- */}
       <group position={[-0.4, -0.425, -0.5]}>
         {/* Base block */}
-        <mesh castShadow receiveShadow position={[0, 0.4, -0.8]}>
-          <boxGeometry args={[3.2, 0.8, 1.2]} />
+        <mesh castShadow receiveShadow position={[0.5, 0.4, -0.8]}>
+          <boxGeometry args={[2.2, 0.8, 1.2]} />
+          <meshStandardMaterial color="#121212" roughness={0.55} metalness={0.6} />
+        </mesh>
+
+        {/* Left corner block extension for L-shaped pocket */}
+        <mesh castShadow receiveShadow position={[-1.1, 0.4, -0.8]}>
+          <boxGeometry args={[1.0, 0.8, 1.2]} />
           <meshStandardMaterial color="#121212" roughness={0.55} metalness={0.6} />
         </mesh>
         
-        {/* Curved ramp surface (Quadrant segment of a cylinder) */}
-        <mesh castShadow receiveShadow position={[0, 0.8, -0.4]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.8, 0.8, 3.2, 32, 1, true, Math.PI, Math.PI / 2]} />
+        {/* Curved ramp surface - Straight center section */}
+        <mesh castShadow receiveShadow position={[0.5, 0.8, -0.4]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.8, 0.8, 2.2, 32, 1, true, Math.PI, Math.PI / 2]} />
+          <meshPhysicalMaterial color="#e3be94" roughness={0.35} clearcoat={0.3} clearcoatRoughness={0.15} side={2} />
+        </mesh>
+
+        {/* Curved ramp surface - Left wrapping corner pocket section */}
+        <mesh castShadow receiveShadow position={[-0.6, 0.8, -0.4]} rotation={[0, Math.PI / 2, Math.PI / 2]}>
+          <cylinderGeometry args={[0.8, 0.8, 1.2, 32, 1, true, Math.PI, Math.PI / 2]} />
           <meshPhysicalMaterial color="#e3be94" roughness={0.35} clearcoat={0.3} clearcoatRoughness={0.15} side={2} />
         </mesh>
 
@@ -325,8 +362,14 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           <meshStandardMaterial color="#1a1a1a" roughness={0.5} metalness={0.75} />
         </mesh>
 
+        {/* CPX stencil logo tag on the top right of the ramp */}
+        <mesh position={[1.2, 0.62, -0.81]} rotation={[Math.PI / 6, 0, 0]}>
+          <planeGeometry args={[0.22, 0.15]} />
+          <meshBasicMaterial color="#111111" transparent opacity={0.65} />
+        </mesh>
+
         {/* Beautiful 3D CPX Labs leaf logo matching the reference image */}
-        <group position={[0, 0.38, -0.15]} rotation={[Math.PI / 6, 0, 0]}>
+        <group position={[0.5, 0.38, -0.15]} rotation={[Math.PI / 6, 0, 0]}>
           {/* Stylized dark gray X background plate */}
           <group>
             <mesh castShadow rotation={[0, 0, 0.5]}>
@@ -378,15 +421,26 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           </group>
         </group>
         
-        {/* Metal transition plate at bottom */}
-        <mesh receiveShadow position={[0, 0.05, 0.75]} rotation={[-Math.PI / 24, 0, 0]}>
-          <boxGeometry args={[3.2, 0.02, 0.5]} />
+        {/* Metal transition plate at bottom - Straight center section */}
+        <mesh receiveShadow position={[0.5, 0.05, 0.75]} rotation={[-Math.PI / 24, 0, 0]}>
+          <boxGeometry args={[2.2, 0.02, 0.5]} />
+          <meshPhysicalMaterial color="#e5e5e5" metalness={0.98} roughness={0.05} clearcoat={1.0} clearcoatRoughness={0.02} />
+        </mesh>
+        {/* Metal transition plate at bottom - Left corner section */}
+        <mesh receiveShadow position={[-1.1, 0.05, 0.75]} rotation={[-Math.PI / 24, 0, 0]}>
+          <boxGeometry args={[1.0, 0.02, 0.5]} />
           <meshPhysicalMaterial color="#e5e5e5" metalness={0.98} roughness={0.05} clearcoat={1.0} clearcoatRoughness={0.02} />
         </mesh>
 
-        {/* Coping metal rail at top */}
-        <mesh castShadow position={[0, 0.8, -1.2]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.05, 0.05, 3.2, 16]} />
+        {/* Coping metal rail at top - Straight center section */}
+        <mesh castShadow position={[0.5, 0.8, -1.2]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.05, 0.05, 2.2, 16]} />
+          <meshPhysicalMaterial color="#f0f0f0" metalness={0.98} roughness={0.02} clearcoat={1.0} clearcoatRoughness={0.02} />
+        </mesh>
+
+        {/* Coping metal rail at top - 90-degree curved corner section wrapping around the left pocket */}
+        <mesh castShadow position={[-0.6, 0.8, -0.6]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.05, 0.05, 1.2, 16]} />
           <meshPhysicalMaterial color="#f0f0f0" metalness={0.98} roughness={0.02} clearcoat={1.0} clearcoatRoughness={0.02} />
         </mesh>
 
@@ -527,9 +581,15 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           <boxGeometry args={[0.4, 0.3, 0.01]} />
           <meshStandardMaterial color="#2b2d29" roughness={0.7} />
         </mesh>
-        <mesh position={[0, 0.9, 0.458]}>
-          <boxGeometry args={[0.2, 0.2, 0.01]} />
-          <meshStandardMaterial color={isDark ? logoGreen : '#00aa00'} roughness={0.3} />
+        {/* Left Glass Chute */}
+        <mesh position={[-0.8, 0.18, 0.65]} rotation={[0, 0, Math.PI / 8]} castShadow>
+          <boxGeometry args={[0.6, 0.02, 0.65]} />
+          <meshPhysicalMaterial color="#ffffff" transparent opacity={0.35} roughness={0.15} transmission={0.9} thickness={0.5} />
+        </mesh>
+        {/* Right Glass Chute */}
+        <mesh position={[0.8, 0.18, 0.65]} rotation={[0, 0, -Math.PI / 8]} castShadow>
+          <boxGeometry args={[0.6, 0.02, 0.65]} />
+          <meshPhysicalMaterial color="#ffffff" transparent opacity={0.35} roughness={0.15} transmission={0.9} thickness={0.5} />
         </mesh>
       </group>
 
