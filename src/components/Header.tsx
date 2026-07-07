@@ -51,6 +51,7 @@ export const Header = () => {
         padding: '0 32px',
         backgroundColor: headerBgColor,
         backdropFilter: 'blur(16px)',
+        boxShadow: isDark ? '0 8px 32px rgba(0, 0, 0, 0.7)' : '0 8px 32px rgba(0, 0, 0, 0.04)',
         height: '80px',
         borderBottom: `1px solid ${borderBottomColor}`
       }}

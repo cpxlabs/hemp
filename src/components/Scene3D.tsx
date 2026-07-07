@@ -546,35 +546,35 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       </group>
 
       {/* --- Detailed Stone Dice Tower to the Right --- */}
-      <group position={[3.0, -0.425, -1.3]} rotation={[0, -0.3, 0]}>
+      <group position={[2.7, -0.425, -1.75]} rotation={[0, -0.4, 0]} scale={0.8}>
         {/* Tower Base castle wall */}
         <mesh castShadow position={[0, 0.7, 0]}>
           <boxGeometry args={[0.9, 1.4, 0.9]} />
-          <meshStandardMaterial color="#4a4d48" roughness={0.9} />
+          <meshStandardMaterial color="#1c1c1a" roughness={0.75} metalness={0.4} />
         </mesh>
         {/* Battlements top rim */}
         <mesh position={[0, 1.45, 0]} castShadow>
           <boxGeometry args={[1.05, 0.2, 1.05]} />
-          <meshStandardMaterial color="#3f413d" roughness={0.9} />
+          <meshStandardMaterial color="#121210" roughness={0.75} metalness={0.4} />
         </mesh>
         {/* Battlement corner notches */}
         {[-0.45, 0.45].map((x) =>
           [-0.45, 0.45].map((z) => (
             <mesh key={`${x}-${z}`} position={[x, 1.6, z]} castShadow>
               <boxGeometry args={[0.2, 0.15, 0.2]} />
-              <meshStandardMaterial color="#3f413d" roughness={0.9} />
+              <meshStandardMaterial color="#121210" roughness={0.75} metalness={0.4} />
             </mesh>
           ))
         )}
         {/* Catch Tray front box */}
         <mesh position={[0, 0.125, 0.65]} castShadow>
           <boxGeometry args={[1.0, 0.25, 0.8]} />
-          <meshStandardMaterial color="#3f413d" roughness={0.9} />
+          <meshStandardMaterial color="#1c1c1a" roughness={0.75} metalness={0.4} />
         </mesh>
         {/* Dice Catch interior tray */}
         <mesh position={[0, 0.05, 0.65]}>
           <boxGeometry args={[0.85, 0.1, 0.65]} />
-          <meshStandardMaterial color="#2d2d2a" roughness={0.8} />
+          <meshStandardMaterial color="#0c0c0a" roughness={0.8} />
         </mesh>
         {/* Arch exit door */}
         <mesh position={[0, 0.25, 0.451]}>
@@ -584,7 +584,7 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
         {/* Engraved logo details on front */}
         <mesh position={[0, 0.9, 0.452]}>
           <boxGeometry args={[0.4, 0.3, 0.01]} />
-          <meshStandardMaterial color="#2b2d29" roughness={0.7} />
+          <meshStandardMaterial color="#2c2c2a" roughness={0.7} />
         </mesh>
         {/* Left Glass Chute */}
         <mesh position={[-0.8, 0.18, 0.65]} rotation={[0, 0, Math.PI / 8]} castShadow>
@@ -599,11 +599,11 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
       </group>
 
       {/* --- Chess Board and pieces in Front Right --- */}
-      <group position={[2.4, -0.425, 1.1]} rotation={[0, -0.2, 0]}>
+      <group position={[2.0, -0.425, 0.75]} rotation={[0, -0.15, 0]} scale={0.78}>
         {/* Chess board base frame */}
         <mesh castShadow receiveShadow position={[0, 0.05, 0]}>
           <boxGeometry args={[2.5, 0.1, 2.5]} />
-          <meshStandardMaterial color="#4a3b32" roughness={0.6} />
+          <meshStandardMaterial color="#1a1a1a" roughness={0.65} metalness={0.3} />
         </mesh>
         {/* Lighter wooden inner board */}
         <mesh position={[0, 0.105, 0]}>
@@ -1002,8 +1002,9 @@ const Scene3D: React.FC<Scene3DProps> = ({
       <Suspense fallback={<Loader />}>
         <Canvas shadows dpr={[1, 2]}>
           <color attach="background" args={[backgroundColor]} />
+          <fog attach="fog" args={[backgroundColor, 5, 13]} />
 
-          <PerspectiveCamera makeDefault position={[0, 3.5, 6]} fov={42} />
+          <PerspectiveCamera makeDefault position={[0, 2.7, 5.2]} fov={42} />
           <OrbitControls
             enablePan={false}
             minPolarAngle={Math.PI / 6}
@@ -1068,13 +1069,24 @@ const Scene3D: React.FC<Scene3DProps> = ({
             </Float>
           )}
 
+          {/* Double-layered soft contact shadows for realistic grounding */}
+          {/* Layer 1: Grounding the toys (Chessboard, ramp, dice tower) on the concrete slab surface */}
           <ContactShadows
-            position={[0, -0.6, 0]}
-            opacity={isDark ? 0.6 : 0.3}
-            scale={8}
-            blur={2.5}
-            far={4}
+            position={[0, -0.42, 0]}
+            opacity={isDark ? 0.65 : 0.4}
+            scale={9}
+            blur={1.8}
+            far={3}
             color={shadowColor}
+          />
+          {/* Layer 2: Grounding the elevated concrete slab platform itself onto the grid floor */}
+          <ContactShadows
+            position={[0, -0.85, 0]}
+            opacity={isDark ? 0.8 : 0.5}
+            scale={10}
+            blur={2.5}
+            far={5}
+            color="#000000"
           />
 
           <Environment preset="night" />
