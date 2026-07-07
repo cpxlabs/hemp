@@ -521,49 +521,53 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           <meshPhysicalMaterial color="#151515" roughness={0.5} metalness={0.4} clearcoat={0.2} />
         </mesh>
 
-        {/* Concrete wall backdrop behind the ramp for scene depth */}
-        <mesh receiveShadow position={[0, 0.6, -2.1]}>
-          <boxGeometry args={[4.0, 2.8, 0.12]} />
-          <meshPhysicalMaterial color={isDark ? '#111111' : '#cccccc'} roughness={0.95} metalness={0.0} />
+        {/* Concrete wall backdrop behind the ramp - lower height for better scene balance */}
+        <mesh receiveShadow position={[0, 0.3, -2.1]}>
+          <boxGeometry args={[4.0, 1.4, 0.12]} />
+          <meshPhysicalMaterial color={isDark ? '#222222' : '#cccccc'} roughness={0.9} metalness={0.05} />
         </mesh>
+        {/* Neon wash uplight behind the ramp pointing up onto the backdrop wall */}
+        {isDark && (
+          <pointLight position={[0, 0.25, -1.95]} intensity={4.5} distance={4} color={lightsColor || '#39FF14'} />
+        )}
         {/* HEMP RAMPS branding banner on the backdrop wall */}
-        <group position={[0, 1.05, -2.02]}>
+        <group position={[0, 0.65, -2.02]}>
           {/* Banner background plate */}
           <mesh>
-            <boxGeometry args={[2.8, 0.42, 0.02]} />
-            <meshStandardMaterial color={isDark ? '#0a0a0a' : '#1a1a1a'} roughness={0.6} />
+            <boxGeometry args={[2.8, 0.32, 0.02]} />
+            <meshStandardMaterial color={isDark ? '#0c0c0c' : '#1a1a1a'} roughness={0.6} />
           </mesh>
           {/* Hemp brand bar 1 */}
-          <mesh position={[0, 0.08, 0.015]}>
-            <boxGeometry args={[2.2, 0.1, 0.01]} />
+          <mesh position={[0, 0.06, 0.015]}>
+            <boxGeometry args={[2.2, 0.08, 0.01]} />
             <meshBasicMaterial color={lightsColor || '#39FF14'} />
           </mesh>
           {/* Hemp brand bar 2 */}
-          <mesh position={[0, -0.08, 0.015]}>
-            <boxGeometry args={[1.6, 0.06, 0.01]} />
+          <mesh position={[0, -0.06, 0.015]}>
+            <boxGeometry args={[1.6, 0.05, 0.01]} />
             <meshBasicMaterial color="#ffffff" transparent opacity={0.7} />
           </mesh>
           {/* CPX dot accent left */}
           <mesh position={[-1.1, 0.0, 0.015]}>
-            <boxGeometry args={[0.12, 0.12, 0.01]} />
+            <boxGeometry args={[0.09, 0.09, 0.01]} />
             <meshBasicMaterial color={lightsColor || '#39FF14'} />
           </mesh>
           {/* CPX dot accent right */}
           <mesh position={[1.1, 0.0, 0.015]}>
-            <boxGeometry args={[0.12, 0.12, 0.01]} />
+            <boxGeometry args={[0.09, 0.09, 0.01]} />
             <meshBasicMaterial color={lightsColor || '#39FF14'} />
           </mesh>
           {/* Banner glow */}
           {isDark && <pointLight position={[0, 0, 0.3]} intensity={2.0} distance={2.5} color={lightsColor || '#39FF14'} />}
         </group>
         {/* Wall accent stripe */}
-        <mesh position={[0, 1.4, -2.03]}>
-          <boxGeometry args={[4.0, 0.06, 0.02]} />
+        <mesh position={[0, 0.95, -2.03]}>
+          <boxGeometry args={[4.0, 0.04, 0.02]} />
           <meshBasicMaterial color={lightsColor || '#39FF14'} transparent opacity={0.6} />
         </mesh>
         {/* Lower wall skirt */}
-        <mesh position={[0, -0.1, -2.03]}>
-          <boxGeometry args={[4.0, 0.3, 0.02]} />
+        <mesh position={[0, -0.32, -2.03]}>
+          <boxGeometry args={[4.0, 0.16, 0.02]} />
           <meshStandardMaterial color={isDark ? '#0a0a0a' : '#bbbbbb'} roughness={0.9} />
         </mesh>
         
@@ -572,15 +576,22 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           <cylinderGeometry args={[0.8, 0.8, 2.2, 32, 1, true, Math.PI, Math.PI / 2]} />
           <meshPhysicalMaterial color="#d4a66a" roughness={0.28} clearcoat={0.5} clearcoatRoughness={0.1} side={2} />
         </mesh>
-        {/* Wood plank ribs on center ramp */}
+        {/* Subtle wood grain stripes for organic texture look */}
+        {[-0.8, -0.3, 0.1, 0.5, 0.9].map((gx, idx) => (
+          <mesh key={`grain-${idx}`} position={[0.5 + gx, 0.8, -0.4]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.801, 0.801, 0.12, 32, 1, true, Math.PI, Math.PI / 2]} />
+            <meshPhysicalMaterial color={idx % 2 === 0 ? '#b88950' : '#e6be8a'} roughness={0.4} clearcoat={0.3} transparent opacity={0.25} side={2} />
+          </mesh>
+        ))}
+        {/* Wood plank ribs on center ramp (receiving & casting shadows) */}
         {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => {
           const angle = Math.PI + (Math.PI / 2) * (i / 7);
           const ry = 0.8 + Math.sin(angle) * 0.8;
           const rz = -0.4 + Math.cos(angle) * 0.8;
           return (
-            <mesh key={`rib-${i}`} position={[0.5, ry, rz]} rotation={[angle, 0, Math.PI / 2]}>
-              <cylinderGeometry args={[0.808, 0.808, 2.2, 4, 1, true, 0, 0.03]} />
-              <meshBasicMaterial color={isDark ? '#1a1108' : '#3a200a'} transparent opacity={0.5} />
+            <mesh key={`rib-${i}`} position={[0.5, ry, rz]} rotation={[angle, 0, Math.PI / 2]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.803, 0.803, 2.2, 4, 1, true, 0, 0.03]} />
+              <meshStandardMaterial color={isDark ? '#4b321a' : '#5c3d20'} roughness={0.8} />
             </mesh>
           );
         })}
@@ -742,26 +753,26 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
           <meshPhysicalMaterial color="#f8f8f8" metalness={0.99} roughness={0.01} clearcoat={1.0} clearcoatRoughness={0.01} emissive="#ffffff" emissiveIntensity={isDark ? 0.3 : 0.1} />
         </mesh>
 
-        {/* Wooden guard rail fence behind top platform - warmer wood */}
+        {/* Sleek black chrome safety guard rail fence behind top platform */}
         <group position={[0, 0.8, -1.35]}>
           {/* Vertical posts */}
-          {[-1.5, 0, 1.5].map((x) => (
-            <mesh key={x} position={[x, 0.45, 0]} castShadow>
-              <boxGeometry args={[0.05, 0.9, 0.05]} />
-              <meshPhysicalMaterial color="#8b5e2c" roughness={0.65} clearcoat={0.3} />
+          {[-1.2, 0, 1.2].map((x) => (
+            <mesh key={x} position={[x, 0.35, 0]} castShadow>
+              <boxGeometry args={[0.03, 0.7, 0.03]} />
+              <meshPhysicalMaterial color="#1a1a1a" roughness={0.25} metalness={0.9} clearcoat={1.0} />
             </mesh>
           ))}
           {/* Horizontal rails */}
-          {[0.25, 0.55, 0.82].map((y) => (
+          {[0.2, 0.45, 0.68].map((y) => (
             <mesh key={y} position={[0, y, 0]} castShadow>
-              <boxGeometry args={[3.15, 0.055, 0.04]} />
-              <meshPhysicalMaterial color="#8b5e2c" roughness={0.6} clearcoat={0.3} />
+              <boxGeometry args={[2.5, 0.03, 0.02]} />
+              <meshPhysicalMaterial color="#1a1a1a" roughness={0.25} metalness={0.9} clearcoat={1.0} />
             </mesh>
           ))}
-          {/* Safety net between rails */}
-          <mesh position={[0, 0.5, 0]}>
-            <boxGeometry args={[3.1, 0.7, 0.005]} />
-            <meshBasicMaterial color={isDark ? '#111111' : '#888888'} transparent opacity={0.35} />
+          {/* Safety glass panel */}
+          <mesh position={[0, 0.35, 0]}>
+            <boxGeometry args={[2.45, 0.65, 0.01]} />
+            <meshPhysicalMaterial color="#ffffff" transparent opacity={0.15} transmission={0.9} roughness={0.1} thickness={0.2} />
           </mesh>
         </group>
 
@@ -1262,54 +1273,96 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
       <group position={[0, 0.1, 0]}>
         {/* --- Middle Section with Concave (Split into center + side rails) --- */}
         <group position={[0, 0, 0]}>
-          {/* Flat Center Grip */}
-          <mesh castShadow receiveShadow position={[0, 0, 0]}>
-            <boxGeometry args={[0.42, 0.025, 1.2]} />
-            <meshPhysicalMaterial {...matProps} />
-          </mesh>
-          {/* Grip Tape Cut-out line exposing wood underneath */}
-          <mesh position={[0, 0.013, -0.2]}>
-            <boxGeometry args={[0.425, 0.002, 0.03]} />
-            <meshPhysicalMaterial {...woodCoreProps} />
-          </mesh>
-
-          {/* Left Concave Rail */}
-          <mesh castShadow receiveShadow position={[-0.28, 0.035, 0]} rotation={[0, 0, Math.PI / 12]}>
-            <boxGeometry args={[0.16, 0.025, 1.2]} />
-            <meshPhysicalMaterial {...matProps} />
-          </mesh>
-          {/* Right Concave Rail */}
-          <mesh castShadow receiveShadow position={[0.28, 0.035, 0]} rotation={[0, 0, -Math.PI / 12]}>
-            <boxGeometry args={[0.16, 0.025, 1.2]} />
-            <meshPhysicalMaterial {...matProps} />
-          </mesh>
-
-          {/* Laminated Wood Core Layer (7-Ply visible edge) */}
-          {Array.from({ length: 5 }).map((_, plyIdx) => {
-            const plyThickness = 0.003;
-            const isDyed = plyIdx === 2;
-            const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
-            return (
-              <mesh key={`center-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
-                <boxGeometry args={[0.74, plyThickness, 1.2]} />
-                <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+          {/* Flat Center Section */}
+          <group position={[0, 0, 0]}>
+            {/* Grip tape */}
+            <mesh castShadow receiveShadow position={[0, 0, 0]}>
+              <boxGeometry args={[0.42, 0.025, 1.2]} />
+              <meshPhysicalMaterial {...matProps} />
+            </mesh>
+            {/* Grip Tape Cut-out line exposing wood underneath */}
+            <mesh position={[0, 0.013, -0.2]}>
+              <boxGeometry args={[0.425, 0.002, 0.03]} />
+              <meshPhysicalMaterial {...woodCoreProps} />
+            </mesh>
+            {/* Plies */}
+            {Array.from({ length: 5 }).map((_, plyIdx) => {
+              const plyThickness = 0.003;
+              const isDyed = plyIdx === 2;
+              const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
+              return (
+                <mesh key={`center-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
+                  <boxGeometry args={[0.42, plyThickness, 1.2]} />
+                  <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+                </mesh>
+              );
+            })}
+            {/* Center Graphic */}
+            <group position={[0, -0.032, 0]}>
+              <mesh position={[0, 0, 0]}>
+                <boxGeometry args={[0.42, 0.002, 1.1]} />
+                <meshPhysicalMaterial {...graphicProps} />
               </mesh>
-            );
-          })}
+              <mesh position={[0, -0.001, 0.1]}>
+                <boxGeometry args={[0.3, 0.002, 0.6]} />
+                <meshBasicMaterial color="#39FF14" />
+              </mesh>
+              <mesh position={[0, -0.001, -0.3]}>
+                <boxGeometry args={[0.35, 0.002, 0.1]} />
+                <meshBasicMaterial color="#39FF14" />
+              </mesh>
+            </group>
+          </group>
 
-          {/* Bottom Deck Graphic (CPX Custom Foil Decal) */}
-          <group position={[0, -0.032, 0]}>
-            <mesh position={[0, 0, 0]}>
-              <boxGeometry args={[0.7, 0.002, 1.1]} />
+          {/* Left Concave Rail Section (tilted upwards) */}
+          <group position={[-0.28, 0.035, 0]} rotation={[0, 0, -Math.PI / 12]}>
+            {/* Grip tape */}
+            <mesh castShadow receiveShadow position={[0, 0, 0]}>
+              <boxGeometry args={[0.16, 0.025, 1.2]} />
+              <meshPhysicalMaterial {...matProps} />
+            </mesh>
+            {/* Plies */}
+            {Array.from({ length: 5 }).map((_, plyIdx) => {
+              const plyThickness = 0.003;
+              const isDyed = plyIdx === 2;
+              const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
+              return (
+                <mesh key={`left-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
+                  <boxGeometry args={[0.16, plyThickness, 1.2]} />
+                  <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+                </mesh>
+              );
+            })}
+            {/* Graphic */}
+            <mesh position={[0, -0.032, 0]}>
+              <boxGeometry args={[0.16, 0.002, 1.1]} />
               <meshPhysicalMaterial {...graphicProps} />
             </mesh>
-            <mesh position={[0, -0.001, 0.1]}>
-              <boxGeometry args={[0.3, 0.002, 0.6]} />
-              <meshBasicMaterial color="#39FF14" />
+          </group>
+
+          {/* Right Concave Rail Section (tilted upwards) */}
+          <group position={[0.28, 0.035, 0]} rotation={[0, 0, Math.PI / 12]}>
+            {/* Grip tape */}
+            <mesh castShadow receiveShadow position={[0, 0, 0]}>
+              <boxGeometry args={[0.16, 0.025, 1.2]} />
+              <meshPhysicalMaterial {...matProps} />
             </mesh>
-            <mesh position={[0, -0.001, -0.3]}>
-              <boxGeometry args={[0.4, 0.002, 0.1]} />
-              <meshBasicMaterial color="#39FF14" />
+            {/* Plies */}
+            {Array.from({ length: 5 }).map((_, plyIdx) => {
+              const plyThickness = 0.003;
+              const isDyed = plyIdx === 2;
+              const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
+              return (
+                <mesh key={`right-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
+                  <boxGeometry args={[0.16, plyThickness, 1.2]} />
+                  <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+                </mesh>
+              );
+            })}
+            {/* Graphic */}
+            <mesh position={[0, -0.032, 0]}>
+              <boxGeometry args={[0.16, 0.002, 1.1]} />
+              <meshPhysicalMaterial {...graphicProps} />
             </mesh>
           </group>
 
@@ -1346,21 +1399,62 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
         {/* --- Nose Kicktail (Front) Hinge Group --- */}
         <group position={[0, 0, 0.6]} rotation={[Math.PI / 11, 0, 0]}>
           <group position={[0, 0.015, 0.15]}>
-            {/* Center */}
-            <mesh castShadow>
-              <boxGeometry args={[0.42, 0.025, 0.3]} />
-              <meshPhysicalMaterial {...matProps} />
-            </mesh>
-            {/* Left Concave */}
-            <mesh castShadow position={[-0.28, 0.035, 0]} rotation={[0, 0, Math.PI / 12]}>
-              <boxGeometry args={[0.16, 0.025, 0.3]} />
-              <meshPhysicalMaterial {...matProps} />
-            </mesh>
-            {/* Right Concave */}
-            <mesh castShadow position={[0.26, 0.035, 0]} rotation={[0, 0, -Math.PI / 12]}>
-              <boxGeometry args={[0.16, 0.025, 0.3]} />
-              <meshPhysicalMaterial {...matProps} />
-            </mesh>
+            {/* Center Section */}
+            <group position={[0, 0, 0]}>
+              <mesh castShadow>
+                <boxGeometry args={[0.42, 0.025, 0.3]} />
+                <meshPhysicalMaterial {...matProps} />
+              </mesh>
+              {Array.from({ length: 5 }).map((_, plyIdx) => {
+                const plyThickness = 0.003;
+                const isDyed = plyIdx === 2;
+                const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
+                return (
+                  <mesh key={`nose-c-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
+                    <boxGeometry args={[0.42, plyThickness, 0.3]} />
+                    <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+                  </mesh>
+                );
+              })}
+            </group>
+
+            {/* Left Concave Section */}
+            <group position={[-0.28, 0.035, 0]} rotation={[0, 0, -Math.PI / 12]}>
+              <mesh castShadow>
+                <boxGeometry args={[0.16, 0.025, 0.3]} />
+                <meshPhysicalMaterial {...matProps} />
+              </mesh>
+              {Array.from({ length: 5 }).map((_, plyIdx) => {
+                const plyThickness = 0.003;
+                const isDyed = plyIdx === 2;
+                const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
+                return (
+                  <mesh key={`nose-l-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
+                    <boxGeometry args={[0.16, plyThickness, 0.3]} />
+                    <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+                  </mesh>
+                );
+              })}
+            </group>
+
+            {/* Right Concave Section */}
+            <group position={[0.28, 0.035, 0]} rotation={[0, 0, Math.PI / 12]}>
+              <mesh castShadow>
+                <boxGeometry args={[0.16, 0.025, 0.3]} />
+                <meshPhysicalMaterial {...matProps} />
+              </mesh>
+              {Array.from({ length: 5 }).map((_, plyIdx) => {
+                const plyThickness = 0.003;
+                const isDyed = plyIdx === 2;
+                const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
+                return (
+                  <mesh key={`nose-r-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
+                    <boxGeometry args={[0.16, plyThickness, 0.3]} />
+                    <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+                  </mesh>
+                );
+              })}
+            </group>
             
             {/* Rounded Tip */}
             <mesh castShadow position={[0, 0, 0.15]} scale={[1, 1, 0.6]}>
@@ -1368,22 +1462,16 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
               <meshPhysicalMaterial {...matProps} />
             </mesh>
 
-            {/* Kicktail Plies */}
+            {/* Rounded Tip Plies */}
             {Array.from({ length: 5 }).map((_, plyIdx) => {
               const plyThickness = 0.003;
               const isDyed = plyIdx === 2;
               const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
               return (
-                <group key={`nose-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
-                  <mesh>
-                    <boxGeometry args={[0.74, plyThickness, 0.3]} />
-                    <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
-                  </mesh>
-                  <mesh position={[0, 0, 0.15]} scale={[1, 1, 0.6]}>
-                    <cylinderGeometry args={[0.37, 0.37, plyThickness, 32]} />
-                    <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
-                  </mesh>
-                </group>
+                <mesh key={`nose-tip-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0.15]} scale={[1, 1, 0.6]}>
+                  <cylinderGeometry args={[0.37, 0.37, plyThickness, 32]} />
+                  <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+                </mesh>
               );
             })}
           </group>
@@ -1392,21 +1480,62 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
         {/* --- Tail Kicktail (Back) Hinge Group --- */}
         <group position={[0, 0, -0.6]} rotation={[-Math.PI / 12, 0, 0]}>
           <group position={[0, 0.015, -0.15]}>
-            {/* Center */}
-            <mesh castShadow>
-              <boxGeometry args={[0.42, 0.025, 0.3]} />
-              <meshPhysicalMaterial {...matProps} />
-            </mesh>
-            {/* Left Concave */}
-            <mesh castShadow position={[-0.28, 0.035, 0]} rotation={[0, 0, Math.PI / 12]}>
-              <boxGeometry args={[0.16, 0.025, 0.3]} />
-              <meshPhysicalMaterial {...matProps} />
-            </mesh>
-            {/* Right Concave */}
-            <mesh castShadow position={[0.26, 0.035, 0]} rotation={[0, 0, -Math.PI / 12]}>
-              <boxGeometry args={[0.16, 0.025, 0.3]} />
-              <meshPhysicalMaterial {...matProps} />
-            </mesh>
+            {/* Center Section */}
+            <group position={[0, 0, 0]}>
+              <mesh castShadow>
+                <boxGeometry args={[0.42, 0.025, 0.3]} />
+                <meshPhysicalMaterial {...matProps} />
+              </mesh>
+              {Array.from({ length: 5 }).map((_, plyIdx) => {
+                const plyThickness = 0.003;
+                const isDyed = plyIdx === 2;
+                const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
+                return (
+                  <mesh key={`tail-c-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
+                    <boxGeometry args={[0.42, plyThickness, 0.3]} />
+                    <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+                  </mesh>
+                );
+              })}
+            </group>
+
+            {/* Left Concave Section */}
+            <group position={[-0.28, 0.035, 0]} rotation={[0, 0, -Math.PI / 12]}>
+              <mesh castShadow>
+                <boxGeometry args={[0.16, 0.025, 0.3]} />
+                <meshPhysicalMaterial {...matProps} />
+              </mesh>
+              {Array.from({ length: 5 }).map((_, plyIdx) => {
+                const plyThickness = 0.003;
+                const isDyed = plyIdx === 2;
+                const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
+                return (
+                  <mesh key={`tail-l-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
+                    <boxGeometry args={[0.16, plyThickness, 0.3]} />
+                    <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+                  </mesh>
+                );
+              })}
+            </group>
+
+            {/* Right Concave Section */}
+            <group position={[0.28, 0.035, 0]} rotation={[0, 0, Math.PI / 12]}>
+              <mesh castShadow>
+                <boxGeometry args={[0.16, 0.025, 0.3]} />
+                <meshPhysicalMaterial {...matProps} />
+              </mesh>
+              {Array.from({ length: 5 }).map((_, plyIdx) => {
+                const plyThickness = 0.003;
+                const isDyed = plyIdx === 2;
+                const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
+                return (
+                  <mesh key={`tail-r-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
+                    <boxGeometry args={[0.16, plyThickness, 0.3]} />
+                    <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+                  </mesh>
+                );
+              })}
+            </group>
 
             {/* Rounded Tip */}
             <mesh castShadow position={[0, 0, -0.15]} scale={[1, 1, 0.5]}>
@@ -1414,22 +1543,16 @@ const SkateDecks = React.forwardRef(({ active, material, isDark, ...props }: any
               <meshPhysicalMaterial {...matProps} />
             </mesh>
 
-            {/* Kicktail Plies */}
+            {/* Rounded Tip Plies */}
             {Array.from({ length: 5 }).map((_, plyIdx) => {
               const plyThickness = 0.003;
               const isDyed = plyIdx === 2;
               const plyColor = isDyed ? '#39FF14' : (plyIdx % 2 === 0 ? '#d1a075' : '#b37f50');
               return (
-                <group key={`tail-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), 0]}>
-                  <mesh>
-                    <boxGeometry args={[0.74, plyThickness, 0.3]} />
-                    <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
-                  </mesh>
-                  <mesh position={[0, 0, -0.15]} scale={[1, 1, 0.5]}>
-                    <cylinderGeometry args={[0.37, 0.37, plyThickness, 32]} />
-                    <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
-                  </mesh>
-                </group>
+                <mesh key={`tail-tip-ply-${plyIdx}`} position={[0, -0.015 - (plyIdx * plyThickness), -0.15]} scale={[1, 1, 0.5]}>
+                  <cylinderGeometry args={[0.37, 0.37, plyThickness, 32]} />
+                  <meshPhysicalMaterial {...woodCoreProps} color={plyColor} />
+                </mesh>
               );
             })}
           </group>

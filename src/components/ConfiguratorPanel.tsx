@@ -99,6 +99,7 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
   const resetSelections = () => {
     const defaultSelections = PRODUCTS.map((p) => ({ productId: p.id, material: MATERIALS[0].value, finish: FINISHES[0].value }));
     setSelections(defaultSelections);
+    setLightsColor('#39FF14');
   };
 
   const handleAddToCart = (idx: number) => {
