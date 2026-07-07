@@ -45,7 +45,35 @@ const getMaterialProps = (materialName?: string, isDark?: boolean) => {
   };
 };
 
-// --- 3D Model Components ---
+const StadiumLight = ({ position, isDark }: any) => {
+  const poleColor = isDark ? '#222222' : '#888888';
+  const lightColor = isDark ? '#39FF14' : '#fff9e6';
+  return (
+    <group position={position}>
+      {/* Pole */}
+      <mesh castShadow position={[0, 1.2, 0]}>
+        <cylinderGeometry args={[0.03, 0.05, 2.4, 8]} />
+        <meshStandardMaterial color={poleColor} roughness={0.5} metalness={0.7} />
+      </mesh>
+      {/* Light Head */}
+      <mesh castShadow position={[0, 2.4, 0]} rotation={[0.3, 0, 0]}>
+        <boxGeometry args={[0.25, 0.12, 0.18]} />
+        <meshStandardMaterial color={poleColor} />
+      </mesh>
+      {/* SpotLight */}
+      <spotLight
+        position={[0, 2.4, 0]}
+        intensity={isDark ? 3.0 : 1.5}
+        distance={7}
+        angle={Math.PI / 3}
+        penumbra={0.4}
+        color={lightColor}
+        castShadow
+        shadow-mapSize={[512, 512]}
+      />
+    </group>
+  );
+};
 
 const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
   const parkColor = isDark ? '#161616' : '#e6dfd5';
@@ -60,6 +88,12 @@ const SkatePark3D = ({ isDark }: { isDark: boolean }) => {
         <boxGeometry args={[9.2, 0.15, 5.0]} />
         <meshStandardMaterial color={parkColor} roughness={0.8} metalness={0.1} />
       </mesh>
+
+      {/* Corner Stadium Floodlights */}
+      <StadiumLight position={[-4.2, -0.525, -2.2]} isDark={isDark} />
+      <StadiumLight position={[4.2, -0.525, -2.2]} isDark={isDark} />
+      <StadiumLight position={[-4.2, -0.525, 2.2]} isDark={isDark} />
+      <StadiumLight position={[4.2, -0.525, 2.2]} isDark={isDark} />
       
       {/* Quarterpipe transition on Left */}
       <group position={[-3.5, -0.425, 0]}>

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { View, Pressable, Platform } from 'react-native';
 import { Text } from './ui/text';
 import { Button } from './ui/button';
-import { ShoppingCart, RotateCcw } from 'lucide-react-native';
+import { ShoppingCart, RotateCcw, X, Sliders } from 'lucide-react-native';
 import { useConfigurator } from '../providers/ConfiguratorProvider';
 import { useTheme } from '../providers/ThemeProvider';
 import { useCart } from '../providers/CartProvider';
@@ -61,6 +61,7 @@ const CustomSelect = ({ label, options, value, onChange, isDark }: any) => {
 
 export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) => {
   const { selections, setSelections, activeProductIndex, setActiveProductIndex, isRampCollapsed, setIsRampCollapsed } = useConfigurator();
+  const [isMinimized, setIsMinimized] = React.useState(false);
   const { isDark } = useTheme();
   const { addToCart, setIsCartOpen } = useCart();
 
@@ -104,6 +105,25 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
 
   if (selections.length === 0) return null;
 
+  if (isMinimized) {
+    const minimizeBtnBg = isDark ? 'bg-black/80 border-white/10' : 'bg-white/80 border-border/40';
+    const minimizeBtnPos = isMobile
+      ? 'absolute bottom-5 right-5'
+      : 'absolute top-24 right-8';
+    
+    return (
+      <Pressable
+        onPress={() => setIsMinimized(false)}
+        className={`${minimizeBtnPos} z-40 flex-row items-center gap-2 px-5 py-3 rounded-full border shadow-lg backdrop-blur-md active:scale-95 transition-all ${minimizeBtnBg}`}
+      >
+        <Sliders size={14} color={isDark ? '#39FF14' : '#000'} />
+        <Text className="text-foreground font-black uppercase text-[10px] tracking-widest">
+          Customizar
+        </Text>
+      </Pressable>
+    );
+  }
+
   const bgClasses = isDark
     ? "bg-black/60 border-white/10 shadow-2xl shadow-black/50"
     : "bg-white/70 border-border/40 shadow-xl shadow-black/5";
@@ -118,6 +138,12 @@ export const ConfiguratorPanel = ({ isMobile = false }: { isMobile?: boolean }) 
 
   return (
     <View className={containerClasses}>
+      <Pressable
+        onPress={() => setIsMinimized(true)}
+        className="absolute top-4 right-4 z-50 w-8 h-8 items-center justify-center rounded-full bg-foreground/5 hover:bg-foreground/10 active:scale-95"
+      >
+        <X size={16} color={isDark ? '#ffffff' : '#111111'} />
+      </Pressable>
       <Text className={`${isMobile ? 'text-xl' : 'text-3xl'} font-black tracking-tighter ${headingColor} mb-6 uppercase italic`}>
         Configurar seu produto
       </Text>
